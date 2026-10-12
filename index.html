@@ -3974,6 +3974,19 @@
                 const inp = document.getElementById('diogo-offers-input');
                 if (inp) inp.value = newSetting.value;
                 showCloudToast(`👑 Nova oferta do Patrão (Diogo) sincronizada!`, 'info');
+              } else if (newSetting && newSetting.key === 'bot_live_status') {
+                try {
+                  const statusData = typeof newSetting.value === 'string' ? JSON.parse(newSetting.value) : newSetting.value;
+                  if (statusData && statusData.message) {
+                    addRobotLog(statusData.message, statusData.type || 'info');
+                  }
+                  if (statusData && statusData.leadsCount !== undefined) {
+                    const el = document.getElementById('robot-kpi-leads');
+                    if (el) el.innerText = `${statusData.leadsCount} Leads`;
+                  }
+                } catch(e) {
+                  if (newSetting.value) addRobotLog(String(newSetting.value), 'info');
+                }
               }
             })
             .subscribe(status => {
@@ -5853,6 +5866,7 @@ END $$;
 
       if (typeof bellaSupabase !== 'undefined' && bellaSupabase.isConnected) {
         await bellaSupabase.saveSetting('bot_last_command', {
+          id: 'cmd_' + Date.now(),
           action: actionType,
           car: carName,
           seller: seller,
