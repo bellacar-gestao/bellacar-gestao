@@ -2705,6 +2705,10 @@
               </p>
             </div>
             <div class="flex flex-wrap items-center gap-2 shrink-0">
+              <button onclick="clearRobotLinksHistory()" class="px-3.5 py-2 bg-[#020202] hover:bg-red-950/40 text-red-400 hover:text-red-300 border border-[#373739] hover:border-red-500/50 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all" title="Limpar todos os links e zerar histórico">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                <span>Limpar Histórico</span>
+              </button>
               <button onclick="loadRobotLinksFromCloud()" class="px-3.5 py-2 bg-[#020202] hover:bg-[#373739] text-[#ecdda2] border border-[#373739] hover:border-[#c9b977] rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all">
                 <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
                 <span>Atualizar</span>
@@ -6014,6 +6018,34 @@ END $$;
       a.click();
       URL.revokeObjectURL(url);
       showCloudToast('📥 Relatório de links baixado com sucesso!', 'success');
+    }
+
+    async function clearRobotLinksHistory() {
+      if (!confirm('Deseja realmente limpar todos os links de postagens e comentários gravados?')) return;
+      appState.robotLinks = [];
+      if (typeof bellaSupabase !== 'undefined' && bellaSupabase.isConnected) {
+        await bellaSupabase.saveSetting('bot_posts_history', []);
+        await bellaSupabase.saveSetting('bot_live_status', {
+          message: '✨ Histórico de links zerado com sucesso!',
+          type: 'info',
+          timestamp: new Date().toISOString()
+        });
+        await bellaSupabase.saveSetting('bot_last_command', {
+          id: 'reset_' + Date.now(),
+          action: 'reset_history',
+          timestamp: new Date().toISOString(),
+          status: 'queued'
+        });
+      }
+      try {
+        await fetch('http://localhost:5000/api/action', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'reset_history' })
+        });
+      } catch(e) {}
+      filterRobotLinks();
+      showCloudToast('🗑️ Histórico de links zerado com sucesso!', 'info');
     }
 
     function parseSpintax(text) {
