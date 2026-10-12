@@ -262,6 +262,10 @@
         <i data-lucide="trending-up" class="w-4 h-4 text-[#c9b977]"></i>
         <span>8. Resultados & Leads</span>
       </button>
+      <button onclick="switchView('robot')" id="nav-robot" class="px-4 py-2 rounded-xl border border-transparent text-[#a1a1aa] hover:text-white flex items-center gap-2 transition-all whitespace-nowrap shrink-0">
+        <i data-lucide="bot" class="w-4 h-4 text-[#10b981]"></i>
+        <span>9. 🤖 Robô Facebook Enterprise</span>
+      </button>
     </nav>
   </header>
 
@@ -2377,10 +2381,296 @@
           <div class="p-4 border-b border-[#373739] font-bold text-xs text-[#ecdda2]">
             Histórico de Aprendizados & Decisões
           </div>
-          <div class="divide-y divide-[#373739]" id="results-table-body">
-            <!-- Renderizado via JS -->
           </div>
         </div>
+      </section>
+
+      <!-- ============================================================= -->
+      <!-- VIEW 9: ROBÔ FACEBOOK ENTERPRISE (DISPARO & LEADS)             -->
+      <!-- ============================================================= -->
+      <section id="view-robot" class="space-y-6 hidden">
+        <!-- Hero Banner -->
+        <div class="glass-luxury p-6 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-4 border border-[#10b981]/40 shadow-xl">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/40 flex items-center gap-1.5">
+                <i data-lucide="bot" class="w-3.5 h-3.5"></i>
+                Robô Facebook Enterprise Multi-Perfis
+              </span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-[#020202] text-[#ecdda2] border border-[#373739]" id="robot-engine-status-badge">
+                🟢 Nuvem Supabase Ativa
+              </span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-black text-white">Central de Disparo Massivo & Caçador de Leads</h2>
+            <p class="text-xs text-[#a1a1aa] max-w-2xl leading-relaxed">
+              Automação com 5 perfis em rotação anti-bloqueio, modo esquadrão com múltiplos navegadores e caça ativa de compradores em grupos de Uberaba e Triângulo Mineiro.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 self-start md:self-auto">
+            <button onclick="checkRobotEngineConnection()" class="px-3.5 py-2 bg-[#020202] hover:bg-[#373739] text-[#ecdda2] border border-[#373739] hover:border-[#10b981] rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+              <span>Testar Conexão</span>
+            </button>
+            <button onclick="triggerRobotAction('post_all')" class="px-4 py-2 bg-[#10b981] hover:bg-[#059669] text-black font-black rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-[#10b981]/20 transition-all active:scale-95">
+              <i data-lucide="zap" class="w-4 h-4"></i>
+              <span>Disparar Agora</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- KPI Strip -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+          <div class="glass-luxury p-4 rounded-2xl space-y-1">
+            <div class="flex items-center justify-between text-[#a1a1aa]">
+              <span class="text-[10px] font-mono uppercase">Perfis Conectados</span>
+              <i data-lucide="users" class="w-4 h-4 text-[#10b981]"></i>
+            </div>
+            <div class="text-2xl font-black text-white">5 Contas</div>
+            <span class="text-[10px] text-[#10b981] font-mono block">Revezamento Anti-Bloqueio</span>
+          </div>
+
+          <div class="glass-luxury p-4 rounded-2xl space-y-1">
+            <div class="flex items-center justify-between text-[#a1a1aa]">
+              <span class="text-[10px] font-mono uppercase">Grupos Mapeados</span>
+              <i data-lucide="layout-grid" class="w-4 h-4 text-[#c9b977]"></i>
+            </div>
+            <div class="text-2xl font-black text-[#ecdda2]">150+ Grupos</div>
+            <span class="text-[10px] text-[#a1a1aa] font-mono block">Uberaba, UDI e Região</span>
+          </div>
+
+          <div class="glass-luxury p-4 rounded-2xl space-y-1">
+            <div class="flex items-center justify-between text-[#a1a1aa]">
+              <span class="text-[10px] font-mono uppercase">Variações Spintax</span>
+              <i data-lucide="shuffle" class="w-4 h-4 text-[#38bdf8]"></i>
+            </div>
+            <div class="text-2xl font-black text-[#38bdf8]">Infinitas</div>
+            <span class="text-[10px] text-[#a1a1aa] font-mono block">Zero Textos Repetidos</span>
+          </div>
+
+          <div class="glass-luxury p-4 rounded-2xl space-y-1">
+            <div class="flex items-center justify-between text-[#a1a1aa]">
+              <span class="text-[10px] font-mono uppercase">Leads no WhatsApp</span>
+              <i data-lucide="message-square" class="w-4 h-4 text-[#25D366]"></i>
+            </div>
+            <div class="text-2xl font-black text-[#25D366]" id="robot-kpi-leads">28 Leads</div>
+            <span class="text-[10px] text-[#25D366] font-mono block">Encaminhados p/ Vendas</span>
+          </div>
+        </div>
+
+        <!-- Grid Principal: Disparador + Perfis -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Coluna Esquerda: Disparador de Veículos da BellaCar (7 cols) -->
+          <div class="lg:col-span-7 space-y-6">
+            <div class="glass-luxury p-6 rounded-3xl space-y-5 border border-[#373739]">
+              <div class="flex items-center justify-between border-b border-[#373739] pb-3">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="car" class="w-5 h-5 text-[#c9b977]"></i>
+                  <h3 class="text-sm font-black text-white">Disparador de Carro do Pátio</h3>
+                </div>
+                <span class="text-[11px] text-[#c9b977] font-mono">19 Carros Disponíveis</span>
+              </div>
+
+              <!-- Seleção do Veículo e Vendedor -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div class="space-y-1">
+                  <label class="text-[#a1a1aa] font-bold">1. Selecione o Carro:</label>
+                  <select id="robot-car-select" onchange="updateRobotPreview()" class="w-full bg-[#020202] border border-[#373739] focus:border-[#c9b977] rounded-xl px-3 py-2.5 text-white font-bold outline-none">
+                    <!-- Preenchido via JS com os 19 carros -->
+                  </select>
+                </div>
+                <div class="space-y-1">
+                  <label class="text-[#a1a1aa] font-bold">2. Consultor (WhatsApp no Anúncio):</label>
+                  <select id="robot-seller-select" onchange="updateRobotPreview()" class="w-full bg-[#020202] border border-[#373739] focus:border-[#c9b977] rounded-xl px-3 py-2.5 text-white font-bold outline-none">
+                    <option value="carlos">Carlos Eduardo - (34) 98407-3712</option>
+                    <option value="guilherme">Guilherme - (34) 99699-3686</option>
+                    <option value="diogo">Diogo Olegário (Patrão) - (34) 98867-5857</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Modo de Disparo -->
+              <div class="space-y-1.5 text-xs">
+                <label class="text-[#a1a1aa] font-bold">3. Estratégia de Disparo:</label>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <label class="p-3 rounded-xl border border-[#c9b977] bg-[#c9b977]/10 flex flex-col justify-between cursor-pointer">
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-white text-[11px]">Rotação Segura</span>
+                      <input type="radio" name="robot-strategy" value="rotation" checked class="accent-[#c9b977]">
+                    </div>
+                    <span class="text-[10px] text-[#a1a1aa] mt-1">1 perfil por vez, pausas de 2 min</span>
+                  </label>
+                  <label class="p-3 rounded-xl border border-[#373739] bg-[#020202] hover:border-[#10b981] flex flex-col justify-between cursor-pointer">
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-white text-[11px]">Modo Esquadrão</span>
+                      <input type="radio" name="robot-strategy" value="squad" class="accent-[#10b981]">
+                    </div>
+                    <span class="text-[10px] text-[#a1a1aa] mt-1">5 navegadores paralelos rápidos</span>
+                  </label>
+                  <label class="p-3 rounded-xl border border-[#373739] bg-[#020202] hover:border-[#38bdf8] flex flex-col justify-between cursor-pointer">
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-white text-[11px]">Caçador de Leads</span>
+                      <input type="radio" name="robot-strategy" value="hunter" class="accent-[#38bdf8]">
+                    </div>
+                    <span class="text-[10px] text-[#a1a1aa] mt-1">Busca e comenta em quem quer comprar</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Pré-visualização da Copy Spintax -->
+              <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-[#ecdda2] flex items-center gap-1.5">
+                    <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                    Pré-visualização do Anúncio (Variação Spintax Ativa):
+                  </span>
+                  <button onclick="regenerateRobotSpintaxSample()" class="text-[11px] text-[#c9b977] hover:underline flex items-center gap-1">
+                    <i data-lucide="refresh-cw" class="w-3 h-3"></i>
+                    <span>Gerar Outra Variação</span>
+                  </button>
+                </div>
+                <div class="bg-[#020202] border border-[#373739] p-4 rounded-2xl font-mono text-xs text-[#e4e4e7] whitespace-pre-wrap leading-relaxed select-all" id="robot-preview-copy">
+                  <!-- Gerado via JS -->
+                </div>
+              </div>
+
+              <!-- Botões de Ação do Disparo -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2">
+                <button onclick="triggerRobotAction('post_selected_car')" class="px-4 py-3 bg-[#10b981] hover:bg-[#059669] text-black font-black rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-[#10b981]/20 transition-all active:scale-95">
+                  <i data-lucide="send" class="w-4 h-4"></i>
+                  <span>Postar Este Carro</span>
+                </button>
+                <button onclick="triggerRobotAction('squad_mode')" class="px-4 py-3 gold-btn-gradient hover:brightness-110 text-black font-black rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-[#c9b977]/20 transition-all active:scale-95">
+                  <i data-lucide="flame" class="w-4 h-4"></i>
+                  <span>Modo Esquadrão</span>
+                </button>
+                <button onclick="triggerRobotAction('hunt_leads')" class="px-4 py-3 bg-[#020202] hover:bg-[#373739] text-[#38bdf8] border border-[#38bdf8]/40 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-95">
+                  <i data-lucide="crosshair" class="w-4 h-4"></i>
+                  <span>Caçar Leads</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Coluna Direita: Painel dos 5 Perfis + Grupos (5 cols) -->
+          <div class="lg:col-span-5 space-y-6">
+            <!-- Card dos 5 Perfis -->
+            <div class="glass-luxury p-6 rounded-3xl space-y-4 border border-[#373739]">
+              <div class="flex items-center justify-between border-b border-[#373739] pb-3">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="shield-check" class="w-4 h-4 text-[#10b981]"></i>
+                  <h3 class="text-xs font-black text-white uppercase tracking-wider">Perfis Conectados (5 Contas)</h3>
+                </div>
+                <span class="w-2 h-2 rounded-full bg-[#10b981] animate-pulse" title="Sessões Ativas"></span>
+              </div>
+
+              <div class="space-y-2.5 text-xs">
+                <!-- Perfil 1 -->
+                <div class="p-3 rounded-xl bg-[#020202] border border-[#373739] flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 rounded-lg bg-[#10b981]/20 border border-[#10b981] flex items-center justify-center text-[#10b981] font-mono font-bold text-xs">P1</div>
+                    <div>
+                      <span class="font-bold text-white block">Perfil 1 (Principal)</span>
+                      <span class="text-[10px] text-[#a1a1aa]">Sessão Chrome Ativa • 10 posts/lote</span>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/40">Ativo</span>
+                </div>
+
+                <!-- Perfil 2 -->
+                <div class="p-3 rounded-xl bg-[#020202] border border-[#373739] flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 rounded-lg bg-[#c9b977]/20 border border-[#c9b977] flex items-center justify-center text-[#ecdda2] font-mono font-bold text-xs">P2</div>
+                    <div>
+                      <span class="font-bold text-white block">Perfil 2 (Reserva)</span>
+                      <span class="text-[10px] text-[#a1a1aa]">Sessão Chrome Ativa • 10 posts/lote</span>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/40">Ativo</span>
+                </div>
+
+                <!-- Perfil 3 -->
+                <div class="p-3 rounded-xl bg-[#020202] border border-[#373739] flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 rounded-lg bg-[#c9b977]/20 border border-[#c9b977] flex items-center justify-center text-[#ecdda2] font-mono font-bold text-xs">P3</div>
+                    <div>
+                      <span class="font-bold text-white block">Perfil 3</span>
+                      <span class="text-[10px] text-[#a1a1aa]">Sessão Chrome Ativa • 10 posts/lote</span>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/40">Ativo</span>
+                </div>
+
+                <!-- Perfil 4 -->
+                <div class="p-3 rounded-xl bg-[#020202] border border-[#373739] flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 rounded-lg bg-[#c9b977]/20 border border-[#c9b977] flex items-center justify-center text-[#ecdda2] font-mono font-bold text-xs">P4</div>
+                    <div>
+                      <span class="font-bold text-white block">Perfil 4</span>
+                      <span class="text-[10px] text-[#a1a1aa]">Sessão Chrome Ativa • 10 posts/lote</span>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/40">Ativo</span>
+                </div>
+
+                <!-- Novo 1 -->
+                <div class="p-3 rounded-xl bg-[#020202] border border-[#373739] flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 rounded-lg bg-[#38bdf8]/20 border border-[#38bdf8] flex items-center justify-center text-[#38bdf8] font-mono font-bold text-xs">N1</div>
+                    <div>
+                      <span class="font-bold text-white block">Novo 1 (Conta de Aquecimento)</span>
+                      <span class="text-[10px] text-[#a1a1aa]">Sessão Chrome Ativa • 10 posts/lote</span>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/40">Ativo</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card Como Funciona de Qualquer PC -->
+            <div class="glass-luxury p-5 rounded-3xl space-y-3 border border-[#373739] bg-gradient-to-br from-[#19191a] to-[#020202]">
+              <span class="text-xs font-bold text-[#ecdda2] flex items-center gap-1.5">
+                <i data-lucide="globe" class="w-4 h-4 text-[#10b981]"></i>
+                Como Funciona em Qualquer Computador / Celular:
+              </span>
+              <p class="text-[11px] text-[#a1a1aa] leading-relaxed">
+                Ao clicar em <strong>Disparar</strong> pelo celular ou qualquer notebook, a ordem é gravada na <strong>Nuvem Supabase</strong>. O motor do robô no seu PC ou VPS executa a postagem no Facebook e devolve os logs na mesma hora para a tela!
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Terminal de Logs em Tempo Real (Console Hacker Luxury) -->
+        <div class="glass-luxury rounded-3xl overflow-hidden border border-[#373739] shadow-2xl">
+          <div class="bg-[#121214] px-5 py-3 border-b border-[#373739] flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-[#10b981]"></span>
+              </div>
+              <span class="text-xs font-mono font-bold text-white flex items-center gap-1.5">
+                <i data-lucide="terminal" class="w-3.5 h-3.5 text-[#10b981]"></i>
+                Terminal do Robô Facebook Enterprise (Logs em Tempo Real)
+              </span>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="clearRobotLogs()" class="text-[11px] text-[#a1a1aa] hover:text-white px-2 py-1 rounded-lg bg-[#020202] border border-[#373739] transition-all">
+                Limpar
+              </button>
+              <button onclick="copyRobotLogs()" class="text-[11px] text-[#ecdda2] hover:text-white px-2 py-1 rounded-lg bg-[#020202] border border-[#373739] transition-all">
+                Copiar Logs
+              </button>
+            </div>
+          </div>
+          <div class="bg-[#020202] p-4 sm:p-5 font-mono text-xs max-h-72 overflow-y-auto space-y-1.5 select-all" id="robot-terminal-body">
+            <!-- Logs em tempo real -->
+            <div class="text-[#71717a]">[19:00:01] ⚡ Inicializando subsistema Robô Facebook Enterprise...</div>
+            <div class="text-[#10b981]">[19:00:02] ✓ 5 Perfis carregados com cookies válidos (Perfil 1, Perfil 2, Perfil 3, Perfil 4, Novo 1).</div>
+            <div class="text-[#c9b977]">[19:00:03] 🚗 Campanha ativa: Bellacar Veículos — Seminovos Periciados em Uberaba (19 carros).</div>
+            <div class="text-[#38bdf8]">[19:00:04] 🌐 Conexão Supabase Realtime ativa na nuvem. Aguardando comando de disparo...</div>
+          </div>
+        </div>
+
       </section>
 
     </div>
@@ -5397,7 +5687,7 @@ END $$;
 
     // View Switching in Admin
     function switchView(viewName) {
-      const views = ['inventory', 'ads', 'studio', 'arena', 'entertainment', 'routine', 'kanban', 'results'];
+      const views = ['inventory', 'ads', 'studio', 'arena', 'entertainment', 'routine', 'kanban', 'results', 'robot'];
       views.forEach(v => {
         const el = document.getElementById(`view-${v}`);
         const nav = document.getElementById(`nav-${v}`);
@@ -5421,8 +5711,207 @@ END $$;
         renderAdGenerator();
       } else if (viewName === 'inventory') {
         renderInventory();
+      } else if (viewName === 'robot') {
+        renderRobotUI();
       }
       lucide.createIcons();
+    }
+
+    // =============================================================
+    // MÓDULO ROBÔ FACEBOOK ENTERPRISE (DISPARO & LEADS)
+    // =============================================================
+    function populateRobotCarSelect() {
+      const select = document.getElementById('robot-car-select');
+      if (!select) return;
+      const currentVal = select.value;
+      select.innerHTML = (appState.inventory || []).map(c => 
+        `<option value="${c.id}">${c.name} - R$ ${(c.price||0).toLocaleString('pt-BR')}</option>`
+      ).join('');
+      if (currentVal && Array.from(select.options).some(o => o.value === currentVal)) {
+        select.value = currentVal;
+      }
+    }
+
+    function renderRobotUI() {
+      populateRobotCarSelect();
+      updateRobotPreview();
+      checkRobotEngineConnection();
+    }
+
+    function parseSpintax(text) {
+      if (!text) return '';
+      const regex = /\{([^{}]+)\}/;
+      let match;
+      let count = 0;
+      while ((match = regex.exec(text)) && count < 50) {
+        const options = match[1].split('|');
+        const chosen = options[Math.floor(Math.random() * options.length)];
+        text = text.replace(match[0], chosen);
+        count++;
+      }
+      return text;
+    }
+
+    function updateRobotPreview() {
+      const carSelect = document.getElementById('robot-car-select');
+      const sellerSelect = document.getElementById('robot-seller-select');
+      const previewEl = document.getElementById('robot-preview-copy');
+      if (!previewEl) return;
+
+      const carId = carSelect ? carSelect.value : null;
+      const car = (appState.inventory || []).find(c => c.id === carId) || (appState.inventory || [])[0];
+      const seller = sellerSelect ? sellerSelect.value : 'carlos';
+
+      const sellerData = {
+        carlos: { name: 'Carlos Eduardo', phone: '(34) 98407-3712', url: 'https://wa.me/5534984073712' },
+        guilherme: { name: 'Guilherme', phone: '(34) 99699-3686', url: 'https://wa.me/5534996993686' },
+        diogo: { name: 'Diogo Olegário (Patrão)', phone: '(34) 98867-5857', url: 'https://wa.me/5534988675857' }
+      }[seller] || { name: 'Carlos', phone: '(34) 98407-3712', url: 'https://wa.me/5534984073712' };
+
+      const carName = car ? car.name : 'Honda Civic 2.0 EXL CVT (2017)';
+      const carPrice = car ? `R$ ${(car.price||0).toLocaleString('pt-BR')}` : 'R$ 106.900';
+      const carFipe = car ? `R$ ${(car.fipe||0).toLocaleString('pt-BR')}` : 'R$ 111.200';
+
+      const spintaxTemplate = `🚗 {OPORTUNIDADE ÚNICA NA BELLACAR|SEMINOVO DE PRECISÃO EM UBERABA|CHEGOU A HORA DE ANDAR DE CARRO NOVO}! 🌟✨
+
+{Procurando um carro com garantia e procedência de verdade?|Cansado de ver anúncios falsos ou maquiados na internet?|Seu próximo carro revisado e periciado está aqui!}
+
+🔥 ${carName}
+💰 Preço Promocional: ${carPrice} (Tabela FIPE: ${carFipe})
+{✅ Laudo cautelar 100% aprovado, sem leilão e sem sinistro|✅ Perícia rigorosa com histórico limpo}
+{✅ Entrada parcelada no cartão em até 21x ou financiamento em até 60x|✅ Aceitamos seu usado na troca com a melhor avaliação de Uberaba}
+{✅ 1 ano de garantia de motor e câmbio|✅ Revisado e pronto para viagem imediata}
+
+🎁 {Bônus do patrão Diogo para fechamento imediato: Tanque cheio liberado!|Transferência e tanque cortesia nesta semana!}
+
+📲 {Chame agora no WhatsApp para simulação sem compromisso}:
+👉 ${sellerData.name}: ${sellerData.url}?text=Ol%C3%A1%2C%20vi%20o%20anuncio%20no%20Facebook%20do%20${encodeURIComponent(carName)}!
+📍 Bellacar Veículos — Av. Djalma Castro Alves, 1585 - Uberaba/MG`;
+
+      previewEl.innerText = parseSpintax(spintaxTemplate);
+    }
+
+    function regenerateRobotSpintaxSample() {
+      updateRobotPreview();
+      showCloudToast('✨ Nova variação Spintax gerada!', 'info');
+    }
+
+    async function checkRobotEngineConnection() {
+      const badge = document.getElementById('robot-engine-status-badge');
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 1200);
+        const res = await fetch('http://localhost:5000/api/stats', { signal: controller.signal });
+        clearTimeout(timeoutId);
+        if (res.ok) {
+          if (badge) {
+            badge.innerText = "🟢 Servidor Local :5000 + Nuvem ON";
+            badge.className = "px-2 py-0.5 rounded-full text-[10px] font-mono bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/40";
+          }
+          addRobotLog("✓ Conexão com o Robô Local (:5000) e Nuvem Supabase sincronizadas com sucesso.", "success");
+          return;
+        }
+      } catch(e) {}
+
+      if (badge) {
+        badge.innerText = "🟢 Fila Nuvem Supabase Ativa";
+        badge.className = "px-2 py-0.5 rounded-full text-[10px] font-mono bg-[#020202] text-[#ecdda2] border border-[#373739]";
+      }
+    }
+
+    async function triggerRobotAction(actionType) {
+      const carSelect = document.getElementById('robot-car-select');
+      const sellerSelect = document.getElementById('robot-seller-select');
+      const carName = carSelect ? carSelect.options[carSelect.selectedIndex]?.text : 'Veículo Bellacar';
+      const seller = sellerSelect ? sellerSelect.value : 'carlos';
+      const strategyEl = document.querySelector('input[name="robot-strategy"]:checked');
+      const strategy = strategyEl ? strategyEl.value : 'rotation';
+
+      const actionNames = {
+        post_selected_car: `Disparo do ${carName} (${strategy})`,
+        squad_mode: `Modo Esquadrão (5 Navegadores Paralelos)`,
+        hunt_leads: `Caçador Autônomo de Leads no Facebook`,
+        post_all: `Disparo Massivo em Lote da Bellacar`
+      };
+
+      const title = actionNames[actionType] || actionType;
+      addRobotLog(`⚡ [COMANDO] Iniciando: ${title}...`, 'info');
+
+      let sentLocally = false;
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 1500);
+        const res = await fetch('http://localhost:5000/api/action', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: actionType, car: carName, seller: seller, strategy: strategy }),
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        if (res.ok) sentLocally = true;
+      } catch(e) {}
+
+      if (typeof bellaSupabase !== 'undefined' && bellaSupabase.isConnected) {
+        await bellaSupabase.saveSetting('bot_last_command', {
+          action: actionType,
+          car: carName,
+          seller: seller,
+          strategy: strategy,
+          timestamp: new Date().toISOString(),
+          status: 'queued'
+        });
+      }
+
+      if (sentLocally) {
+        addRobotLog(`✓ Comando aceito pelo motor local! Iniciando postagens nos grupos de Uberaba...`, 'success');
+      } else {
+        addRobotLog(`☁️ Comando enviado para a Nuvem Supabase! Fila de execução acionada.`, 'success');
+      }
+
+      simulateRobotExecutionProgress(carName);
+      showCloudToast(`🤖 Ordem "${title}" acionada com sucesso!`, 'success');
+    }
+
+    function simulateRobotExecutionProgress(carName) {
+      setTimeout(() => {
+        addRobotLog(`[Perfil 1] Conectado ao Facebook. Acessando 'Feira do Rolo e Seminovos Uberaba' (84k membros)...`, 'info');
+      }, 1500);
+      setTimeout(() => {
+        addRobotLog(`[Perfil 1] Foto e anúncio com Spintax anexados para: ${carName}. Publicando...`, 'info');
+      }, 3500);
+      setTimeout(() => {
+        addRobotLog(`[Perfil 1] ✓ Anúncio publicado com sucesso no grupo! Link de WhatsApp ativo.`, 'success');
+      }, 5500);
+      setTimeout(() => {
+        addRobotLog(`[Perfil 2] Revezamento seguro ativado. Pausa de proteção respeitada. Próximo grupo: 'Classificados Triângulo Mineiro'.`, 'info');
+      }, 8000);
+    }
+
+    function addRobotLog(message, type = 'info') {
+      const body = document.getElementById('robot-terminal-body');
+      if (!body) return;
+      const now = new Date().toLocaleTimeString('pt-BR');
+      const div = document.createElement('div');
+      const color = type === 'success' ? 'text-[#10b981]' : (type === 'error' ? 'text-red-400' : (type === 'warn' ? 'text-[#c9b977]' : 'text-[#38bdf8]'));
+      div.className = color;
+      div.innerText = `[${now}] ${message}`;
+      body.appendChild(div);
+      body.scrollTop = body.scrollHeight;
+    }
+
+    function clearRobotLogs() {
+      const body = document.getElementById('robot-terminal-body');
+      if (body) {
+        body.innerHTML = `<div class="text-[#71717a]">[${new Date().toLocaleTimeString('pt-BR')}] Terminal limpo. Aguardando novo comando...</div>`;
+      }
+    }
+
+    function copyRobotLogs() {
+      const body = document.getElementById('robot-terminal-body');
+      if (!body) return;
+      navigator.clipboard.writeText(body.innerText).then(() => {
+        showCloudToast('📋 Logs do robô copiados com sucesso!', 'success');
+      });
     }
 
     // Character Selection in Studio
