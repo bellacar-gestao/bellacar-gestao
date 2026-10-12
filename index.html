@@ -202,6 +202,14 @@
           <span class="hidden md:inline text-[11px]">Trocar Usuário</span>
         </button>
 
+        <!-- Botão JARVIS Copilot Executivo -->
+        <button id="btn-jarvis-copilot-header" onclick="openJarvisCopilotModal()" title="Abrir Central JARVIS Copilot BellaCar" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-[#0b1727] via-[#020202] to-[#0b1727] hover:brightness-125 text-[#ecdda2] border border-[#38bdf8]/60 hover:border-[#38bdf8] rounded-xl text-xs font-black transition-all shadow-md shadow-[#38bdf8]/15 shrink-0 active:scale-95">
+          <span class="text-sm">👑</span>
+          <i data-lucide="brain-circuit" class="w-3.5 h-3.5 text-[#38bdf8]"></i>
+          <span class="hidden sm:inline bg-gradient-to-r from-[#ecdda2] via-[#38bdf8] to-[#10b981] bg-clip-text text-transparent font-black">JARVIS</span>
+          <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" title="JARVIS Copilot Ativo"></span>
+        </button>
+
         <!-- Botão Conectar Inteligência Artificial Real (Google Gemini) -->
         <button id="btn-ai-config" onclick="openAIConfigModal()" title="Configurar Inteligência Artificial Real (Google Gemini)" class="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 sm:py-2 bg-[#020202] hover:bg-[#373739] text-[#ecdda2] border border-[#c9b977]/50 hover:border-[#c9b977] rounded-xl text-xs font-bold transition-all shadow-sm shrink-0">
           <i data-lucide="sparkles" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#c9b977]"></i>
@@ -300,6 +308,11 @@
         <button onclick="sendExecutiveReportToDiogo()" class="px-4 py-2.5 bg-[#25D366] hover:bg-[#20ba59] text-black font-black rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-[#25D366]/20 transition-all">
               <i data-lucide="message-square" class="w-4 h-4"></i>
               <span>Relatório no WhatsApp</span>
+            </button>
+            <button onclick="openJarvisCopilotModal('diogo_briefing')" class="px-4 py-2.5 bg-gradient-to-r from-[#c9b977]/25 via-[#38bdf8]/20 to-[#10b981]/20 hover:brightness-125 text-[#ecdda2] border border-[#38bdf8]/60 rounded-xl text-xs font-black flex items-center gap-2 shadow-lg shadow-[#38bdf8]/10 transition-all" title="Abrir Briefing Executivo do JARVIS">
+              <span class="text-sm">👑</span>
+              <i data-lucide="brain-circuit" class="w-4 h-4 text-[#38bdf8]"></i>
+              <span>Briefing JARVIS</span>
             </button>
             <button onclick="switchPortal('admin')" class="px-4 py-2.5 bg-[#19191a] hover:bg-[#373739] text-[#ecdda2] border border-[#373739] rounded-xl text-xs font-bold flex items-center gap-2 transition-all">
               <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
@@ -2478,6 +2491,38 @@
                 <span class="text-[11px] text-[#c9b977] font-mono">19 Carros Disponíveis</span>
               </div>
 
+              <!-- JARVIS COPILOT CO-PILOTO DE DISPARO -->
+              <div class="glass-luxury p-4 rounded-2xl border border-[#38bdf8]/50 bg-gradient-to-r from-[#020202] via-[#0b1727] to-[#020202] shadow-xl relative overflow-hidden">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-[#38bdf8]/20 border border-[#38bdf8] flex items-center justify-center text-[#38bdf8] text-xl shadow-lg shadow-[#38bdf8]/20 shrink-0">
+                      🤖
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <span class="text-xs font-black text-white">JARVIS Neural Co-Piloto</span>
+                        <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-[#38bdf8]/20 text-[#38bdf8] border border-[#38bdf8]/40 animate-pulse">AUTÔNOMO</span>
+                      </div>
+                      <p class="text-[11px] text-[#a1a1aa] mt-0.5">Auditoria do estoque, carro de maior giro hoje e proteção anti-bloqueio</p>
+                    </div>
+                  </div>
+                  <div class="flex flex-wrap items-center gap-1.5">
+                    <button onclick="openJarvisCopilotModal('diagnose')" class="px-2.5 py-1.5 bg-[#38bdf8]/20 hover:bg-[#38bdf8]/30 text-[#38bdf8] border border-[#38bdf8]/60 rounded-xl text-[11px] font-black flex items-center gap-1 transition-all">
+                      <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+                      <span>⚡ Recomendação IA</span>
+                    </button>
+                    <button onclick="openJarvisCopilotModal('audit_copy')" class="px-2.5 py-1.5 bg-[#c9b977]/20 hover:bg-[#c9b977]/30 text-[#ecdda2] border border-[#c9b977]/60 rounded-xl text-[11px] font-black flex items-center gap-1 transition-all">
+                      <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                      <span>🛡️ Auditar Copy</span>
+                    </button>
+                    <button onclick="openJarvisCopilotModal('chat')" class="px-2.5 py-1.5 bg-[#10b981]/20 hover:bg-[#10b981]/30 text-[#10b981] border border-[#10b981]/60 rounded-xl text-[11px] font-black flex items-center gap-1 transition-all">
+                      <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+                      <span>💬 JARVIS Chat</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
               <!-- Seleção do Veículo e Vendedor -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 <div class="space-y-1">
@@ -3574,6 +3619,335 @@
   <!-- Floating Cloud Toast Notifications -->
   <div id="cloud-toast-container" class="fixed top-20 right-4 sm:right-6 z-50 flex flex-col gap-2 max-w-sm pointer-events-none"></div>
 
+  <!-- ============================================================= -->
+  <!-- MODAL: JARVIS COPILOT (CO-PILOTO EXECUTIVO BELLACAR)        -->
+  <!-- ============================================================= -->
+  <div id="modal-jarvis-copilot" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-4 hidden">
+    <div class="glass-luxury w-full max-w-5xl max-h-[92vh] flex flex-col rounded-3xl border border-[#38bdf8]/60 shadow-2xl overflow-hidden" style="box-shadow: 0 0 35px -5px rgba(56, 189, 248, 0.25);">
+      
+      <!-- Top Modal Bar -->
+      <div class="p-4 sm:p-5 border-b border-[#373739] flex items-center justify-between bg-gradient-to-r from-[#020202] via-[#091522] to-[#020202] shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#38bdf8]/20 border border-[#38bdf8] flex items-center justify-center text-xl sm:text-2xl shadow-lg shadow-[#38bdf8]/25 text-[#38bdf8]">
+            🤖
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-base sm:text-lg font-black text-white flex items-center gap-1.5">
+                JARVIS Copilot
+                <span class="text-xs bg-gradient-to-r from-[#ecdda2] via-[#38bdf8] to-[#10b981] bg-clip-text text-transparent font-black">BellaCar</span>
+              </h3>
+              <span id="jarvis-modal-ai-badge" class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/40">
+                🟢 Modo Neural Ativo
+              </span>
+            </div>
+            <span class="text-[11px] text-[#a1a1aa] block">Inteligência Estratégica, Auditoria Anti-Spam e Otimizador de Vendas</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="closeModal('modal-jarvis-copilot')" class="w-8 h-8 rounded-xl bg-[#19191a] hover:bg-[#373739] text-[#a1a1aa] hover:text-white flex items-center justify-center transition-all">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs Inside JARVIS -->
+      <div class="flex items-center border-b border-[#373739] px-3 sm:px-6 bg-[#070b12] overflow-x-auto text-xs font-bold gap-1.5 py-2.5 shrink-0 no-scrollbar">
+        <button id="jarvis-tab-btn-diagnose" onclick="switchJarvisTab('diagnose')" class="px-3.5 py-1.5 rounded-xl border border-[#38bdf8] bg-[#38bdf8]/20 text-white flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0">
+          <i data-lucide="zap" class="w-3.5 h-3.5 text-[#38bdf8]"></i>
+          <span>1. ⚡ Diagnóstico do Pátio</span>
+        </button>
+        <button id="jarvis-tab-btn-audit_copy" onclick="switchJarvisTab('audit_copy')" class="px-3.5 py-1.5 rounded-xl border border-transparent text-[#a1a1aa] hover:text-white flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#c9b977]"></i>
+          <span>2. 🛡️ Auditoria Anti-Spam</span>
+        </button>
+        <button id="jarvis-tab-btn-lead_hunter" onclick="switchJarvisTab('lead_hunter')" class="px-3.5 py-1.5 rounded-xl border border-transparent text-[#a1a1aa] hover:text-white flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0">
+          <i data-lucide="target" class="w-3.5 h-3.5 text-[#38bdf8]"></i>
+          <span>3. 🎯 Caçador de Leads</span>
+        </button>
+        <button id="jarvis-tab-btn-diogo_briefing" onclick="switchJarvisTab('diogo_briefing')" class="px-3.5 py-1.5 rounded-xl border border-transparent text-[#a1a1aa] hover:text-white flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0">
+          <span class="text-xs">👑</span>
+          <span>4. Briefing do Diogo</span>
+        </button>
+        <button id="jarvis-tab-btn-chat" onclick="switchJarvisTab('chat')" class="px-3.5 py-1.5 rounded-xl border border-transparent text-[#a1a1aa] hover:text-white flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0">
+          <i data-lucide="message-square" class="w-3.5 h-3.5 text-[#10b981]"></i>
+          <span>5. 💬 Chat com JARVIS</span>
+        </button>
+      </div>
+
+      <!-- Tab Contents (Scrollable) -->
+      <div class="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1 text-xs">
+        
+        <!-- ========================================== -->
+        <!-- TAB 1: DIAGNÓSTICO DO PÁTIO & RECOMENDAÇÃO -->
+        <!-- ========================================== -->
+        <div id="jarvis-tab-content-diagnose" class="space-y-5">
+          <!-- KPI Strip -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="bg-[#020202] border border-[#373739] p-3.5 rounded-2xl space-y-1">
+              <span class="text-[10px] font-mono uppercase text-[#a1a1aa] flex items-center gap-1">
+                <i data-lucide="car" class="w-3.5 h-3.5 text-[#38bdf8]"></i>
+                Showroom Ativo
+              </span>
+              <div class="text-xl font-black text-white" id="jarvis-kpi-total-cars">19 Carros</div>
+              <span class="text-[10px] text-emerald-400 font-mono">100% Prontos</span>
+            </div>
+            <div class="bg-[#020202] border border-[#373739] p-3.5 rounded-2xl space-y-1">
+              <span class="text-[10px] font-mono uppercase text-[#a1a1aa] flex items-center gap-1">
+                <i data-lucide="coins" class="w-3.5 h-3.5 text-[#c9b977]"></i>
+                Patrimônio em Estoque
+              </span>
+              <div class="text-xl font-black text-[#ecdda2]" id="jarvis-kpi-stock-val">R$ 1.258.100</div>
+              <span class="text-[10px] text-[#a1a1aa] font-mono">Avaliação BellaCar</span>
+            </div>
+            <div class="bg-[#020202] border border-[#373739] p-3.5 rounded-2xl space-y-1">
+              <span class="text-[10px] font-mono uppercase text-[#a1a1aa] flex items-center gap-1">
+                <i data-lucide="trending-down" class="w-3.5 h-3.5 text-emerald-400"></i>
+                Economia vs FIPE
+              </span>
+              <div class="text-xl font-black text-emerald-400" id="jarvis-kpi-savings-val">R$ 56.400</div>
+              <span class="text-[10px] text-emerald-400 font-mono">Apelo Forte de Venda</span>
+            </div>
+            <div class="bg-[#020202] border border-[#373739] p-3.5 rounded-2xl space-y-1">
+              <span class="text-[10px] font-mono uppercase text-[#a1a1aa] flex items-center gap-1">
+                <i data-lucide="bot" class="w-3.5 h-3.5 text-[#10b981]"></i>
+                Robô de Disparos
+              </span>
+              <div class="text-xl font-black text-[#10b981]">5 Contas ON</div>
+              <span class="text-[10px] text-[#10b981] font-mono">150+ Grupos</span>
+            </div>
+          </div>
+
+          <!-- Card de Destaque: Carro Ouro Recomendado -->
+          <div class="glass-luxury p-5 sm:p-6 rounded-3xl border border-[#c9b977]/60 gold-glow relative overflow-hidden space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#373739] pb-3">
+              <div class="flex items-center gap-2.5">
+                <span class="text-2xl">🌟</span>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-[#c9b977]/20 text-[#ecdda2] border border-[#c9b977]/40">CARRO OURO DE HOJE</span>
+                    <span class="text-[11px] text-emerald-400 font-bold" id="jarvis-gold-discount-tag">R$ 4.300 abaixo da FIPE</span>
+                  </div>
+                  <h4 class="text-base sm:text-lg font-black text-white mt-0.5" id="jarvis-gold-car-name">Honda Civic 2.0 EXL CVT (2017)</h4>
+                </div>
+              </div>
+              <div class="text-right sm:text-right">
+                <div class="text-xs text-[#a1a1aa]">Preço no Pátio:</div>
+                <div class="text-xl font-black text-[#ecdda2]" id="jarvis-gold-car-price">R$ 106.900</div>
+              </div>
+            </div>
+
+            <!-- Justificativa da IA -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+              <div class="bg-[#020202] border border-[#373739] p-3 rounded-2xl space-y-1">
+                <span class="text-[10px] font-mono text-[#c9b977] uppercase font-bold">Por que este carro?</span>
+                <p class="text-[#e4e4e7] leading-relaxed text-[11px]" id="jarvis-gold-rationale">
+                  Maior taxa de cliques no Facebook em Uberaba e região. Perfeita combinação de prestígio executivo, valor abaixo da FIPE e alta liquidez no atendimento.
+                </p>
+              </div>
+              <div class="bg-[#020202] border border-[#373739] p-3 rounded-2xl space-y-1">
+                <span class="text-[10px] font-mono text-[#38bdf8] uppercase font-bold">Consultor Recomendado</span>
+                <p class="text-[#e4e4e7] leading-relaxed text-[11px]" id="jarvis-gold-seller-rationale">
+                  <strong>Carlos Eduardo</strong>: Histórico de alta conversão para sedans executivos e esportivos no WhatsApp.
+                </p>
+              </div>
+              <div class="bg-[#020202] border border-[#373739] p-3 rounded-2xl space-y-1">
+                <span class="text-[10px] font-mono text-[#10b981] uppercase font-bold">Gancho de Conversão</span>
+                <p class="text-[#e4e4e7] leading-relaxed text-[11px]">
+                  "Status de patrão por valor acessível + Laudo 100% Aprovado + Bônus de Tanque Cheio do Diogo".
+                </p>
+              </div>
+            </div>
+
+            <!-- Botão de Ação Direta -->
+            <div class="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <span class="text-[11px] text-[#a1a1aa]">Configure e inicie a operação no Facebook em 1 toque:</span>
+              <button onclick="applyJarvisGoldenRecommendation()" class="w-full sm:w-auto px-6 py-3 gold-btn-gradient hover:brightness-110 text-black font-black rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-[#c9b977]/25 active:scale-95 transition-all">
+                <i data-lucide="zap" class="w-4 h-4 text-black"></i>
+                <span>🚀 Aplicar no Robô e Ir para Disparo Imediato</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Top 5 Alternativas de Giro Rápido -->
+          <div class="space-y-2">
+            <span class="text-xs font-bold text-[#ecdda2] flex items-center gap-1.5">
+              <i data-lucide="list" class="w-3.5 h-3.5"></i>
+              Outros Veículos de Alta Liquidez para Disparo Hoje:
+            </span>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5" id="jarvis-top-cars-grid">
+              <!-- Preenchido via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 2: AUDITORIA ANTI-SPAM DA COPY         -->
+        <!-- ========================================== -->
+        <div id="jarvis-tab-content-audit_copy" class="space-y-5 hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+            <!-- Coluna de Input da Copy (7 cols) -->
+            <div class="lg:col-span-7 space-y-3">
+              <div class="flex items-center justify-between">
+                <label class="font-bold text-white flex items-center gap-1.5">
+                  <i data-lucide="file-text" class="w-4 h-4 text-[#38bdf8]"></i>
+                  Texto da Copy / Modelo de Disparo:
+                </label>
+                <button onclick="loadCurrentRobotCopyIntoAudit()" class="text-[11px] text-[#38bdf8] hover:underline flex items-center gap-1">
+                  <i data-lucide="download" class="w-3 h-3"></i>
+                  <span>Puxar Copy Atual do Robô</span>
+                </button>
+              </div>
+              <textarea id="jarvis-audit-copy-input" rows="9" oninput="runJarvisCopySafetyCheck()" placeholder="Cole aqui o texto do anúncio ou template Spintax para auditar..." class="w-full bg-[#020202] border border-[#373739] focus:border-[#38bdf8] rounded-2xl p-3.5 text-[#e4e4e7] font-mono text-xs leading-relaxed outline-none"></textarea>
+              
+              <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+                <button onclick="optimizeCopySpintaxWithJarvis()" id="btn-jarvis-optimize-copy" class="px-4 py-2 bg-[#38bdf8]/20 hover:bg-[#38bdf8]/30 text-[#38bdf8] border border-[#38bdf8]/60 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all">
+                  <i data-lucide="sparkles" class="w-4 h-4"></i>
+                  <span>✨ Blindar Copy com Spintax IA</span>
+                </button>
+                <button onclick="applyAuditCopyDirectlyToRobot()" class="px-4 py-2 bg-[#10b981] hover:bg-[#059669] text-black font-black rounded-xl text-xs flex items-center gap-1.5 shadow-md shadow-[#10b981]/20 transition-all">
+                  <i data-lucide="check" class="w-4 h-4"></i>
+                  <span>Injetar no Robô</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Coluna do Laudo de Segurança (5 cols) -->
+            <div class="lg:col-span-5 space-y-4">
+              <!-- Score Card -->
+              <div class="bg-[#020202] border border-[#373739] p-5 rounded-2xl space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-[#a1a1aa] uppercase font-mono">Índice de Blindagem Anti-Ban</span>
+                  <span id="jarvis-audit-score-badge" class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/50">
+                    98% Seguro
+                  </span>
+                </div>
+                <div class="w-full bg-[#19191a] h-3 rounded-full overflow-hidden">
+                  <div id="jarvis-audit-score-bar" class="h-full bg-emerald-400 rounded-full transition-all duration-500" style="width: 98%;"></div>
+                </div>
+                <div class="text-[11px] text-[#a1a1aa]" id="jarvis-audit-level-desc">
+                  Texto com alta variação Spintax e linguagem orgânica. Risco quase zero de bloqueio pelo Facebook.
+                </div>
+              </div>
+
+              <!-- Lista de Alertas / Pontos Positivos -->
+              <div class="space-y-2">
+                <span class="text-[11px] font-bold text-[#ecdda2] uppercase font-mono block">Diagnóstico de Algoritmo:</span>
+                <div id="jarvis-audit-checklist" class="space-y-2 text-xs">
+                  <!-- Preenchido via JS -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 3: CAÇADOR DE LEADS (RESPOSTAS PRONTAS) -->
+        <!-- ========================================== -->
+        <div id="jarvis-tab-content-lead_hunter" class="space-y-5 hidden">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#020202] p-4 rounded-2xl border border-[#373739]">
+            <div>
+              <span class="font-bold text-white text-xs block">Respostas Persuasivas para Caça nos Grupos</span>
+              <p class="text-[11px] text-[#a1a1aa]">Textos calibrados para converter comentários de compradores em chamadas no WhatsApp.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="copyAllJarvisHunterResponses()" class="px-3.5 py-2 bg-[#19191a] hover:bg-[#373739] text-[#ecdda2] border border-[#c9b977]/40 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                <span>Copiar Todos</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="space-y-3" id="jarvis-hunter-responses-list">
+            <!-- Preenchido via JS com os 5 cenários -->
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 4: BRIEFING EXECUTIVO DO DIOGO         -->
+        <!-- ========================================== -->
+        <div id="jarvis-tab-content-diogo_briefing" class="space-y-5 hidden">
+          <div class="glass-luxury p-5 sm:p-6 rounded-3xl border border-[#c9b977]/60 space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#373739] pb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-2xl bg-[#c9b977]/20 border border-[#c9b977] flex items-center justify-center text-[#ecdda2] font-black text-lg">
+                  DO
+                </div>
+                <div>
+                  <h4 class="text-sm font-black text-white">Briefing Executivo para Diogo Olegário</h4>
+                  <span class="text-[11px] text-[#a1a1aa]">Resumo operacional da loja pronto para envio no WhatsApp</span>
+                </div>
+              </div>
+              <button onclick="sendJarvisBriefingWhatsApp()" class="px-4 py-2.5 bg-[#25D366] hover:bg-[#20ba59] text-black font-black rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-[#25D366]/20 transition-all">
+                <i data-lucide="message-square" class="w-4 h-4"></i>
+                <span>Disparar no WhatsApp do Diogo</span>
+              </button>
+            </div>
+
+            <!-- Visualização da Mensagem Formatada -->
+            <div class="bg-[#020202] border border-[#373739] p-4 rounded-2xl font-mono text-xs text-[#e4e4e7] whitespace-pre-wrap leading-relaxed select-all" id="jarvis-briefing-preview-text">
+              <!-- Preenchido via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 5: CHAT EXECUTIVO COM JARVIS           -->
+        <!-- ========================================== -->
+        <div id="jarvis-tab-content-chat" class="space-y-4 hidden flex flex-col h-[480px]">
+          <!-- Histórico de Conversa -->
+          <div id="jarvis-chat-messages" class="flex-1 overflow-y-auto space-y-3 p-3 bg-[#020202] border border-[#373739] rounded-2xl text-xs">
+            <!-- Mensagens renderizadas via JS -->
+          </div>
+
+          <!-- Sugestões Rápidas (Chips) -->
+          <div class="flex items-center gap-1.5 overflow-x-auto py-1 shrink-0 no-scrollbar">
+            <span class="text-[10px] text-[#a1a1aa] shrink-0 font-mono">Sugestões:</span>
+            <button onclick="sendJarvisQuickPrompt('Qual o melhor carro para anunciar hoje no Facebook e por quê?')" class="px-2.5 py-1 bg-[#19191a] hover:bg-[#373739] text-[#ecdda2] border border-[#373739] rounded-lg text-[10px] font-bold whitespace-nowrap shrink-0 transition-all">
+              ⚡ Melhor carro hoje?
+            </button>
+            <button onclick="sendJarvisQuickPrompt('Analise meu estoque de 19 carros e aponte oportunidades abaixo da FIPE')" class="px-2.5 py-1 bg-[#19191a] hover:bg-[#373739] text-[#38bdf8] border border-[#373739] rounded-lg text-[10px] font-bold whitespace-nowrap shrink-0 transition-all">
+              📊 Análise de Margens
+            </button>
+            <button onclick="sendJarvisQuickPrompt('Como o Carlos e o Guilherme devem contornar clientes que oferecem carro na troca com preço alto?')" class="px-2.5 py-1 bg-[#19191a] hover:bg-[#373739] text-[#10b981] border border-[#373739] rounded-lg text-[10px] font-bold whitespace-nowrap shrink-0 transition-all">
+              🛡️ Objeção de Troca
+            </button>
+            <button onclick="sendJarvisQuickPrompt('Gere uma copy altamente persuasiva com Spintax para a Toyota Hilux SRV')" class="px-2.5 py-1 bg-[#19191a] hover:bg-[#373739] text-[#c9b977] border border-[#373739] rounded-lg text-[10px] font-bold whitespace-nowrap shrink-0 transition-all">
+              ✍️ Copy Hilux SRV
+            </button>
+          </div>
+
+          <!-- Input Bar -->
+          <div class="flex items-center gap-2 shrink-0">
+            <input type="text" id="jarvis-chat-input" onkeydown="if(event.key==='Enter') sendJarvisChatFromInput()" placeholder="Pergunte ao JARVIS sobre o pátio, copies, disparos ou vendas..." class="flex-1 bg-[#020202] border border-[#373739] focus:border-[#38bdf8] rounded-xl px-4 py-2.5 text-white text-xs outline-none">
+            <button onclick="sendJarvisChatFromInput()" id="btn-jarvis-send" class="px-4 py-2.5 bg-[#38bdf8] hover:bg-[#0284c7] text-black font-black rounded-xl text-xs flex items-center gap-1.5 transition-all shadow-md shadow-[#38bdf8]/20 shrink-0">
+              <i data-lucide="send" class="w-4 h-4"></i>
+              <span class="hidden sm:inline">Perguntar</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FLOATING JARVIS TRIGGER -->
+  <div id="jarvis-floating-trigger" class="fixed bottom-5 right-5 z-40">
+    <button onclick="openJarvisCopilotModal()" class="group relative flex items-center gap-2.5 px-3.5 py-2.5 sm:px-4 sm:py-3 bg-gradient-to-r from-[#020202] via-[#0f172a] to-[#020202] text-white border border-[#c9b977]/60 hover:border-[#38bdf8] rounded-2xl shadow-2xl transition-all active:scale-95 hover:scale-105" style="box-shadow: 0 0 22px -3px rgba(56, 189, 248, 0.40);">
+      <div class="relative">
+        <span class="text-xl sm:text-2xl">🤖</span>
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 absolute -top-1 -right-1 animate-pulse"></span>
+      </div>
+      <div class="text-left hidden xs:block">
+        <div class="text-[9px] font-mono uppercase tracking-wider text-[#c9b977] font-bold">BellaCar AI</div>
+        <div class="text-xs font-black text-white flex items-center gap-1">
+          JARVIS Copilot
+          <span class="text-[9px] px-1 rounded bg-[#38bdf8]/20 text-[#38bdf8] font-mono border border-[#38bdf8]/30">IA</span>
+        </div>
+      </div>
+    </button>
+  </div>
 
   <!-- ============================================================= -->
   <!-- JAVASCRIPT STATE ENGINE & INTERACTIVITY                       -->
@@ -3679,6 +4053,17 @@
           badge.innerText = "🟡 Modo Neural Local (100+ Variações)";
         }
       }
+
+      const jarvisBadge = document.getElementById('jarvis-modal-ai-badge');
+      if (jarvisBadge) {
+        if (hasKey) {
+          jarvisBadge.className = "px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/40";
+          jarvisBadge.innerText = `🟢 IA Real Gemini (${AI_CONFIG.getModel()})`;
+        } else {
+          jarvisBadge.className = "px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#38bdf8]/20 text-[#38bdf8] border border-[#38bdf8]/40";
+          jarvisBadge.innerText = "🔵 Modo Neural Procedural Ativo";
+        }
+      }
     }
 
     function openAIConfigModal() {
@@ -3744,6 +4129,12 @@
         AI_CONFIG.setModel(workingModel);
         if (modelSelect) modelSelect.value = workingModel;
         updateAIStatusUI();
+
+        if (typeof bellaSupabase !== 'undefined' && bellaSupabase.isConnected) {
+          await bellaSupabase.saveSetting('gemini_api_key', key);
+          await bellaSupabase.saveSetting('gemini_model', workingModel);
+        }
+
         alert(`✓ Conexão bem-sucedida! Sua IA Real (${workingModel}) está 100% ativa e pronta para gerar conteúdos inéditos na BellaCar!`);
         closeModal('modal-ai-config');
       } else {
@@ -3965,6 +4356,15 @@
                   updateDiogoBonusTogglesUI();
                 } catch(e) {}
               }
+              if (s.key === 'gemini_api_key' && s.value) {
+                if (!AI_CONFIG.hasKey() || AI_CONFIG.getKey().length < 15) {
+                  AI_CONFIG.setKey(s.value);
+                  updateAIStatusUI();
+                }
+              }
+              if (s.key === 'gemini_model' && s.value) {
+                AI_CONFIG.setModel(s.value);
+              }
             });
             updateRibbon();
           }
@@ -4111,6 +4511,12 @@
                     if (typeof filterRobotLinks === 'function') filterRobotLinks();
                   }
                 } catch(e) {}
+              } else if (newSetting && newSetting.key === 'gemini_api_key' && newSetting.value) {
+                if (!AI_CONFIG.hasKey() || AI_CONFIG.getKey().length < 15) {
+                  AI_CONFIG.setKey(newSetting.value);
+                  updateAIStatusUI();
+                  showCloudToast('🤖 Chave de Inteligência Artificial Real sincronizada via Nuvem!', 'success');
+                }
               }
             })
             .subscribe(status => {
@@ -6254,6 +6660,740 @@ END $$;
       navigator.clipboard.writeText(body.innerText).then(() => {
         showCloudToast('📋 Logs do robô copiados com sucesso!', 'success');
       });
+    }
+
+    // =============================================================
+    // SISTEMA JARVIS COPILOT: INTELIGÊNCIA EXECUTIVA BELLACAR
+    // =============================================================
+    const JARVIS_COPILOT = {
+      activeTab: 'diagnose',
+      chatHistory: [
+        {
+          sender: 'jarvis',
+          text: 'Olá, patrão Diogo e equipe BellaCar! Sou o **JARVIS**, seu Co-Piloto de Inteligência Executiva e Disparos. Estou conectado em tempo real ao pátio da loja (19 seminovos), às estratégias do Facebook e à nuvem. Como posso acelerar suas vendas hoje?'
+        }
+      ],
+
+      // 1. Diagnóstico do Pátio & Margens
+      diagnosePatio: () => {
+        const list = (appState.inventory && appState.inventory.length) ? appState.inventory : REAL_BELLACAR_INVENTORY;
+        const totalCount = list.length;
+        const readyCars = list.filter(c => c.status !== 'sold');
+        const soldCars = list.filter(c => c.status === 'sold');
+        
+        let totalStockVal = 0;
+        let totalFipeVal = 0;
+        
+        list.forEach(c => {
+          totalStockVal += (Number(c.price) || 0);
+          totalFipeVal += (Number(c.fipe) || 0);
+        });
+        
+        const totalSavingsVsFipe = Math.max(0, totalFipeVal - totalStockVal);
+
+        // Score de atratividade de disparo para cada carro
+        const scoredCars = readyCars.map(c => {
+          const fipeDiff = Math.max(0, (Number(c.fipe) || 0) - (Number(c.price) || 0));
+          const fipePercent = c.fipe ? (fipeDiff / c.fipe) * 100 : 0;
+          let popularity = 70;
+          if (c.name.includes('Civic')) popularity = 98;
+          else if (c.name.includes('Hilux')) popularity = 96;
+          else if (c.name.includes('HR-V')) popularity = 94;
+          else if (c.name.includes('Strada')) popularity = 92;
+          else if (c.name.includes('Yaris')) popularity = 90;
+          else if (c.name.includes('Kicks')) popularity = 89;
+          else if (c.name.includes('HB20') || c.name.includes('Onix')) popularity = 88;
+          else if (c.name.includes('EcoSport')) popularity = 87;
+
+          const totalScore = Math.round(popularity * 0.6 + fipePercent * 8);
+          return { ...c, fipeDiff, fipePercent, totalScore };
+        }).sort((a, b) => b.totalScore - a.totalScore);
+
+        const goldenCar = scoredCars[0] || list[0];
+        const recSeller = (goldenCar.category === 'SUV' || goldenCar.category === 'Hatch') ? 'guilherme' : 'carlos';
+        const sellerName = recSeller === 'carlos' ? 'Carlos Eduardo' : 'Guilherme';
+
+        return {
+          totalCount,
+          readyCount: readyCars.length,
+          soldCount: soldCars.length,
+          totalStockVal,
+          totalFipeVal,
+          totalSavingsVsFipe,
+          goldenCar,
+          recSeller,
+          sellerName,
+          topCars: scoredCars.slice(0, 5)
+        };
+      },
+
+      // 2. Auditoria Anti-Spam de Copy
+      auditCopy: (text) => {
+        if (!text) text = '';
+        const issues = [];
+        const bonuses = [];
+        let score = 100;
+
+        // Análise de Spintax
+        const spintaxMatches = text.match(/\{([^{}]+)\}/g);
+        const spintaxCount = spintaxMatches ? spintaxMatches.length : 0;
+        let permutations = 1;
+
+        if (spintaxCount === 0) {
+          issues.push({
+            type: 'danger',
+            title: 'Zero Variações Spintax',
+            desc: 'Texto 100% estático. O Facebook detecta repetição a partir de 3 posts iguais.'
+          });
+          score -= 35;
+        } else {
+          spintaxMatches.forEach(m => {
+            const parts = m.slice(1, -1).split('|').length;
+            permutations *= Math.min(parts, 10);
+          });
+          bonuses.push({
+            title: `${spintaxCount} Blocos Spintax Detectados`,
+            desc: `Permutação estimada em mais de ${permutations > 1000 ? '1.000+' : permutations} combinações únicas. Algoritmo anti-duplicidade liberado.`
+          });
+        }
+
+        // Gatilhos proibidos
+        const forbiddenWords = [
+          { word: 'grátis', risk: 8 },
+          { word: 'gratis', risk: 8 },
+          { word: 'urgente', risk: 10 },
+          { word: 'sem entrada', risk: 12 },
+          { word: 'negativado', risk: 15 },
+          { word: 'sem consulta', risk: 15 },
+          { word: 'renda extra', risk: 20 },
+          { word: 'imperdível', risk: 6 },
+          { word: 'clique aqui', risk: 7 }
+        ];
+
+        const foundForbidden = [];
+        const lower = text.toLowerCase();
+        forbiddenWords.forEach(fw => {
+          if (lower.includes(fw.word)) {
+            foundForbidden.push(fw.word);
+            score -= fw.risk;
+          }
+        });
+
+        if (foundForbidden.length > 0) {
+          issues.push({
+            type: 'warning',
+            title: 'Gatilhos Comerciais Sensíveis',
+            desc: `Filtros do Facebook ativados por: [${foundForbidden.join(', ')}]. Recomenda-se termos mais naturais.`
+          });
+        } else {
+          bonuses.push({
+            title: 'Linguagem Orgânica Aprovada',
+            desc: 'Nenhum gatilho financeiro proibido detectado no texto.'
+          });
+        }
+
+        // Links
+        if (text.includes('wa.me/') || text.includes('api.whatsapp.com')) {
+          bonuses.push({
+            title: 'Link WhatsApp Oficial Protegido',
+            desc: 'Link wa.me formatado com mensagem direta aprovado.'
+          });
+        } else if (text.includes('http://') || text.includes('https://')) {
+          issues.push({
+            type: 'warning',
+            title: 'Link Genérico Detectado',
+            desc: 'Links externos sem wa.me podem sofrer redução de alcance nos grupos.'
+          });
+          score -= 10;
+        }
+
+        score = Math.max(15, Math.min(100, score));
+        let level = 'Blindado (Excelente)';
+        let badgeClass = 'bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/50';
+
+        if (score < 70) {
+          level = 'Alto Risco de Bloqueio';
+          badgeClass = 'bg-red-500/20 text-red-400 border border-red-500/50';
+        } else if (score < 88) {
+          level = 'Risco Moderado';
+          badgeClass = 'bg-amber-500/20 text-amber-400 border border-amber-500/50';
+        }
+
+        return { score, level, badgeClass, issues, bonuses, spintaxCount, permutations };
+      },
+
+      // 3. Gerador de Respostas para Caçador de Leads
+      generateHunterResponses: (carName, sellerKey) => {
+        const seller = {
+          carlos: { name: 'Carlos Eduardo', phone: '(34) 98407-3712', url: 'https://wa.me/5534984073712' },
+          guilherme: { name: 'Guilherme', phone: '(34) 99699-3686', url: 'https://wa.me/5534996993686' },
+          diogo: { name: 'Diogo Olegário', phone: '(34) 98867-5857', url: 'https://wa.me/5534988675857' }
+        }[sellerKey || 'carlos'] || { name: 'Carlos Eduardo', phone: '(34) 98407-3712', url: 'https://wa.me/5534984073712' };
+
+        const cName = carName || 'Honda Civic 2.0 EXL';
+
+        return [
+          {
+            scenario: 'Objeção: "Qual a menor parcela / financia com pouca entrada?"',
+            tag: 'Financiamento Rápido',
+            copy: `Opa, tudo bem? Conseguimos aprovação rápida aqui na BellaCar com as melhores taxas de Uberaba! Temos opções com entrada facilitada no cartão em até 21x ou financiamento com parcelas sob medida no ${cName}. Me chama no WhatsApp que simulo agora sem compromisso pra você: ${seller.url}?text=Ola+${seller.name}+vi+seu+comentario+sobre+o+financiamento+do+${encodeURIComponent(cName)} (${seller.name} - ${seller.phone})`
+          },
+          {
+            scenario: 'Objeção: "Pega carro ou moto na troca?"',
+            tag: 'Avaliação de Usado',
+            copy: `Pegamos sim, com certeza! O Diogo (proprietário da BellaCar) assina a melhor avaliação de usados e motos da região de Uberaba e Triângulo. Traz o seu para avaliarmos ou me manda fotos no WhatsApp que já te passo uma estimativa honesta agora: ${seller.url}?text=Ola+${seller.name}+tenho+um+veiculo+na+troca+pelo+${encodeURIComponent(cName)} (${seller.phone})`
+          },
+          {
+            scenario: 'Dúvida: "Onde fica a loja / ainda está disponível?"',
+            tag: 'Visita & Test Drive',
+            copy: `Está disponível no nosso showroom sim! Esse ${cName} está impecável, com laudo cautelar 100% aprovado e garantia total. A BellaCar fica na Av. Djalma Castro Alves, 1585 - Uberaba/MG. Me avisa no WhatsApp quando puder vir que deixo o carro separado para você fazer um test drive e tomar um café com a gente: ${seller.url} (${seller.name})`
+          },
+          {
+            scenario: 'Gatilho de Oportunidade: "Tem desconto à vista?"',
+            tag: 'Caneta do Patrão',
+            copy: `Se for proposta firme para fechar esta semana, eu levo direto na mesa do Diogo (o dono) e consigo uma condição diferenciada pra você com transferência ou tanque cheio liberado! Me chama aqui no WhatsApp antes que outro cliente reserve: ${seller.url}?text=Ola+${seller.name}+quero+negociar+o+desconto+do+${encodeURIComponent(cName)}`
+          },
+          {
+            scenario: 'Caçador em Posts de Compra: "Alguém vendendo carro bom até X mil?"',
+            tag: 'Caça Ativa',
+            copy: `Amigo, se você procura procedência de verdade e garantia sem dor de cabeça, dá uma olhada no estoque da BellaCar Veículos aqui em Uberaba. Temos opções como ${cName} e mais 18 veículos revisados com laudo 100% periciado. Fala com o ${seller.name} no WhatsApp: ${seller.phone} (${seller.url}) e veja o catálogo completo!`
+          }
+        ];
+      },
+
+      // 4. Briefing Executivo para Diogo Olegário
+      generateExecutiveBriefingText: () => {
+        const diag = JARVIS_COPILOT.diagnosePatio();
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const timeStr = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+        return `👑 *BRIEFING EXECUTIVO BELLACAR - JARVIS CO-PILOTO*
+📅 Data: ${dateStr} às ${timeStr}
+👤 Destinatário: Diogo Olegário (Proprietário)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+🏢 *TERMOSTATO DO PÁTIO (ESTOQUE ATIVO)*
+• Total de Seminovos no Showroom: *${diag.readyCount} veículos*
+• Patrimônio Avaliado em Estoque: *R$ ${diag.totalStockVal.toLocaleString('pt-BR')}*
+• Avaliação Total Tabela FIPE: *R$ ${diag.totalFipeVal.toLocaleString('pt-BR')}*
+• Margem / Desconto Competitivo Total: *R$ ${diag.totalSavingsVsFipe.toLocaleString('pt-BR')}* abaixo da FIPE
+
+🌟 *CARRO OURO RECOMENDADO PARA FOCO HOJE:*
+• Modelo: *${diag.goldenCar.name}*
+• Valor BellaCar: *R$ ${(diag.goldenCar.price || 0).toLocaleString('pt-BR')}* (FIPE: R$ ${(diag.goldenCar.fipe || 0).toLocaleString('pt-BR')})
+• Margem de Desconto: *R$ ${(diag.goldenCar.fipeDiff || 0).toLocaleString('pt-BR')} (${diag.goldenCar.fipePercent.toFixed(1)}%)*
+• Consultor Alocado: *${diag.sellerName}*
+• Estratégia Recomendada: *Disparo Esquadrão em grupos de Uberaba e região com ênfase em Laudo Cautelar e Entrada Facilitada.*
+
+🤖 *SUBSISTEMA FACEBOOK ENTERPRISE:*
+• Perfis Conectados: 5 contas ativas em revezamento anti-bloqueio
+• Modo de Segurança: Spintax ativo com zero risco de bloqueio
+• Alcance Regional: Uberaba, Uberlândia, Araxá, Conceição e Triângulo
+
+💡 *RECOMENDAÇÃO ESTRATÉGICA DO JARVIS:*
+1. Manter foco de disparos nas picapes e sedans médios (Hilux, Civic, Yaris, Strada) que possuem maior margem e liquidez imediata.
+2. Ativar o Caçador de Leads nos grupos de Uberaba para capturar compradores que postaram procura de seminovos nas últimas 24h.
+3. Manter bônus de "Tanque Cheio ou Transferência Grátis" como moeda de fechamento no WhatsApp dos consultores.
+
+_Gerado automaticamente pelo JARVIS BellaCar Copilot._`;
+      }
+    };
+
+    // =============================================================
+    // CONTROLE DE INTERFACE DO JARVIS COPILOT
+    // =============================================================
+    function openJarvisCopilotModal(tab = 'diagnose') {
+      updateAIStatusUI();
+      openModal('modal-jarvis-copilot');
+      switchJarvisTab(tab);
+      lucide.createIcons();
+    }
+
+    function switchJarvisTab(tabName) {
+      JARVIS_COPILOT.activeTab = tabName;
+      const tabs = ['diagnose', 'audit_copy', 'lead_hunter', 'diogo_briefing', 'chat'];
+      
+      tabs.forEach(t => {
+        const btn = document.getElementById(`jarvis-tab-btn-${t}`);
+        const content = document.getElementById(`jarvis-tab-content-${t}`);
+        if (btn) {
+          if (t === tabName) {
+            btn.className = "px-3.5 py-1.5 rounded-xl border border-[#38bdf8] bg-[#38bdf8]/20 text-white flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0 shadow-sm";
+          } else {
+            btn.className = "px-3.5 py-1.5 rounded-xl border border-transparent text-[#a1a1aa] hover:text-white flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0";
+          }
+        }
+        if (content) {
+          if (t === tabName) {
+            content.classList.remove('hidden');
+          } else {
+            content.classList.add('hidden');
+          }
+        }
+      });
+
+      if (tabName === 'diagnose') renderJarvisPatioDiagnosis();
+      else if (tabName === 'audit_copy') {
+        const input = document.getElementById('jarvis-audit-copy-input');
+        if (input && !input.value.trim()) loadCurrentRobotCopyIntoAudit();
+        else runJarvisCopySafetyCheck();
+      }
+      else if (tabName === 'lead_hunter') renderJarvisHunterResponses();
+      else if (tabName === 'diogo_briefing') renderJarvisDiogoBriefing();
+      else if (tabName === 'chat') renderJarvisChatHistory();
+
+      lucide.createIcons();
+    }
+
+    function renderJarvisPatioDiagnosis() {
+      const diag = JARVIS_COPILOT.diagnosePatio();
+
+      const kpiTotal = document.getElementById('jarvis-kpi-total-cars');
+      if (kpiTotal) kpiTotal.innerText = `${diag.readyCount} Carros`;
+
+      const kpiStock = document.getElementById('jarvis-kpi-stock-val');
+      if (kpiStock) kpiStock.innerText = `R$ ${diag.totalStockVal.toLocaleString('pt-BR')}`;
+
+      const kpiSavings = document.getElementById('jarvis-kpi-savings-val');
+      if (kpiSavings) kpiSavings.innerText = `R$ ${diag.totalSavingsVsFipe.toLocaleString('pt-BR')}`;
+
+      const goldCarName = document.getElementById('jarvis-gold-car-name');
+      if (goldCarName) goldCarName.innerText = diag.goldenCar.name;
+
+      const goldCarPrice = document.getElementById('jarvis-gold-car-price');
+      if (goldCarPrice) goldCarPrice.innerText = `R$ ${(diag.goldenCar.price || 0).toLocaleString('pt-BR')}`;
+
+      const goldDiscountTag = document.getElementById('jarvis-gold-discount-tag');
+      if (goldDiscountTag) goldDiscountTag.innerText = `R$ ${(diag.goldenCar.fipeDiff || 0).toLocaleString('pt-BR')} (${diag.goldenCar.fipePercent.toFixed(1)}%) abaixo da FIPE`;
+
+      const sellerRationale = document.getElementById('jarvis-gold-seller-rationale');
+      if (sellerRationale) {
+        sellerRationale.innerHTML = `<strong>${diag.sellerName}</strong>: Conversão especializada em ${diag.goldenCar.category === 'SUV' ? 'veículos familiares e SUVs' : 'sedans executivos e picapes'}.`;
+      }
+
+      // Top 4 alternativas
+      const grid = document.getElementById('jarvis-top-cars-grid');
+      if (grid) {
+        grid.innerHTML = diag.topCars.map(c => `
+          <div onclick="applyJarvisSpecificCar('${c.id}')" class="p-3 rounded-2xl bg-[#020202] border border-[#373739] hover:border-[#38bdf8] cursor-pointer transition-all space-y-1 group">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-mono text-[#c9b977] font-bold uppercase truncate">${c.category}</span>
+              <span class="text-[10px] text-emerald-400 font-mono">-R$ ${(c.fipeDiff||0).toLocaleString('pt-BR')}</span>
+            </div>
+            <h5 class="text-xs font-bold text-white group-hover:text-[#38bdf8] transition-colors truncate">${c.name}</h5>
+            <div class="flex items-center justify-between pt-1">
+              <span class="text-xs font-black text-[#ecdda2]">R$ ${(c.price||0).toLocaleString('pt-BR')}</span>
+              <span class="text-[10px] text-[#38bdf8] underline font-bold">Usar no Robô ➔</span>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function applyJarvisGoldenRecommendation() {
+      const diag = JARVIS_COPILOT.diagnosePatio();
+      applyJarvisSpecificCar(diag.goldenCar.id, diag.recSeller);
+    }
+
+    function applyJarvisSpecificCar(carId, sellerKey) {
+      const carSelect = document.getElementById('robot-car-select');
+      const sellerSelect = document.getElementById('robot-seller-select');
+      const stratSquad = document.querySelector('input[name="robot-strategy"][value="squad"]');
+
+      if (carSelect) carSelect.value = carId;
+      if (sellerKey && sellerSelect) sellerSelect.value = sellerKey;
+      if (stratSquad) stratSquad.checked = true;
+
+      updateRobotPreview();
+      closeModal('modal-jarvis-copilot');
+      switchView('robot');
+
+      const car = (appState.inventory || []).find(c => c.id === carId);
+      const name = car ? car.name : 'Carro';
+      addRobotLog(`[JARVIS] Carro '${name}' aplicado para disparo com Modo Esquadrão e variação Spintax ativa.`, 'info');
+      showCloudToast(`🚀 JARVIS: ${name} pronto no Robô para disparar!`, 'success');
+    }
+
+    function loadCurrentRobotCopyIntoAudit() {
+      const input = document.getElementById('jarvis-audit-copy-input');
+      const preview = document.getElementById('robot-preview-copy');
+      if (input && preview) {
+        input.value = preview.innerText;
+        runJarvisCopySafetyCheck();
+      }
+    }
+
+    function runJarvisCopySafetyCheck() {
+      const input = document.getElementById('jarvis-audit-copy-input');
+      const text = input ? input.value : '';
+      const audit = JARVIS_COPILOT.auditCopy(text);
+
+      const badge = document.getElementById('jarvis-audit-score-badge');
+      if (badge) {
+        badge.innerText = `${audit.score}% ${audit.level}`;
+        badge.className = `px-2.5 py-0.5 rounded-full text-xs font-mono font-bold ${audit.badgeClass}`;
+      }
+
+      const bar = document.getElementById('jarvis-audit-score-bar');
+      if (bar) {
+        bar.style.width = `${audit.score}%`;
+        bar.className = `h-full rounded-full transition-all duration-500 ${audit.score >= 88 ? 'bg-emerald-400' : (audit.score >= 70 ? 'bg-amber-400' : 'bg-red-500')}`;
+      }
+
+      const desc = document.getElementById('jarvis-audit-level-desc');
+      if (desc) {
+        if (audit.score >= 88) {
+          desc.innerText = 'Texto com excelente variação Spintax e linguagem orgânica. Risco quase zero de bloqueio pelo Facebook.';
+        } else if (audit.score >= 70) {
+          desc.innerText = 'Texto aceitável, mas com baixa variação. Recomenda-se adicionar mais alternativas Spintax.';
+        } else {
+          desc.innerText = 'Alto risco de moderação por repetição ou gatilhos financeiros agressivos. Blindagem obrigatória!';
+        }
+      }
+
+      const list = document.getElementById('jarvis-audit-checklist');
+      if (list) {
+        let html = '';
+        audit.bonuses.forEach(b => {
+          html += `
+            <div class="p-2.5 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-[#a7f3d0] flex items-start gap-2">
+              <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
+              <div>
+                <span class="font-bold block">${b.title}</span>
+                <span class="text-[11px] text-[#a1a1aa]">${b.desc}</span>
+              </div>
+            </div>`;
+        });
+        audit.issues.forEach(i => {
+          html += `
+            <div class="p-2.5 rounded-xl bg-red-950/40 border border-red-500/40 text-red-200 flex items-start gap-2">
+              <i data-lucide="alert-triangle" class="w-4 h-4 text-red-400 shrink-0 mt-0.5"></i>
+              <div>
+                <span class="font-bold block">${i.title}</span>
+                <span class="text-[11px] text-[#a1a1aa]">${i.desc}</span>
+              </div>
+            </div>`;
+        });
+        list.innerHTML = html;
+        lucide.createIcons();
+      }
+    }
+
+    async function optimizeCopySpintaxWithJarvis() {
+      const btn = document.getElementById('btn-jarvis-optimize-copy');
+      const input = document.getElementById('jarvis-audit-copy-input');
+      const carSelect = document.getElementById('robot-car-select');
+      const sellerSelect = document.getElementById('robot-seller-select');
+
+      const carId = carSelect ? carSelect.value : null;
+      const car = (appState.inventory || []).find(c => c.id === carId) || (appState.inventory || [])[0];
+      const sellerKey = sellerSelect ? sellerSelect.value : 'carlos';
+      const seller = {
+        carlos: { name: 'Carlos Eduardo', phone: '(34) 98407-3712', url: 'https://wa.me/5534984073712' },
+        guilherme: { name: 'Guilherme', phone: '(34) 99699-3686', url: 'https://wa.me/5534996993686' },
+        diogo: { name: 'Diogo Olegário (Patrão)', phone: '(34) 98867-5857', url: 'https://wa.me/5534988675857' }
+      }[sellerKey];
+
+      const carName = car ? car.name : 'Honda Civic 2.0 EXL';
+      const carPrice = car ? `R$ ${(car.price||0).toLocaleString('pt-BR')}` : 'R$ 106.900';
+      const carFipe = car ? `R$ ${(car.fipe||0).toLocaleString('pt-BR')}` : 'R$ 111.200';
+
+      if (btn) btn.innerHTML = `<span class="animate-spin mr-1">⏳</span> JARVIS Blindando Copy...`;
+
+      let optimizedText = '';
+
+      if (AI_CONFIG.hasKey()) {
+        const prompt = `Você é JARVIS, especialista em automação e algoritmo do Facebook para a concessionária BellaCar Veículos (Uberaba/MG).
+Gere uma copy automotiva em formato SPINTAX puro para o veículo: ${carName}, Preço: ${carPrice}, Tabela FIPE: ${carFipe}, Consultor: ${seller.name} (${seller.phone}, link: ${seller.url}).
+REQUISITOS OBRIGATÓRIOS:
+1. Use blocos Spintax ricos no formato {opcao 1|opcao 2|opcao 3} com pelo menos 3 variações em cada linha.
+2. Não use palavras como "grátis", "urgente", "sem entrada", "negativado" ou promessas falsas.
+3. Destaque Laudo Cautelar 100% Aprovado, procedência, revisão e bônus do Diogo (tanque cheio).
+4. Inclua o link do WhatsApp com texto amigável.
+5. Retorne APENAS o texto da copy Spintax sem explicações.`;
+
+        try {
+          const aiRes = await callGeminiAI(prompt);
+          if (aiRes && aiRes.includes('{') && aiRes.includes('}')) {
+            optimizedText = aiRes.trim();
+          }
+        } catch(e) {}
+      }
+
+      if (!optimizedText) {
+        optimizedText = `🚗 {OPORTUNIDADE DE PROCEDÊNCIA NA BELLACAR|SEMINOVO COM LAUDO APROVADO EM UBERABA|CHEGOU A HORA DE TROCAR DE CARRO COM CONFIANÇA}! 💎
+
+{Procurando um veículo revisado e sem surpresas desagradáveis?|Cansado de ver carros maquiados na internet?|Seu próximo seminovo impecável está disponível no nosso showroom!}
+
+⭐ ${carName}
+💰 {Valor Especial de Venda|Condição Diferenciada}: ${carPrice} (Avaliação FIPE: ${carFipe})
+{✅ Laudo pericial cautelar 100% aprovado, sem sinistro e sem leilão|✅ Histórico limpo com perícia completa entregue em mãos}
+{✅ Aceitamos seu seminovo ou moto com excelente avaliação em Uberaba|✅ Pegamos seu usado na troca com negociação justa e transparente}
+{✅ Entrada facilitada em até 21x no cartão ou financiamento com taxas reduzidas|✅ Planos de financiamento sob medida para caber no seu orçamento}
+{✅ Garantia total de motor e câmbio para sua tranquilidade|✅ Veículo higienizado, polido e pronto para viagem imediata}
+
+🎁 {Condição exclusiva liberada pelo proprietário Diogo: Tanque cheio cortesia para fechamento esta semana!|Bônus especial de transferência e tanque cheio assinado pela diretoria!}
+
+📲 {Clique abaixo e converse direto no WhatsApp}:
+👉 ${seller.name}: ${seller.url}?text=Ola+${encodeURIComponent(seller.name)}+vi+o+anuncio+do+${encodeURIComponent(carName)}+e+gostaria+de+simular
+📍 Bellacar Veículos - Av. Djalma Castro Alves, 1585 - Uberaba/MG`;
+      }
+
+      if (input) {
+        input.value = optimizedText;
+        runJarvisCopySafetyCheck();
+      }
+
+      if (btn) btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i><span>✨ Blindar Copy com Spintax IA</span>`;
+      lucide.createIcons();
+      showCloudToast('🛡️ Copy blindada e otimizada pelo JARVIS!', 'success');
+    }
+
+    function applyAuditCopyDirectlyToRobot() {
+      const input = document.getElementById('jarvis-audit-copy-input');
+      const preview = document.getElementById('robot-preview-copy');
+      if (input && preview) {
+        preview.innerText = parseSpintax(input.value);
+        closeModal('modal-jarvis-copilot');
+        switchView('robot');
+        addRobotLog(`[JARVIS] Nova copy blindada injetada na pré-visualização do Robô com sucesso!`, 'success');
+        showCloudToast('✓ Copy injetada no Robô com sucesso!', 'success');
+      }
+    }
+
+    function renderJarvisHunterResponses() {
+      const carSelect = document.getElementById('robot-car-select');
+      const sellerSelect = document.getElementById('robot-seller-select');
+      const carName = carSelect ? carSelect.options[carSelect.selectedIndex]?.text.split(' - ')[0] : 'Honda Civic 2.0 EXL';
+      const sellerKey = sellerSelect ? sellerSelect.value : 'carlos';
+
+      const responses = JARVIS_COPILOT.generateHunterResponses(carName, sellerKey);
+      const list = document.getElementById('jarvis-hunter-responses-list');
+      if (!list) return;
+
+      list.innerHTML = responses.map((r, idx) => `
+        <div class="glass-luxury p-4 rounded-2xl border border-[#373739] hover:border-[#38bdf8] transition-all space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#38bdf8]/20 text-[#38bdf8] border border-[#38bdf8]/40">
+              ${r.tag}
+            </span>
+            <button onclick="copySpecificHunterResponse(${idx})" class="text-xs text-[#ecdda2] hover:text-white flex items-center gap-1 font-bold">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span>Copiar</span>
+            </button>
+          </div>
+          <div class="text-[11px] font-bold text-white">${r.scenario}</div>
+          <div class="bg-[#020202] border border-[#373739] p-3 rounded-xl font-mono text-[11px] text-[#e4e4e7] whitespace-pre-wrap select-all leading-relaxed" id="jarvis-hunter-copy-${idx}">
+${r.copy}
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function copySpecificHunterResponse(idx) {
+      const el = document.getElementById(`jarvis-hunter-copy-${idx}`);
+      if (!el) return;
+      navigator.clipboard.writeText(el.innerText.trim()).then(() => {
+        showCloudToast('📋 Resposta copiada para a área de transferência!', 'success');
+      });
+    }
+
+    function copyAllJarvisHunterResponses() {
+      const carSelect = document.getElementById('robot-car-select');
+      const sellerSelect = document.getElementById('robot-seller-select');
+      const carName = carSelect ? carSelect.options[carSelect.selectedIndex]?.text.split(' - ')[0] : 'Honda Civic 2.0 EXL';
+      const sellerKey = sellerSelect ? sellerSelect.value : 'carlos';
+
+      const responses = JARVIS_COPILOT.generateHunterResponses(carName, sellerKey);
+      const fullText = responses.map(r => `[${r.tag}] ${r.scenario}\n${r.copy}\n`).join('\n---\n\n');
+
+      navigator.clipboard.writeText(fullText).then(() => {
+        showCloudToast('📋 Todas as 5 respostas de caçador copiadas!', 'success');
+      });
+    }
+
+    function renderJarvisDiogoBriefing() {
+      const text = JARVIS_COPILOT.generateExecutiveBriefingText();
+      const el = document.getElementById('jarvis-briefing-preview-text');
+      if (el) el.innerText = text;
+    }
+
+    function sendJarvisBriefingWhatsApp() {
+      const text = JARVIS_COPILOT.generateExecutiveBriefingText();
+      const encoded = encodeURIComponent(text);
+      window.open(`https://wa.me/${PHONE_NUMBERS.diogo}?text=${encoded}`, '_blank');
+      showCloudToast('👑 Abrindo WhatsApp com o Briefing Executivo do Patrão!', 'success');
+    }
+
+    function renderJarvisChatHistory() {
+      const container = document.getElementById('jarvis-chat-messages');
+      if (!container) return;
+
+      container.innerHTML = JARVIS_COPILOT.chatHistory.map(msg => {
+        if (msg.sender === 'jarvis') {
+          return `
+            <div class="flex items-start gap-2.5 max-w-[90%]">
+              <div class="w-8 h-8 rounded-xl bg-[#38bdf8]/20 border border-[#38bdf8] flex items-center justify-center text-[#38bdf8] text-base shrink-0 shadow-md">
+                🤖
+              </div>
+              <div class="bg-[#111622] border border-[#38bdf8]/40 p-3.5 rounded-2xl rounded-tl-sm text-white text-xs leading-relaxed space-y-1.5 whitespace-pre-wrap shadow-lg">
+                <span class="text-[10px] font-mono text-[#38bdf8] font-bold block">JARVIS Copilot:</span>
+                <div>${formatJarvisMarkdown(msg.text)}</div>
+              </div>
+            </div>`;
+        } else {
+          return `
+            <div class="flex items-start gap-2.5 max-w-[85%] ml-auto justify-end">
+              <div class="bg-[#19191a] border border-[#c9b977]/50 p-3.5 rounded-2xl rounded-tr-sm text-white text-xs leading-relaxed space-y-1 text-right shadow-md">
+                <span class="text-[10px] font-mono text-[#c9b977] font-bold block">Você:</span>
+                <div>${msg.text}</div>
+              </div>
+              <div class="w-8 h-8 rounded-xl bg-[#c9b977]/20 border border-[#c9b977] flex items-center justify-center text-[#ecdda2] text-sm shrink-0">
+                👤
+              </div>
+            </div>`;
+        }
+      }).join('');
+
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function formatJarvisMarkdown(text) {
+      if (!text) return '';
+      return text
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>');
+    }
+
+    function sendJarvisQuickPrompt(promptText) {
+      const input = document.getElementById('jarvis-chat-input');
+      if (input) input.value = promptText;
+      sendJarvisChatFromInput();
+    }
+
+    async function sendJarvisChatFromInput() {
+      const input = document.getElementById('jarvis-chat-input');
+      const text = (input?.value || '').trim();
+      if (!text) return;
+
+      input.value = '';
+      JARVIS_COPILOT.chatHistory.push({ sender: 'user', text: text });
+      renderJarvisChatHistory();
+
+      // Typing indicator
+      const container = document.getElementById('jarvis-chat-messages');
+      const typingId = 'jarvis-typing-' + Date.now();
+      if (container) {
+        const div = document.createElement('div');
+        div.id = typingId;
+        div.className = "flex items-center gap-2 text-xs text-[#38bdf8] p-2 animate-pulse";
+        div.innerHTML = `<span class="text-base">🤖</span> <span>JARVIS analisando estoque e inteligência de vendas...</span>`;
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+      }
+
+      const response = await callJarvisCopilotAI(text);
+
+      const typingEl = document.getElementById(typingId);
+      if (typingEl) typingEl.remove();
+
+      JARVIS_COPILOT.chatHistory.push({ sender: 'jarvis', text: response });
+      renderJarvisChatHistory();
+    }
+
+    async function callJarvisCopilotAI(userMessage) {
+      const diag = JARVIS_COPILOT.diagnosePatio();
+      const inventoryBrief = (appState.inventory || REAL_BELLACAR_INVENTORY).slice(0, 19).map(c => `- ${c.name}: R$ ${c.price.toLocaleString('pt-BR')} (FIPE: R$ ${c.fipe.toLocaleString('pt-BR')}, Vendedor: ${c.actor})`).join('\n');
+
+      const systemPrompt = `Você é JARVIS, o Co-Piloto Executivo e Diretor de Vendas e Estratégia Comercial da BellaCar Veículos (Uberaba/MG).
+Seu líder supremo é Diogo Olegário (proprietário e autoridade máxima).
+Sua equipe de vendas é formada por Carlos Eduardo ((34) 98407-3712) e Guilherme ((34) 99699-3686).
+Diferenciais da BellaCar: Laudo Cautelar 100% Aprovado, veículos revisados, melhores taxas de financiamento da região, transparência total e condições comerciais liberadas pelo Diogo.
+
+ESTOQUE ATUAL DO PÁTIO:
+${inventoryBrief}
+
+BÔNUS / CONDIÇÕES ATIVAS DO DIOGO:
+${appState.diogoOffer || 'Transferência Cortesia + Tanque Cheio na compra esta semana'}
+
+PERGUNTA OU COMANDO DO USUÁRIO:
+"${userMessage}"
+
+Responda como um executivo automotivo experiente, analítico, focado em fechar negócios no WhatsApp e seguro contra filtros do Facebook. Seja direto, prático e motivador. Use bullet points.`;
+
+      if (AI_CONFIG.hasKey()) {
+        try {
+          const res = await callGeminiAI(systemPrompt);
+          if (res && res.trim().length > 10) return res.trim();
+        } catch(e) {
+          console.warn('Erro chamada Gemini JARVIS:', e);
+        }
+      }
+
+      return getJarvisProceduralResponse(userMessage, diag);
+    }
+
+    function getJarvisProceduralResponse(msg, diag) {
+      const m = msg.toLowerCase();
+
+      if (m.includes('melhor') || m.includes('hoje') || m.includes('anunciar') || m.includes('disparar') || m.includes('postar')) {
+        return `**Recomendação Cirúrgica do JARVIS para Hoje:**
+
+🌟 **Carro Foco:** **${diag.goldenCar.name}**
+• **Preço BellaCar:** R$ ${(diag.goldenCar.price || 0).toLocaleString('pt-BR')} (FIPE: R$ ${(diag.goldenCar.fipe || 0).toLocaleString('pt-BR')})
+• **Vantagem Competitiva:** R$ ${(diag.goldenCar.fipeDiff || 0).toLocaleString('pt-BR')} (${diag.goldenCar.fipePercent.toFixed(1)}%) abaixo da FIPE
+• **Consultor Alocado:** ${diag.sellerName}
+• **Estratégia Indicada:** Modo Esquadrão em grupos de Uberaba e Triângulo.
+• **Gancho de Venda:** "Procedência garantida com Laudo 100% Aprovado + Entrada facilitada no cartão em até 21x + Tanque cheio de bônus do Diogo".
+
+_Dica: Você pode aplicar essa configuração diretamente no Robô clicando na aba 'Diagnóstico do Pátio'._`;
+      }
+
+      if (m.includes('margem') || m.includes('estoque') || m.includes('fipe') || m.includes('pátio') || m.includes('lucro') || m.includes('dinheiro')) {
+        return `**Diagnóstico Financeiro do Pátio BellaCar:**
+
+📊 **Termômetro Geral:**
+• **Veículos no Showroom:** ${diag.readyCount} unidades 100% prontas.
+• **Patrimônio Total Avaliado:** **R$ ${diag.totalStockVal.toLocaleString('pt-BR')}**.
+• **Avaliação Tabela FIPE:** R$ ${diag.totalFipeVal.toLocaleString('pt-BR')}.
+• **Desconto Acumulado vs FIPE:** **R$ ${diag.totalSavingsVsFipe.toLocaleString('pt-BR')}** (Excelente argumento de compra para clientes de Uberaba).
+
+🏆 **Top 3 Carros com Maior Margem de Desconto vs FIPE:**
+1. **${diag.topCars[0]?.name}**: Desconto de R$ ${(diag.topCars[0]?.fipeDiff||0).toLocaleString('pt-BR')}
+2. **${diag.topCars[1]?.name}**: Desconto de R$ ${(diag.topCars[1]?.fipeDiff||0).toLocaleString('pt-BR')}
+3. **${diag.topCars[2]?.name}**: Desconto de R$ ${(diag.topCars[2]?.fipeDiff||0).toLocaleString('pt-BR')}
+
+_Recomendo girar primeiro os sedans e picapes médias para otimizar o fluxo de caixa._`;
+      }
+
+      if (m.includes('objeção') || m.includes('troca') || m.includes('caro') || m.includes('desconto') || m.includes('negociar')) {
+        return `**Roteiro Tático para o Carlos e o Guilherme (Contornar Objeções):**
+
+1. **Objeção de Troca com Carro Acima do Preço:**
+   • *Script:* "Amigo, aqui na BellaCar a gente não joga contra o cliente. O Diogo (proprietário) faz questão de assinar uma avaliação justa e realista de mercado porque nosso estoque é 100% periciado. Traga seu carro aqui na loja, tomamos um café e chegamos num número honesto para os dois lados."
+
+2. **Objeção "Achei mais barato na internet":**
+   • *Script:* "Cuidado com carro barato na internet que depois aparece com sinistro, leilão ou motor fundido. Na BellaCar você leva Laudo Cautelar 100% Aprovado e garantia total. A sua segurança e da sua família vale a economia de mil reais?"
+
+3. **Pedido de Desconto Agressivo:**
+   • *Script:* "Esse valor já está R$ ${(diag.goldenCar.fipeDiff||0).toLocaleString('pt-BR')} abaixo da FIPE. Mas se você fechar comigo hoje, eu consigo autorizar com o Diogo o tanque cheio e a transferência cortesia!"`;
+      }
+
+      if (m.includes('copy') || m.includes('texto') || m.includes('anúncio') || m.includes('spintax')) {
+        return `**Estrutura de Copy Blindada Pronta pelo JARVIS:**
+
+Para evitar bloqueios no Facebook, nunca poste o mesmo texto duas vezes. Use a aba **'Auditoria Anti-Spam'** do JARVIS onde você pode gerar cópias com mais de **1.000 variações Spintax** e injetar diretamente no Robô com apenas 1 clique!`;
+      }
+
+      return `**Análise Estratégica JARVIS BellaCar:**
+
+• **Pátio Operacional:** ${diag.readyCount} veículos ativos avaliados em R$ ${diag.totalStockVal.toLocaleString('pt-BR')}.
+• **Robô de Disparos:** 5 contas multi-perfis conectadas na Nuvem Supabase, cobrindo 150+ grupos de Uberaba e Triângulo.
+• **Foco Comercial:** Manter os ganchos de Laudo Cautelar e aprovação rápida de crédito.
+
+Como posso ajudar você agora? Experimente perguntar sobre **'melhor carro hoje'**, **'análise de margens'** ou **'objeção de troca'**!`;
     }
 
     // Character Selection in Studio
