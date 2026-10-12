@@ -2406,7 +2406,11 @@
               Automação com 5 perfis em rotação anti-bloqueio, modo esquadrão com múltiplos navegadores e caça ativa de compradores em grupos de Uberaba e Triângulo Mineiro.
             </p>
           </div>
-          <div class="flex items-center gap-2 self-start md:self-auto">
+          <div class="flex flex-wrap items-center gap-2 self-start md:self-auto">
+            <button onclick="triggerRobotAction('test_ping')" class="px-3.5 py-2 bg-[#020202] hover:bg-[#373739] text-[#38bdf8] border border-[#38bdf8]/40 hover:border-[#38bdf8] rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all" title="Testa a comunicacao em tempo real entre o Celular e este PC">
+              <i data-lucide="radio" class="w-3.5 h-3.5"></i>
+              <span>Testar Celular ➔ PC</span>
+            </button>
             <button onclick="checkRobotEngineConnection()" class="px-3.5 py-2 bg-[#020202] hover:bg-[#373739] text-[#ecdda2] border border-[#373739] hover:border-[#10b981] rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all">
               <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
               <span>Testar Conexão</span>
@@ -5841,6 +5845,7 @@ END $$;
       const strategy = strategyEl ? strategyEl.value : 'rotation';
 
       const actionNames = {
+        test_ping: `Teste de Comunicação Celular -> PC (Ping)`,
         post_selected_car: `Disparo do ${carName} (${strategy})`,
         squad_mode: `Modo Esquadrão (5 Navegadores Paralelos)`,
         hunt_leads: `Caçador Autônomo de Leads no Facebook`,
@@ -5877,12 +5882,14 @@ END $$;
       }
 
       if (sentLocally) {
-        addRobotLog(`✓ Comando aceito pelo motor local! Iniciando postagens nos grupos de Uberaba...`, 'success');
+        addRobotLog(`✓ Comando aceito pelo motor local (:5000)! Processando...`, 'success');
       } else {
-        addRobotLog(`☁️ Comando enviado para a Nuvem Supabase! Fila de execução acionada.`, 'success');
+        addRobotLog(`☁️ Comando enviado para a Nuvem Supabase! Fila de execução remota acionada.`, 'success');
       }
 
-      simulateRobotExecutionProgress(carName);
+      if (actionType !== 'test_ping') {
+        simulateRobotExecutionProgress(carName);
+      }
       showCloudToast(`🤖 Ordem "${title}" acionada com sucesso!`, 'success');
     }
 
