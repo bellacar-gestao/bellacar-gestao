@@ -2407,17 +2407,21 @@
             </p>
           </div>
           <div class="flex flex-wrap items-center gap-2 self-start md:self-auto">
-            <button onclick="triggerRobotAction('test_ping')" class="px-3.5 py-2 bg-[#020202] hover:bg-[#373739] text-[#38bdf8] border border-[#38bdf8]/40 hover:border-[#38bdf8] rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all" title="Testa a comunicacao em tempo real entre o Celular e este PC">
+            <button onclick="triggerRobotAction('test_ping')" class="px-3 py-2 bg-[#020202] hover:bg-[#373739] text-[#38bdf8] border border-[#38bdf8]/40 hover:border-[#38bdf8] rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all" title="Testa a comunicacao em tempo real entre o Celular e este PC">
               <i data-lucide="radio" class="w-3.5 h-3.5"></i>
               <span>Testar Celular ➔ PC</span>
             </button>
-            <button onclick="checkRobotEngineConnection()" class="px-3.5 py-2 bg-[#020202] hover:bg-[#373739] text-[#ecdda2] border border-[#373739] hover:border-[#10b981] rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all">
+            <button onclick="checkRobotEngineConnection()" class="px-3 py-2 bg-[#020202] hover:bg-[#373739] text-[#ecdda2] border border-[#373739] hover:border-[#10b981] rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all">
               <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
               <span>Testar Conexão</span>
             </button>
-            <button onclick="triggerRobotAction('post_all')" class="px-4 py-2 bg-[#10b981] hover:bg-[#059669] text-black font-black rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-[#10b981]/20 transition-all active:scale-95">
+            <button onclick="triggerRobotAction('post_all')" class="px-4 py-2 bg-[#10b981] hover:bg-[#059669] text-black font-black rounded-xl text-xs flex items-center gap-1.5 shadow-lg shadow-[#10b981]/20 transition-all active:scale-95">
               <i data-lucide="zap" class="w-4 h-4"></i>
               <span>Disparar Agora</span>
+            </button>
+            <button onclick="triggerRobotAction('stop_all')" class="px-3.5 py-2 bg-red-600/90 hover:bg-red-600 text-white font-black rounded-xl text-xs flex items-center gap-1.5 shadow-lg shadow-red-600/30 transition-all active:scale-95 border border-red-500/50" title="Interromper todos os robôs imediatamente">
+              <i data-lucide="square" class="w-3.5 h-3.5 fill-current"></i>
+              <span>Parar Robô</span>
             </button>
           </div>
         </div>
@@ -2550,6 +2554,14 @@
                 <button onclick="triggerRobotAction('hunt_leads')" class="px-4 py-3 bg-[#020202] hover:bg-[#373739] text-[#38bdf8] border border-[#38bdf8]/40 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-95">
                   <i data-lucide="crosshair" class="w-4 h-4"></i>
                   <span>Caçar Leads</span>
+                </button>
+              </div>
+
+              <!-- Botão de Emergência: Parar Todos os Disparos -->
+              <div class="pt-1">
+                <button onclick="triggerRobotAction('stop_all')" class="w-full py-2.5 px-4 bg-red-950/40 hover:bg-red-900/60 text-red-300 hover:text-white border border-red-500/40 hover:border-red-500 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-95 shadow-md group">
+                  <i data-lucide="octagon-pause" class="w-4 h-4 text-red-400 group-hover:scale-110 transition-transform"></i>
+                  <span>🛑 Parar / Interromper Todos os Disparos Imediatamente</span>
                 </button>
               </div>
             </div>
@@ -5836,6 +5848,14 @@ END $$;
       }
     }
 
+    let robotSimTimeouts = [];
+    function clearRobotSimTimeouts() {
+      if (robotSimTimeouts && robotSimTimeouts.length) {
+        robotSimTimeouts.forEach(t => clearTimeout(t));
+        robotSimTimeouts = [];
+      }
+    }
+
     async function triggerRobotAction(actionType) {
       const carSelect = document.getElementById('robot-car-select');
       const sellerSelect = document.getElementById('robot-seller-select');
@@ -5849,11 +5869,18 @@ END $$;
         post_selected_car: `Disparo do ${carName} (${strategy})`,
         squad_mode: `Modo Esquadrão (5 Navegadores Paralelos)`,
         hunt_leads: `Caçador Autônomo de Leads no Facebook`,
-        post_all: `Disparo Massivo em Lote da Bellacar`
+        post_all: `Disparo Massivo em Lote da Bellacar`,
+        stop_all: `🛑 PARADA DE EMERGÊNCIA (Encerrando Robôs)`
       };
 
       const title = actionNames[actionType] || actionType;
-      addRobotLog(`⚡ [COMANDO] Iniciando: ${title}...`, 'info');
+      
+      if (actionType === 'stop_all') {
+        clearRobotSimTimeouts();
+        addRobotLog(`🛑 [EMERGÊNCIA] Interrupção acionada! Encerrando todos os robôs, navegadores e processos...`, 'error');
+      } else {
+        addRobotLog(`⚡ [COMANDO] Iniciando: ${title}...`, 'info');
+      }
 
       let sentLocally = false;
       try {
@@ -5882,30 +5909,43 @@ END $$;
       }
 
       if (sentLocally) {
-        addRobotLog(`✓ Comando aceito pelo motor local (:5000)! Processando...`, 'success');
+        if (actionType === 'stop_all') {
+          addRobotLog(`🛑 Todos os robôs e navegadores locais (:5000) foram finalizados com sucesso!`, 'error');
+        } else {
+          addRobotLog(`✓ Comando aceito pelo motor local (:5000)! Processando...`, 'success');
+        }
       } else {
-        addRobotLog(`☁️ Comando enviado para a Nuvem Supabase! Fila de execução remota acionada.`, 'success');
+        if (actionType === 'stop_all') {
+          addRobotLog(`☁️ Ordem de PARADA enviada para a Nuvem! Interrompendo no computador...`, 'error');
+        } else {
+          addRobotLog(`☁️ Comando enviado para a Nuvem Supabase! Fila de execução remota acionada.`, 'success');
+        }
       }
 
-      if (actionType !== 'test_ping') {
+      if (actionType === 'stop_all') {
+        showCloudToast(`🛑 Ordem de parada executada com sucesso!`, 'error');
+      } else if (actionType !== 'test_ping') {
         simulateRobotExecutionProgress(carName);
+        showCloudToast(`🤖 Ordem "${title}" acionada com sucesso!`, 'success');
+      } else {
+        showCloudToast(`📡 Ping enviado com sucesso para o computador!`, 'info');
       }
-      showCloudToast(`🤖 Ordem "${title}" acionada com sucesso!`, 'success');
     }
 
     function simulateRobotExecutionProgress(carName) {
-      setTimeout(() => {
+      clearRobotSimTimeouts();
+      robotSimTimeouts.push(setTimeout(() => {
         addRobotLog(`[Perfil 1] Conectado ao Facebook. Acessando 'Feira do Rolo e Seminovos Uberaba' (84k membros)...`, 'info');
-      }, 1500);
-      setTimeout(() => {
+      }, 1500));
+      robotSimTimeouts.push(setTimeout(() => {
         addRobotLog(`[Perfil 1] Foto e anúncio com Spintax anexados para: ${carName}. Publicando...`, 'info');
-      }, 3500);
-      setTimeout(() => {
+      }, 3500));
+      robotSimTimeouts.push(setTimeout(() => {
         addRobotLog(`[Perfil 1] ✓ Anúncio publicado com sucesso no grupo! Link de WhatsApp ativo.`, 'success');
-      }, 5500);
-      setTimeout(() => {
+      }, 5500));
+      robotSimTimeouts.push(setTimeout(() => {
         addRobotLog(`[Perfil 2] Revezamento seguro ativado. Pausa de proteção respeitada. Próximo grupo: 'Classificados Triângulo Mineiro'.`, 'info');
-      }, 8000);
+      }, 8000));
     }
 
     function addRobotLog(message, type = 'info') {
