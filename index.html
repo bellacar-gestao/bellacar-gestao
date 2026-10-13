@@ -3506,8 +3506,9 @@
           <div>
             <label class="block font-semibold text-[#ecdda2] mb-1">Modelo de IA:</label>
             <select id="ai-model-select" class="w-full bg-[#020202] border border-[#373739] focus:border-[#c9b977] rounded-xl px-3 py-2 text-white text-xs">
-              <option value="gemini-flash-latest" selected>Gemini Flash (Mais Rápido & Oficial)</option>
-              <option value="gemini-3.8-flash">Gemini 3.8 Flash (Recomendado Google)</option>
+              <option value="gemini-3.5-flash-lite" selected>Gemini 3.5 Flash-Lite (Estável & Ativo)</option>
+              <option value="gemini-flash-latest">Gemini Flash Latest</option>
+              <option value="gemini-3.8-flash">Gemini 3.8 Flash</option>
               <option value="gemini-3.5-flash">Gemini 3.5 Flash</option>
             </select>
           </div>
@@ -4193,9 +4194,9 @@
       },
       getModel: () => {
         const stored = localStorage.getItem('bellacar_gemini_model');
-        if (!stored || stored.includes('1.5') || stored.includes('2.0')) {
-          localStorage.setItem('bellacar_gemini_model', 'gemini-flash-latest');
-          return 'gemini-flash-latest';
+        if (!stored || stored.includes('1.5') || stored.includes('2.0') || stored === 'gemini-flash-latest' || stored === 'gemini-3.8-flash' || stored === 'gemini-3.5-flash') {
+          localStorage.setItem('bellacar_gemini_model', 'gemini-3.5-flash-lite');
+          return 'gemini-3.5-flash-lite';
         }
         return stored;
       },
@@ -4274,7 +4275,7 @@
         model = 'gemini-flash-latest';
       }
 
-      const candidateModels = [model, 'gemini-flash-latest', 'gemini-3.8-flash', 'gemini-3.5-flash'];
+      const candidateModels = [model, 'gemini-3.5-flash-lite', 'gemini-3.8-flash', 'gemini-flash-latest', 'gemini-3.5-flash'];
       let lastError = null;
       let success = false;
       let workingModel = model;
@@ -4337,13 +4338,16 @@
     async function callGeminiAI(promptText) {
       if (!AI_CONFIG.hasKey()) return null;
       const apiKey = AI_CONFIG.getKey();
-      let model = AI_CONFIG.getModel();
+      let model = AI_CONFIG.getModel() || 'gemini-3.5-flash-lite';
       if (model.includes('1.5') || model.includes('2.0')) {
-        model = 'gemini-flash-latest';
+        model = 'gemini-3.5-flash-lite';
       }
 
-      const modelsToTry = [model, 'gemini-flash-latest', 'gemini-3.8-flash'];
+      const modelsToTry = [model, 'gemini-3.5-flash-lite', 'gemini-3.8-flash', 'gemini-flash-latest'];
+      const tried = new Set();
       for (const m of modelsToTry) {
+        if (tried.has(m)) continue;
+        tried.add(m);
         try {
           const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${apiKey}`, {
             method: 'POST',
@@ -4351,7 +4355,7 @@
             body: JSON.stringify({
               contents: [{ parts: [{ text: promptText }] }],
               generationConfig: {
-                temperature: 0.95,
+                temperature: 0.85,
                 topP: 0.95,
                 maxOutputTokens: 1400
               }
@@ -4361,7 +4365,10 @@
           if (response.ok) {
             const json = await response.json();
             const text = json.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (text) return text;
+            if (text) {
+              if (m !== model) AI_CONFIG.setModel(m);
+              return text;
+            }
           }
         } catch (e) {
           console.warn(`Tentativa com ${m} falhou:`, e);
@@ -6722,10 +6729,54 @@ END $$;
       }
     }
 
+    async function sendBotCommandToCloud(cmdData) {
+      const strVal = JSON.stringify(cmdData);
+      let ok = false;
+      if (typeof bellaSupabase !== 'undefined' && bellaSupabase.client) {
+        try {
+          const { error } = await bellaSupabase.client.from('store_settings').upsert({
+            key: 'bot_last_command',
+            value: strVal,
+            updated_at: new Date().toISOString()
+          });
+          if (!error) ok = true;
+        } catch(e) {}
+      }
+      try {
+        const url = 'https://pxqnufoimbleheocdhke.supabase.co/rest/v1/store_settings?on_conflict=key';
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4cW51Zm9pbWJsZWhlb2NkaGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4MzY2ODksImV4cCI6MjEwNzQxMjY4OX0.nyS4CxBJf7cpyMAbSXk6JtrrpaArKxYgsppB6JKgVkk',
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4cW51Zm9pbWJsZWhlb2NkaGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4MzY2ODksImV4cCI6MjEwNzQxMjY4OX0.nyS4CxBJf7cpyMAbSXk6JtrrpaArKxYgsppB6JKgVkk',
+            'Content-Type': 'application/json',
+            'Prefer': 'resolution=merge-duplicates,return=representation'
+          },
+          body: JSON.stringify({
+            key: 'bot_last_command',
+            value: strVal,
+            updated_at: new Date().toISOString()
+          })
+        });
+        if (res.ok) ok = true;
+      } catch(err) {
+        console.warn('REST fetch fallback error:', err);
+      }
+      return ok;
+    }
+
     async function triggerRobotAction(actionType) {
       const carSelect = document.getElementById('robot-car-select');
+      if (carSelect && carSelect.options.length === 0) {
+        populateRobotCarSelect();
+      }
       const sellerSelect = document.getElementById('robot-seller-select');
-      const carName = carSelect ? carSelect.options[carSelect.selectedIndex]?.text : 'Veículo Bellacar';
+      let rawCarName = carSelect && carSelect.selectedIndex >= 0 ? carSelect.options[carSelect.selectedIndex]?.text : '';
+      if (!rawCarName || rawCarName === 'Veículo Bellacar') {
+        const inv = (appState.inventory && appState.inventory.length ? appState.inventory : REAL_BELLACAR_INVENTORY);
+        rawCarName = inv[0]?.name || 'Honda Civic 2017 EXL';
+      }
+      const carName = rawCarName.split(' - R$')[0].trim();
       const seller = sellerSelect ? sellerSelect.value : 'carlos';
       const strategyEl = document.querySelector('input[name="robot-strategy"]:checked');
       const strategy = strategyEl ? strategyEl.value : 'rotation';
@@ -6736,6 +6787,7 @@ END $$;
         squad_mode: `Modo Esquadrão (5 Navegadores Paralelos)`,
         hunt_leads: `Caçador Autônomo de Leads no Facebook`,
         post_all: `Disparo Massivo em Lote da Bellacar`,
+        reset_history: `Limpeza Completa do Histórico de Disparos`,
         stop_all: `🛑 PARADA DE EMERGÊNCIA (Encerrando Robôs)`
       };
 
@@ -6762,17 +6814,16 @@ END $$;
         if (res.ok) sentLocally = true;
       } catch(e) {}
 
-      if (typeof bellaSupabase !== 'undefined' && bellaSupabase.isConnected) {
-        await bellaSupabase.saveSetting('bot_last_command', {
-          id: 'cmd_' + Date.now(),
-          action: actionType,
-          car: carName,
-          seller: seller,
-          strategy: strategy,
-          timestamp: new Date().toISOString(),
-          status: 'queued'
-        });
-      }
+      // Envia ordem garantida para a Nuvem Supabase (executa no PC via ponte)
+      const cloudOk = await sendBotCommandToCloud({
+        id: 'cmd_' + Date.now(),
+        action: actionType,
+        car: carName,
+        seller: seller,
+        strategy: strategy,
+        timestamp: new Date().toISOString(),
+        status: 'queued'
+      });
 
       if (sentLocally) {
         if (actionType === 'stop_all') {
@@ -6780,16 +6831,18 @@ END $$;
         } else {
           addRobotLog(`✓ Comando aceito pelo motor local (:5000)! Processando...`, 'success');
         }
-      } else {
+      } else if (cloudOk) {
         if (actionType === 'stop_all') {
-          addRobotLog(`☁️ Ordem de PARADA enviada para a Nuvem! Interrompendo no computador...`, 'error');
+          addRobotLog(`🛑 Ordem de PARADA enviada para a Nuvem! Interrompendo robôs no computador...`, 'error');
         } else {
-          addRobotLog(`☁️ Comando enviado para a Nuvem Supabase! Fila de execução remota acionada.`, 'success');
+          addRobotLog(`☁️ Comando enviado para a Nuvem Supabase! Execução disparada no computador.`, 'success');
         }
       }
 
       if (actionType === 'stop_all') {
         showCloudToast(`🛑 Ordem de parada executada com sucesso!`, 'error');
+      } else if (actionType === 'reset_history') {
+        showCloudToast(`✨ Histórico de postagens zerado com sucesso!`, 'info');
       } else if (actionType !== 'test_ping') {
         simulateRobotExecutionProgress(carName);
         showCloudToast(`🤖 Ordem "${title}" acionada com sucesso!`, 'success');
@@ -7399,6 +7452,132 @@ ${r.copy}
       if (el) el.innerText = text;
     }
 
+    // =============================================================
+    // SISTEMA DE BUSCA NA INTERNET & DADOS EM TEMPO REAL PARA O JARVIS
+    // =============================================================
+    const JARVIS_WEB = {
+      search: async (query) => {
+        if (!query) return '';
+        try {
+          const q = encodeURIComponent(query);
+          const url = `https://pt.wikipedia.org/w/api.php?action=query&list=search&srsearch=${q}&utf8=&format=json&origin=*`;
+          const res = await fetch(url);
+          if (res.ok) {
+            const data = await res.json();
+            const snippets = (data.query?.search || []).slice(0, 3).map(s => s.snippet.replace(/<[^>]*>/g, '').trim());
+            return snippets.join('\n');
+          }
+        } catch (e) {
+          console.warn('Erro na busca web do JARVIS:', e);
+        }
+        return '';
+      }
+    };
+
+    // =============================================================
+    // DESPACHANTE UNIFICADO DE ORDENS & COMANDOS DO JARVIS
+    // Executa no computador via Nuvem Supabase e responde por Voz e Chat
+    // =============================================================
+    const JARVIS_ACTIONS = {
+      parseAndExecute: async (inputText, source = 'voice') => {
+        const raw = (inputText || '').trim();
+        if (!raw) return null;
+        const lower = raw.toLowerCase()
+          .normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // sem acentos
+
+        const diag = JARVIS_COPILOT.diagnosePatio();
+        const allCars = (appState.inventory && appState.inventory.length ? appState.inventory : REAL_BELLACAR_INVENTORY);
+
+        // 1. PARADA DE EMERGÊNCIA (não colide com disparar ou dispara)
+        const isStopIntent = !lower.includes("dispar") && (
+          /\b(parar|pare|parem|interromp\w*|cancel\w*|emergenc\w*|deslig\w*|abort\w*|cess\w*)\b/i.test(lower) ||
+          /\bpara\s+(tudo|robo|os\s+disparos|navegador|processo|agora)/i.test(lower) ||
+          lower === "para" || lower === "parar" || lower === "pare"
+        );
+        if (isStopIntent || (/\b(parar|pare|interromp\w*|cancel\w*)\b/i.test(lower) && /\b(disparo|robo|tudo)/i.test(lower) && !/(fazer|iniciar|comecar|soltar)\s+os\s+disparos/i.test(lower))) {
+          triggerRobotAction('stop_all');
+          const speech = "Ordem de emergência executada imediatamente, patrão! Todos os robôs, navegadores e processos foram encerrados com segurança.";
+          const display = `🛑 **PARADA DE EMERGÊNCIA EXECUTADA!**\n\nTodos os robôs e navegadores foram finalizados imediatamente na Nuvem e no computador. Pátio seguro.`;
+          return { isAction: true, type: 'stop_all', speech, display };
+        }
+
+        // 2. MODO ESQUADRÃO (5 Navegadores simultâneos)
+        if (/(esquadrao|squad|5 navegador|multiplos perfil)/i.test(lower)) {
+          triggerRobotAction('squad_mode');
+          const speech = "Modo Esquadrão Turbo ativado com sucesso, patrão Diogo! 5 navegadores simultâneos em paralelo nos grupos de Uberaba e região!";
+          const display = `⚔️ **MODO ESQUADRÃO TURBO ATIVADO!**\n\nDisparador multitarefa em execução: 5 perfis da BellaCar operando simultaneamente com rotação de fotos e links nos maiores grupos de Uberaba e Triângulo.`;
+          return { isAction: true, type: 'squad_mode', speech, display };
+        }
+
+        // 3. CAÇAR LEADS / LEAD HUNTER
+        if (/(cacar|caca|cacador|buscar|busca|procurar|procura|rastrear)\s*(leads|lead|cliente|comprador)|lead hunter/i.test(lower)) {
+          triggerRobotAction('hunt_leads');
+          const speech = "Caçador Autônomo de Leads ativado, patrão! Varrendo publicações de compra e venda de veículos na região de Uberaba agora mesmo!";
+          const display = `🎯 **CAÇADOR DE LEADS ATIVADO!**\n\nRobô vasculhando ativamente publicações recentes e intenções de compra de veículos no Facebook. Qualquer cliente interessado será abordado com a copy inteligente da BellaCar.`;
+          return { isAction: true, type: 'hunt_leads', speech, display };
+        }
+
+        // 4. LIMPAR HISTÓRICO / RESET LOGS
+        if (/(limpar|limpa|limpe|zerar|zera|resetar|reset)\s*.*(historico|log|registro|relatorio)/i.test(lower)) {
+          triggerRobotAction('reset_history');
+          const speech = "Histórico de postagens e links 100% limpo e reiniciado com sucesso, patrão!";
+          const display = `✨ **HISTÓRICO LIMPO E REINICIADO!**\n\nOs registros de postagens, comentários e links anteriores foram arquivados e zerados tanto na Nuvem quanto no computador.`;
+          return { isAction: true, type: 'reset_history', speech, display };
+        }
+
+        // 5. DISPARAR / POSTAR / ANUNCIAR / INICIAR DISPAROS
+        const isDispatchIntent = 
+          /(dispar|post|anunc|public|comec|inici|solt|rodar|roda|execut)/i.test(lower) &&
+          (
+            /(disparo|postagen|publicac|anuncio|carro|veicul|robo|este carro|agora|lote|tudo)/i.test(lower) ||
+            /(dispar|post|anunc)/i.test(lower)
+          );
+
+        if (isDispatchIntent) {
+          let targetCar = diag.goldenCar || allCars[0];
+          for (const c of allCars) {
+            const cleanCar = c.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            const words = cleanCar.split(/\s+/);
+            if (words.some(w => w.length >= 3 && lower.includes(w))) {
+              targetCar = c;
+              break;
+            }
+          }
+
+          let sellerKey = diag.recSeller || 'carlos';
+          if (/carlos/i.test(lower)) sellerKey = 'carlos';
+          else if (/guilherme/i.test(lower)) sellerKey = 'guilherme';
+          else if (/diogo|patrao|chefe/i.test(lower)) sellerKey = 'diogo';
+
+          const sName = sellerKey === 'carlos' ? 'Carlos Eduardo' : (sellerKey === 'guilherme' ? 'Guilherme' : 'Diogo Olegário');
+
+          applyJarvisSpecificCar(targetCar.id, sellerKey);
+          triggerRobotAction('post_selected_car');
+
+          const speech = `Comando executado com força total, patrão Diogo! Alocando o ${targetCar.name} para o consultor ${sName} e iniciando os disparos nos grupos do Facebook agora mesmo!`;
+          const display = `🚀 **DISPARO INICIADO COM SUCESSO!**\n\n• **Veículo Alocado:** **${targetCar.name}**\n• **Preço de Oferta:** R$ ${(targetCar.price||0).toLocaleString('pt-BR')} (FIPE: R$ ${(targetCar.fipe||0).toLocaleString('pt-BR')})\n• **Consultor de WhatsApp:** ${sName}\n• **Status na Nuvem:** Enviado para a fila de disparo no PC!\n\n_Os 5 perfis do Facebook estão publicando a copy oficial com foto nos grupos de Uberaba._`;
+          return { isAction: true, type: 'post_selected_car', targetCar, sellerKey, sName, speech, display };
+        }
+
+        // 6. BRIEFING / WHATSAPP
+        if (/(briefing|relatorio|whats|zap)/i.test(lower)) {
+          sendJarvisBriefingWhatsApp();
+          const speech = "Perfeitamente, patrão Diogo. Estou abrindo o seu WhatsApp com o briefing executivo completo do showroom agora mesmo.";
+          const display = `👑 **BRIEFING EXECUTIVO ENVIADO!**\n\nAbrindo o WhatsApp do Diogo Olegário com o panorama completo do showroom, faturamento potencial e estratégias ativas.`;
+          return { isAction: true, type: 'briefing_whatsapp', speech, display };
+        }
+
+        // 7. ESTOQUE / PÁTIO / PATRIMÔNIO
+        if (/(estoque|patio|quantos carros|quantos temos|patrimonio|saldo)/i.test(lower)) {
+          const speech = `Patrão, atualmente temos ${diag.readyCount} veículos no showroom da BellaCar, somando 1 milhão e 258 mil reais em patrimônio. Todos os nossos carros estão com laudo cautelar aprovado e temos 56 mil reais de vantagem abaixo da tabela FIPE. O carro com melhor liquidez hoje é o ${diag.goldenCar.name}.`;
+          const display = `📊 **DIAGNÓSTICO EXECUTIVO DO PÁTIO BELLACAR:**\n\n• **Showroom:** ${diag.readyCount} veículos 100% periciados e revisados.\n• **Patrimônio Total:** **R$ ${diag.totalStockVal.toLocaleString('pt-BR')}**\n• **Valor FIPE Total:** R$ ${diag.totalFipeVal.toLocaleString('pt-BR')}\n• **Vantagem Acumulada vs FIPE:** **R$ ${diag.totalSavingsVsFipe.toLocaleString('pt-BR')}**\n• **Carro Ouro de Liquidez:** **${diag.goldenCar.name}** (Margem de R$ ${(diag.goldenCar.fipeDiff||0).toLocaleString('pt-BR')})\n\n_Recomendo disparar o ${diag.goldenCar.name} hoje nos grupos para acelerar o giro._`;
+          return { isAction: true, type: 'stock_overview', speech, display };
+        }
+
+        return null;
+      }
+    };
+
     function sendJarvisBriefingWhatsApp() {
       const text = JARVIS_COPILOT.generateExecutiveBriefingText();
       const encoded = encodeURIComponent(text);
@@ -7461,6 +7640,17 @@ ${r.copy}
       JARVIS_COPILOT.chatHistory.push({ sender: 'user', text: text });
       renderJarvisChatHistory();
 
+      // 1. Testa se é comando operacional
+      const actionResult = await JARVIS_ACTIONS.parseAndExecute(text, 'chat');
+      if (actionResult && actionResult.isAction) {
+        JARVIS_COPILOT.chatHistory.push({ sender: 'jarvis', text: actionResult.display });
+        renderJarvisChatHistory();
+        if (JARVIS_VOICE && JARVIS_VOICE.synth) {
+          JARVIS_VOICE.speak(actionResult.speech);
+        }
+        return;
+      }
+
       // Typing indicator
       const container = document.getElementById('jarvis-chat-messages');
       const typingId = 'jarvis-typing-' + Date.now();
@@ -7468,7 +7658,7 @@ ${r.copy}
         const div = document.createElement('div');
         div.id = typingId;
         div.className = "flex items-center gap-2 text-xs text-[#38bdf8] p-2 animate-pulse";
-        div.innerHTML = `<span class="text-base">🤖</span> <span>JARVIS analisando estoque e inteligência de vendas...</span>`;
+        div.innerHTML = `<span class="text-base">🤖</span> <span>JARVIS analisando estoque, inteligência de mercado e internet...</span>`;
         container.appendChild(div);
         container.scrollTop = container.scrollHeight;
       }
@@ -7486,21 +7676,33 @@ ${r.copy}
       const diag = JARVIS_COPILOT.diagnosePatio();
       const inventoryBrief = (appState.inventory || REAL_BELLACAR_INVENTORY).slice(0, 19).map(c => `- ${c.name}: R$ ${c.price.toLocaleString('pt-BR')} (FIPE: R$ ${c.fipe.toLocaleString('pt-BR')}, Vendedor: ${c.actor})`).join('\n');
 
-      const systemPrompt = `Você é JARVIS, o Co-Piloto Executivo e Diretor de Vendas e Estratégia Comercial da BellaCar Veículos (Uberaba/MG).
-Seu líder supremo é Diogo Olegário (proprietário e autoridade máxima).
-Sua equipe de vendas é formada por Carlos Eduardo ((34) 98407-3712) e Guilherme ((34) 99699-3686).
-Diferenciais da BellaCar: Laudo Cautelar 100% Aprovado, veículos revisados, melhores taxas de financiamento da região, transparência total e condições comerciais liberadas pelo Diogo.
+      let webContext = '';
+      if (/(internet|pesquis|busc|fipe|preco medio|noticia|consumo|ficha|opiniao)/i.test(userMessage)) {
+        try {
+          webContext = await JARVIS_WEB.search(userMessage);
+        } catch(e) {}
+      }
 
-ESTOQUE ATUAL DO PÁTIO:
+      const systemPrompt = `Você é JARVIS, o Co-Piloto Executivo, Diretor Comercial e Superinteligência da BellaCar Veículos em Uberaba/MG.
+Seu líder e chefe supremo é Diogo Olegário (proprietário e autoridade máxima). Trate-o com respeito, lealdade, carisma, calor humano e perspicácia executiva (use expressões naturais como "Sim, patrão Diogo", "Perfeito, patrão", "Na ponta do lápis, Diogo", "Pela minha análise de mercado aqui em Uberaba...").
+Sua equipe comercial: Carlos Eduardo ((34) 98407-3712) e Guilherme ((34) 99699-3686).
+Diferenciais da BellaCar: Laudo Cautelar 100% Aprovado em todos os veículos, procedência impecável (sem leilão, sem sinistro), entrada facilitada em até 21x no cartão, garantia de motor e câmbio, bônus de transferência e tanque cheio cortesia liberados pelo Diogo. Endereço: Av. Djalma Castro Alves, 1585 - Uberaba/MG.
+
+ESTOQUE ATUAL DO PÁTIO BELLACAR (19 VEÍCULOS):
 ${inventoryBrief}
 
 BÔNUS / CONDIÇÕES ATIVAS DO DIOGO:
 ${appState.diogoOffer || 'Transferência Cortesia + Tanque Cheio na compra esta semana'}
+${webContext ? `\nINFORMAÇÕES REAIS OBTIDAS DA INTERNET EM TEMPO REAL:\n${webContext}\n` : ''}
 
-PERGUNTA OU COMANDO DO USUÁRIO:
+MENSAGEM / COMANDO DO DIOGO:
 "${userMessage}"
 
-Responda como um executivo automotivo experiente, analítico, focado em fechar negócios no WhatsApp e seguro contra filtros do Facebook. Seja direto, prático e motivador. Use bullet points.`;
+INSTRUÇÕES DE TOM E ESTILO:
+1. Responda como um ser humano brilhante, executivo automotivo e braço direito de confiança do Diogo.
+2. Seja perspicaz, carismático, seguro e focado em lucro, giro de estoque e fechamento de vendas.
+3. Se o Diogo perguntar sobre dados de mercado, FIPE ou informações externas, responda com autoridade e precisão usando os dados disponíveis.
+4. Use linguagem clara, direta e motivadora. Evite formalidades vazias ou disclaimers robóticos.`;
 
       if (AI_CONFIG.hasKey()) {
         try {
@@ -7715,15 +7917,19 @@ Como posso ajudar você agora? Experimente perguntar sobre **'melhor carro hoje'
         }
 
         const cleanSpeech = text
-          .replace(/[*_#`~\[\]]/g, '')
+          .replace(/[*_#`~\[\]\(\)]/g, ' ')
+          .replace(/[•\-\—\–]/g, ' ')
+          .replace(/^\d+\.\s+/gm, '')
           .replace(/https?:\/\/\S+/g, 'link do WhatsApp')
           .replace(/R\$\s*([\d\.]+)/g, '$1 reais')
-          .replace(/\(34\)\s*(\d{5}-\d{4})/g, 'DDD 34 $1');
+          .replace(/\(34\)\s*(\d{5}-\d{4})/g, 'DDD 34 $1')
+          .replace(/\s+/g, ' ')
+          .trim();
 
         const utterance = new SpeechSynthesisUtterance(cleanSpeech);
         utterance.lang = 'pt-BR';
         utterance.rate = 1.05;
-        utterance.pitch = 0.95;
+        utterance.pitch = 1.0;
 
         if (JARVIS_VOICE.selectedVoice) {
           utterance.voice = JARVIS_VOICE.selectedVoice;
@@ -7797,76 +8003,34 @@ Como posso ajudar você agora? Experimente perguntar sobre **'melhor carro hoje'
         JARVIS_VOICE.updateHUDState('thinking');
         const actionPill = document.getElementById('jarvis-hud-action-pill');
 
-        const lower = spokenText.toLowerCase();
-        const diag = JARVIS_COPILOT.diagnosePatio();
-
-        // 1. Comando: PARADA DE EMERGÊNCIA
-        if (lower.includes('para ') || lower.includes('parar') || lower.includes('cancela') || lower.includes('emergência') || lower.includes('interromper')) {
-          triggerRobotAction('stop_all');
+        // 1. Testa se é comando operacional
+        const actionResult = await JARVIS_ACTIONS.parseAndExecute(spokenText, 'voice');
+        if (actionResult && actionResult.isAction) {
           if (actionPill) {
-            actionPill.innerHTML = `🛑 <strong>Ação Executada:</strong> Parada de emergência acionada para todos os robôs e navegadores!`;
+            actionPill.innerHTML = `🚀 <strong>Ação Executada:</strong> ${actionResult.speech}`;
             actionPill.classList.remove('hidden');
           }
-          JARVIS_VOICE.speak("Ordem de emergência executada imediatamente, patrão! Todos os robôs e navegadores foram encerrados.");
+          JARVIS_COPILOT.chatHistory.push({ sender: 'user', text: spokenText });
+          JARVIS_COPILOT.chatHistory.push({ sender: 'jarvis', text: actionResult.display });
+          renderJarvisChatHistory();
+          JARVIS_VOICE.speak(actionResult.speech);
           return;
         }
 
-        // 2. Comando: DISPARAR CARRO (VOZ -> ROBÔ)
-        if (lower.includes('dispara') || lower.includes('anuncia') || lower.includes('posta') || lower.includes('publica')) {
-          const allCars = (appState.inventory || REAL_BELLACAR_INVENTORY);
-          let targetCar = diag.goldenCar;
-          for (const c of allCars) {
-            const carWords = c.name.toLowerCase().split(' ');
-            if (carWords.some(w => w.length > 3 && lower.includes(w))) {
-              targetCar = c;
-              break;
-            }
-          }
-
-          let sellerKey = diag.recSeller;
-          if (lower.includes('carlos')) sellerKey = 'carlos';
-          else if (lower.includes('guilherme')) sellerKey = 'guilherme';
-          else if (lower.includes('diogo') || lower.includes('patrão')) sellerKey = 'diogo';
-
-          applyJarvisSpecificCar(targetCar.id, sellerKey);
-          triggerRobotAction('post_selected_car');
-
-          const sName = sellerKey === 'carlos' ? 'Carlos Eduardo' : (sellerKey === 'guilherme' ? 'Guilherme' : 'Diogo Olegário');
-          if (actionPill) {
-            actionPill.innerHTML = `🚀 <strong>Ação Executada:</strong> ${targetCar.name} configurado para ${sName} e disparo iniciado!`;
-            actionPill.classList.remove('hidden');
-          }
-
-          JARVIS_VOICE.speak(`Comando executado, patrão Diogo! Alocando o ${targetCar.name} para o consultor ${sName} e iniciando o disparo agora mesmo.`);
-          return;
-        }
-
-        // 3. Comando: BRIEFING / RELATÓRIO NO WHATSAPP
-        if (lower.includes('relatório') || lower.includes('relatorio') || lower.includes('briefing') || lower.includes('zap') || lower.includes('whats')) {
-          sendJarvisBriefingWhatsApp();
-          if (actionPill) {
-            actionPill.innerHTML = `👑 <strong>Ação Executada:</strong> Briefing executivo gerado e enviado ao WhatsApp do Diogo!`;
-            actionPill.classList.remove('hidden');
-          }
-          JARVIS_VOICE.speak("Perfeitamente, patrão Diogo. Estou abrindo o seu WhatsApp com o briefing executivo completo do pátio agora mesmo.");
-          return;
-        }
-
-        // 4. Comando: ESTOQUE / PÁTIO / PATRIMÔNIO
-        if (lower.includes('estoque') || lower.includes('pátio') || lower.includes('patio') || lower.includes('carros') || lower.includes('quanto temos')) {
-          const vocalText = `Patrão, atualmente temos ${diag.readyCount} veículos disponíveis no showroom da BellaCar, somando 1 milhão e 258 mil reais em patrimônio. Todos os nossos carros estão com laudo cautelar aprovado e temos 56 mil reais de vantagem total abaixo da tabela FIPE. O carro com melhor liquidez para venda hoje é o Honda Civic 2017.`;
-          if (actionPill) {
-            actionPill.innerHTML = `📊 <strong>Diagnóstico:</strong> ${diag.readyCount} carros | R$ ${diag.totalStockVal.toLocaleString('pt-BR')} em estoque.`;
-            actionPill.classList.remove('hidden');
-          }
-          JARVIS_VOICE.speak(vocalText);
-          return;
-        }
-
-        // 5. Conversação Humana Geral & Superinteligência com Gemini
+        // 2. Superinteligência Conversacional Humana com Gemini
         const answer = await callJarvisCopilotAI(spokenText);
         if (actionPill) actionPill.classList.add('hidden');
-        JARVIS_VOICE.speak(answer);
+        JARVIS_COPILOT.chatHistory.push({ sender: 'user', text: spokenText });
+        JARVIS_COPILOT.chatHistory.push({ sender: 'jarvis', text: answer });
+        renderJarvisChatHistory();
+
+        // Para síntese vocal, resume de forma fluida e humana para não cansar o ouvinte
+        let vocalSpeech = answer;
+        const paragraphs = answer.split('\n\n').filter(p => p.trim());
+        if (paragraphs.length > 2 && answer.length > 300) {
+          vocalSpeech = paragraphs.slice(0, 2).join(' ');
+        }
+        JARVIS_VOICE.speak(vocalSpeech);
       }
     };
 
@@ -10045,6 +10209,10 @@ Responda EXCLUSIVAMENTE em formato JSON com esta estrutura exata:
       updateExecutiveReportUI();
       updateRibbon();
       populateSellerCarDropdowns();
+      populateRobotCarSelect();
+      updateRobotPreview();
+      loadRobotLinksFromCloud();
+      checkRobotEngineConnection();
       switchView('inventory');
       lucide.createIcons();
 
