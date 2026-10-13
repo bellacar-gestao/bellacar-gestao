@@ -6475,7 +6475,7 @@ END $$;
       if (counterEl) counterEl.innerText = 'Buscando links na Nuvem...';
 
       let links = null;
-      if (typeof bellaSupabase !== 'undefined' && bellaSupabase.client && bellaSupabase.isConnected) {
+      if (typeof bellaSupabase !== 'undefined' && bellaSupabase.client) {
         try {
           const { data, error } = await bellaSupabase.client
             .from('store_settings')
@@ -6484,6 +6484,26 @@ END $$;
             .single();
           if (data && data.value) {
             links = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
+          }
+        } catch(e) {}
+      }
+
+      // Fallback REST direto com chave anon garantida
+      if (!links || !links.length) {
+        try {
+          const url = 'https://pxqnufoimbleheocdhke.supabase.co/rest/v1/store_settings?key=eq.bot_posts_history&select=*';
+          const res = await fetch(url, {
+            headers: {
+              'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4cW51Zm9pbWJsZWhlb2NkaGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4MzY2ODksImV4cCI6MjEwNzQxMjY4OX0.nyS4CxBJf7cpyMAbSXk6JtrrpaArKxYgsppB6JKgVkk',
+              'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4cW51Zm9pbWJsZWhlb2NkaGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4MzY2ODksImV4cCI6MjEwNzQxMjY4OX0.nyS4CxBJf7cpyMAbSXk6JtrrpaArKxYgsppB6JKgVkk'
+            }
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data[0] && data[0].value) {
+              const val = data[0].value;
+              links = typeof val === 'string' ? JSON.parse(val) : val;
+            }
           }
         } catch(e) {}
       }
