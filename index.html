@@ -6575,10 +6575,14 @@ END $$;
       }
 
       tbody.innerHTML = links.slice(0, 100).map(item => {
-        const isPost = item.type === 'post';
-        const typeBadge = isPost 
-          ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/40">Post no Grupo</span>`
-          : `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#38bdf8]/20 text-[#38bdf8] border border-[#38bdf8]/40">Comentário Lead</span>`;
+        let typeBadge = '';
+        if (item.type === 'comment' || (item.status || '').includes('COMENTARIO')) {
+          typeBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#38bdf8]/20 text-[#38bdf8] border border-[#38bdf8]/40">🎯 Comentário Lead</span>`;
+        } else if (item.type === 'pending' || (item.status || '').includes('PENDENTE')) {
+          typeBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#f59e0b]/20 text-[#f59e0b] border border-[#f59e0b]/40">⏳ Pendente Moderação</span>`;
+        } else {
+          typeBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#10b981]/20 text-[#10b981] border border-[#10b981]/40">✅ Post no Grupo</span>`;
+        }
 
         const displayUrl = item.url.replace('https://www.facebook.com/', '').replace('https://facebook.com/', '');
         const cleanProf = item.profile || 'Perfil 1';
