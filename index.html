@@ -224,11 +224,6 @@
           <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" title="JARVIS Copilot Ativo"></span>
         </button>
 
-        <!-- Botão JARVIS Modo Voz Superinteligência -->
-        <button id="btn-jarvis-voice-header" onclick="openJarvisVoiceHUD()" title="Falar por Voz em Tempo Real com JARVIS" class="flex items-center gap-1 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-[#10b981]/20 via-[#38bdf8]/20 to-[#6366f1]/20 hover:brightness-125 text-[#38bdf8] border border-[#38bdf8]/70 hover:border-[#38bdf8] rounded-xl text-xs font-black transition-all shadow-md shadow-[#38bdf8]/20 shrink-0 active:scale-95 animate-pulse">
-          <i data-lucide="mic" class="w-3.5 h-3.5 text-[#38bdf8]"></i>
-          <span class="hidden sm:inline text-white font-black">Falar</span>
-        </button>
 
         <!-- Botão Conectar Inteligência Artificial Real (Google Gemini) -->
         <button id="btn-ai-config" onclick="openAIConfigModal()" title="Configurar Inteligência Artificial Real (Google Gemini)" class="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 sm:py-2 bg-[#020202] hover:bg-[#373739] text-[#ecdda2] border border-[#c9b977]/50 hover:border-[#c9b977] rounded-xl text-xs font-bold transition-all shadow-sm shrink-0">
@@ -2539,10 +2534,7 @@
                       <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
                       <span>💬 Chat</span>
                     </button>
-                    <button onclick="openJarvisVoiceHUD()" class="px-2.5 py-1.5 bg-gradient-to-r from-[#10b981]/30 to-[#38bdf8]/30 hover:brightness-125 text-white border border-[#38bdf8]/70 rounded-xl text-[11px] font-black flex items-center gap-1 transition-all shadow-md animate-pulse" title="Falar comandos por voz em tempo real">
-                      <i data-lucide="mic" class="w-3.5 h-3.5 text-[#38bdf8]"></i>
-                      <span>🎙️ Falar</span>
-                    </button>
+
                   </div>
                 </div>
               </div>
@@ -3670,10 +3662,6 @@
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <button onclick="openJarvisVoiceHUD()" class="px-3 py-1.5 bg-gradient-to-r from-[#10b981] via-[#38bdf8] to-[#6366f1] text-black font-black rounded-xl text-xs flex items-center gap-1.5 shadow-lg shadow-[#38bdf8]/30 hover:brightness-110 active:scale-95 transition-all animate-pulse">
-            <i data-lucide="mic" class="w-3.5 h-3.5 text-black"></i>
-            <span>Falar por Voz</span>
-          </button>
           <button onclick="closeModal('modal-jarvis-copilot')" class="w-8 h-8 rounded-xl bg-[#19191a] hover:bg-[#373739] text-[#a1a1aa] hover:text-white flex items-center justify-center transition-all">
             <i data-lucide="x" class="w-5 h-5"></i>
           </button>
@@ -3701,10 +3689,6 @@
         <button id="jarvis-tab-btn-chat" onclick="switchJarvisTab('chat')" class="px-3.5 py-1.5 rounded-xl border border-transparent text-[#a1a1aa] hover:text-white flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0">
           <i data-lucide="message-square" class="w-3.5 h-3.5 text-[#10b981]"></i>
           <span>5. 💬 Chat com JARVIS</span>
-        </button>
-        <button id="jarvis-tab-btn-voice-tab" onclick="openJarvisVoiceHUD()" class="px-3.5 py-1.5 rounded-xl border border-[#38bdf8]/60 bg-gradient-to-r from-[#10b981]/25 via-[#38bdf8]/25 to-[#6366f1]/25 text-white flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0 hover:brightness-125">
-          <i data-lucide="mic" class="w-3.5 h-3.5 text-[#38bdf8] animate-pulse"></i>
-          <span>🎙️ 6. Falar por Voz (Tempo Real)</span>
         </button>
       </div>
 
@@ -3965,155 +3949,8 @@
     </div>
   </div>
 
-  <!-- ============================================================= -->
-  <!-- MODAL: JARVIS VOICE HUD (SUPERINTELIGÊNCIA EM TEMPO REAL)     -->
-  <!-- ============================================================= -->
-  <div id="modal-jarvis-voice" class="fixed inset-0 bg-black/95 backdrop-blur-2xl z-50 flex items-center justify-center p-3 sm:p-6 hidden">
-    <div class="glass-luxury w-full max-w-4xl max-h-[95vh] flex flex-col rounded-3xl border-2 border-[#38bdf8]/70 shadow-2xl overflow-hidden relative" style="box-shadow: 0 0 50px -5px rgba(56, 189, 248, 0.4), inset 0 0 30px rgba(56, 189, 248, 0.05);">
-      
-      <!-- Top Holographic Bar -->
-      <div class="p-4 sm:p-5 border-b border-[#373739] flex items-center justify-between bg-gradient-to-r from-[#020202] via-[#09182a] to-[#020202] shrink-0">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-[#38bdf8]/20 border border-[#38bdf8] flex items-center justify-center text-xl shadow-lg shadow-[#38bdf8]/30 text-[#38bdf8] animate-pulse">
-            🤖
-          </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <h3 class="text-base sm:text-lg font-black text-white flex items-center gap-1.5">
-                JARVIS Superinteligência
-                <span class="text-xs px-2 py-0.5 rounded-full bg-gradient-to-r from-[#10b981]/30 to-[#38bdf8]/30 text-[#38bdf8] border border-[#38bdf8]/40 font-mono font-bold">VOZ TEMPO REAL</span>
-              </h3>
-            </div>
-            <span class="text-[11px] text-[#a1a1aa] block">Fale com o JARVIS como um humano • Execução autônoma de comandos por voz</span>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <button onclick="toggleJarvisContinuousVoice()" id="btn-jarvis-continuous-toggle" class="px-3 py-1.5 rounded-xl border border-emerald-500/50 bg-emerald-950/40 text-emerald-400 text-xs font-mono font-bold flex items-center gap-1.5 transition-all" title="Modo Contínuo: Mantém o microfone sempre ouvindo">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-            <span id="label-jarvis-continuous">Contínuo: LIGADO</span>
-          </button>
-          <button onclick="closeJarvisVoiceHUD()" class="w-9 h-9 rounded-xl bg-[#19191a] hover:bg-[#373739] text-[#a1a1aa] hover:text-white flex items-center justify-center transition-all">
-            <i data-lucide="x" class="w-5 h-5"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- Main Visual Core Area -->
-      <div class="p-4 sm:p-6 flex-1 overflow-y-auto flex flex-col items-center justify-between space-y-6 text-center">
-        
-        <!-- Status Indicator Pill -->
-        <div id="jarvis-hud-status-pill" class="px-4 py-1.5 rounded-full text-xs font-mono font-bold bg-[#19191a] text-[#a1a1aa] border border-[#373739] flex items-center gap-2 transition-all">
-          <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
-          <span id="jarvis-hud-status-text">Pressione o microfone para falar com o JARVIS</span>
-        </div>
-
-        <!-- Action Confirmation Banner (Appears when commands run) -->
-        <div id="jarvis-hud-action-pill" class="hidden px-4 py-2 rounded-2xl bg-emerald-950/60 border border-emerald-500/60 text-emerald-300 text-xs font-bold shadow-lg animate-bounce max-w-xl">
-        </div>
-
-        <!-- Arc Reactor / Neural Core Hologram -->
-        <div class="relative flex items-center justify-center my-2">
-          <!-- Outer Spinning Rings -->
-          <div class="w-48 h-48 sm:w-56 sm:h-56 rounded-full border border-dashed border-[#38bdf8]/30 absolute animate-spin" style="animation-duration: 25s;"></div>
-          <div class="w-40 h-40 sm:w-48 sm:h-48 rounded-full border border-dotted border-[#c9b977]/40 absolute animate-spin" style="animation-duration: 15s; animation-direction: reverse;"></div>
-          <div class="w-32 h-32 sm:w-40 sm:h-40 rounded-full border border-[#10b981]/30 absolute animate-ping" style="animation-duration: 3s;"></div>
-
-          <!-- Central Core Orb -->
-          <div id="jarvis-hud-core-orb" onclick="toggleJarvisVoiceRecording()" class="w-28 h-28 sm:w-36 sm:h-36 rounded-full border-4 border-[#38bdf8] bg-gradient-to-tr from-[#020202] via-[#09203f] to-[#020202] flex items-center justify-center cursor-pointer shadow-2xl transition-all duration-300 active:scale-95 z-10" style="box-shadow: 0 0 35px 5px rgba(56, 189, 248, 0.45);">
-            <div class="text-center space-y-1">
-              <span class="text-3xl sm:text-4xl block">🎙️</span>
-              <span class="text-[10px] font-mono font-bold uppercase text-[#38bdf8] tracking-widest block">JARVIS</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Soundwave Equalizer Bars -->
-        <div id="jarvis-hud-waveforms" class="flex items-center justify-center gap-1.5 h-10 opacity-30 transition-opacity">
-          <div class="w-1.5 bg-[#38bdf8] rounded-full wave-bar" style="animation-delay: 0.1s;"></div>
-          <div class="w-1.5 bg-[#10b981] rounded-full wave-bar" style="animation-delay: 0.3s;"></div>
-          <div class="w-1.5 bg-[#c9b977] rounded-full wave-bar" style="animation-delay: 0.2s;"></div>
-          <div class="w-1.5 bg-[#38bdf8] rounded-full wave-bar" style="animation-delay: 0.5s;"></div>
-          <div class="w-1.5 bg-[#ecdda2] rounded-full wave-bar" style="animation-delay: 0.4s;"></div>
-          <div class="w-1.5 bg-[#10b981] rounded-full wave-bar" style="animation-delay: 0.25s;"></div>
-          <div class="w-1.5 bg-[#38bdf8] rounded-full wave-bar" style="animation-delay: 0.35s;"></div>
-          <div class="w-1.5 bg-[#c9b977] rounded-full wave-bar" style="animation-delay: 0.15s;"></div>
-        </div>
-
-        <!-- Live Transcripts Display -->
-        <div class="w-full max-w-2xl space-y-3 text-left">
-          <!-- O que você falou -->
-          <div class="bg-[#020202] border border-[#373739] p-3.5 rounded-2xl space-y-1">
-            <div class="flex items-center justify-between text-[10px] font-mono text-[#a1a1aa] uppercase">
-              <span class="flex items-center gap-1"><i data-lucide="mic" class="w-3 h-3 text-[#38bdf8]"></i> Você disse:</span>
-              <span class="text-[#38bdf8]">Em tempo real</span>
-            </div>
-            <div id="jarvis-voice-user-text" class="text-xs sm:text-sm text-white font-semibold italic min-h-[22px]">
-              "Clique no microfone ou diga algo como: 'JARVIS, analisa meu pátio e dispara o Civic'..."
-            </div>
-          </div>
-
-          <!-- O que o JARVIS respondeu -->
-          <div class="bg-[#0b1727]/90 border border-[#38bdf8]/50 p-4 rounded-2xl space-y-1 shadow-lg">
-            <div class="flex items-center justify-between text-[10px] font-mono text-[#38bdf8] uppercase">
-              <span class="flex items-center gap-1"><i data-lucide="bot" class="w-3.5 h-3.5 text-[#38bdf8]"></i> JARVIS Superinteligência (Voz Ativa):</span>
-              <button onclick="JARVIS_VOICE.stopSpeaking()" class="text-red-400 hover:text-red-300 text-[10px] underline">Silenciar Áudio</button>
-            </div>
-            <div id="jarvis-voice-response-text" class="text-xs sm:text-sm text-[#e0f2fe] leading-relaxed whitespace-pre-wrap min-h-[38px]">
-              "Estou pronto, patrão Diogo. Meus sensores neurais estão conectados aos 19 carros do pátio, aos 5 perfis do Facebook e ao WhatsApp. Pode falar comigo!"
-            </div>
-          </div>
-        </div>
-
-        <!-- Sugestões Rápidas de Comandos Falados -->
-        <div class="w-full max-w-2xl space-y-1.5 pt-1">
-          <span class="text-[10px] text-[#a1a1aa] font-mono uppercase block text-left">Comandos sugeridos para você falar ou clicar:</span>
-          <div class="flex flex-wrap items-center gap-2">
-            <button onclick="simulateVoiceCommand('JARVIS, como está o estoque do pátio hoje?')" class="px-3 py-1.5 bg-[#19191a] hover:bg-[#373739] text-[#38bdf8] border border-[#373739] rounded-xl text-[11px] font-bold transition-all">
-              🗣️ "Como está o pátio hoje?"
-            </button>
-            <button onclick="simulateVoiceCommand('JARVIS, dispara o Civic no modo esquadrão com o Carlos!')" class="px-3 py-1.5 bg-[#19191a] hover:bg-[#373739] text-[#10b981] border border-[#373739] rounded-xl text-[11px] font-bold transition-all">
-              🗣️ "Dispara o Civic com o Carlos!"
-            </button>
-            <button onclick="simulateVoiceCommand('JARVIS, manda o resumo no WhatsApp do Diogo')" class="px-3 py-1.5 bg-[#19191a] hover:bg-[#373739] text-[#ecdda2] border border-[#373739] rounded-xl text-[11px] font-bold transition-all">
-              🗣️ "Manda o resumo no WhatsApp"
-            </button>
-            <button onclick="simulateVoiceCommand('JARVIS, para todos os robôs imediatamente!')" class="px-3 py-1.5 bg-[#19191a] hover:bg-red-950/40 text-red-400 border border-[#373739] rounded-xl text-[11px] font-bold transition-all">
-              🗣️ "Para todos os robôs!"
-            </button>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Bottom Voice Bar (Controls) -->
-      <div class="p-4 border-t border-[#373739] bg-[#050911] flex flex-wrap items-center justify-between gap-3 text-xs shrink-0">
-        <div class="flex items-center gap-2">
-          <label class="text-[#a1a1aa] font-mono text-[11px]">Voz do Sintetizador:</label>
-          <select id="jarvis-voice-selector" onchange="changeJarvisVoice(this.value)" class="bg-[#020202] text-white border border-[#373739] focus:border-[#38bdf8] rounded-xl px-2.5 py-1.5 text-xs outline-none max-w-[220px]">
-            <option value="">Carregando vozes...</option>
-          </select>
-        </div>
-
-        <div class="flex items-center gap-2">
-          <button onclick="toggleJarvisVoiceRecording()" id="btn-jarvis-hud-mic" class="px-5 py-2.5 bg-gradient-to-r from-[#10b981] to-[#38bdf8] text-black font-black rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-[#38bdf8]/20 hover:brightness-110 active:scale-95 transition-all">
-            <i data-lucide="mic" class="w-4 h-4 text-black"></i>
-            <span id="btn-jarvis-hud-mic-label">Ativar Microfone</span>
-          </button>
-          <button onclick="closeJarvisVoiceHUD()" class="px-4 py-2.5 bg-[#19191a] hover:bg-[#373739] text-[#a1a1aa] hover:text-white rounded-xl text-xs font-bold transition-all">
-            Fechar
-          </button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
   <!-- FLOATING JARVIS TRIGGER -->
   <div id="jarvis-floating-trigger" class="fixed bottom-5 right-5 z-40 flex items-center gap-2">
-    <!-- Botão Rápido de Voz -->
-    <button onclick="openJarvisVoiceHUD()" class="w-12 h-12 rounded-2xl bg-gradient-to-r from-[#10b981] via-[#38bdf8] to-[#6366f1] text-black flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all border border-white/20 animate-pulse" title="Falar com JARVIS por Voz (Tempo Real)">
-      <i data-lucide="mic" class="w-6 h-6 text-black"></i>
-    </button>
     <button onclick="openJarvisCopilotModal()" class="group relative flex items-center gap-2.5 px-3.5 py-2.5 sm:px-4 sm:py-3 bg-gradient-to-r from-[#020202] via-[#0f172a] to-[#020202] text-white border border-[#c9b977]/60 hover:border-[#38bdf8] rounded-2xl shadow-2xl transition-all active:scale-95 hover:scale-105" style="box-shadow: 0 0 22px -3px rgba(56, 189, 248, 0.40);">
       <div class="relative">
         <span class="text-xl sm:text-2xl">🤖</span>
@@ -7669,9 +7506,6 @@ ${r.copy}
       if (actionResult && actionResult.isAction) {
         JARVIS_COPILOT.chatHistory.push({ sender: 'jarvis', text: actionResult.display });
         renderJarvisChatHistory();
-        if (JARVIS_VOICE && JARVIS_VOICE.synth) {
-          JARVIS_VOICE.speak(actionResult.speech);
-        }
         return;
       }
 
@@ -7802,331 +7636,44 @@ Como posso ajudar você agora? Experimente perguntar sobre **'melhor carro hoje'
     }
 
     // =============================================================
-    // JARVIS VOICE SUPERINTELLIGENCE ENGINE (TEMPO REAL)
+    // JARVIS VOICE ENGINE - DESATIVADO PARA MÁXIMA VELOCIDADE E ZERO LAG
     // =============================================================
     const JARVIS_VOICE = {
       isListening: false,
       isSpeaking: false,
-      isContinuous: true,
+      isContinuous: false,
       recognition: null,
-      synth: window.speechSynthesis || null,
+      synth: null,
       selectedVoice: null,
       voicesLoaded: false,
-
       init: () => {
-        // Setup Speech Recognition
-        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (SpeechRec && !JARVIS_VOICE.recognition) {
-          JARVIS_VOICE.recognition = new SpeechRec();
-          JARVIS_VOICE.recognition.lang = 'pt-BR';
-          JARVIS_VOICE.recognition.continuous = false;
-          JARVIS_VOICE.recognition.interimResults = true;
-
-          JARVIS_VOICE.recognition.onstart = () => {
-            JARVIS_VOICE.isListening = true;
-            JARVIS_VOICE.updateHUDState('listening');
-          };
-
-          JARVIS_VOICE.recognition.onresult = (event) => {
-            let interimText = '';
-            let finalText = '';
-            for (let i = event.resultIndex; i < event.results.length; ++i) {
-              if (event.results[i].isFinal) {
-                finalText += event.results[i][0].transcript;
-              } else {
-                interimText += event.results[i][0].transcript;
-              }
-            }
-
-            const transcriptEl = document.getElementById('jarvis-voice-user-text');
-            if (transcriptEl) {
-              transcriptEl.innerText = finalText || interimText || 'Ouvindo...';
-            }
-
-            if (finalText && finalText.trim().length > 1) {
-              JARVIS_VOICE.handleUserVoiceInput(finalText.trim());
-            }
-          };
-
-          JARVIS_VOICE.recognition.onerror = (event) => {
-            console.warn('SpeechRec status:', event.error);
-            if (event.error !== 'no-speech') {
-              JARVIS_VOICE.updateHUDState('idle');
-            }
-          };
-
-          JARVIS_VOICE.recognition.onend = () => {
-            JARVIS_VOICE.isListening = false;
-            const modal = document.getElementById('modal-jarvis-voice');
-            const isOpen = modal && !modal.classList.contains('hidden');
-            if (!JARVIS_VOICE.isSpeaking && JARVIS_VOICE.isContinuous && isOpen) {
-              setTimeout(() => {
-                if (!JARVIS_VOICE.isSpeaking && JARVIS_VOICE.isContinuous && !modal.classList.contains('hidden')) {
-                  JARVIS_VOICE.startListening();
-                }
-              }, 700);
-            } else if (!JARVIS_VOICE.isSpeaking) {
-              JARVIS_VOICE.updateHUDState('idle');
-            }
-          };
-        }
-
-        // Setup Speech Synthesis
-        if (JARVIS_VOICE.synth) {
-          const loadVoices = () => {
-            const voices = JARVIS_VOICE.synth.getVoices();
-            if (voices && voices.length > 0) {
-              JARVIS_VOICE.voicesLoaded = true;
-              JARVIS_VOICE.populateVoiceDropdown(voices);
-            }
-          };
-          loadVoices();
-          if (JARVIS_VOICE.synth.onvoiceschanged !== undefined) {
-            JARVIS_VOICE.synth.onvoiceschanged = loadVoices;
-          }
-        }
-      },
-
-      populateVoiceDropdown: (voices) => {
-        const select = document.getElementById('jarvis-voice-selector');
-        if (!select) return;
-        const ptVoices = voices.filter(v => v.lang.includes('pt') || v.lang.includes('PT') || v.lang.includes('br') || v.lang.includes('BR'));
-        const listToUse = ptVoices.length ? ptVoices : voices.slice(0, 10);
-
-        select.innerHTML = listToUse.map(v => `<option value="${v.name}">${v.name} (${v.lang})</option>`).join('');
-
-        const best = ptVoices.find(v => v.lang.includes('BR') && (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Francisca') || v.name.includes('Antonio') || v.name.includes('Daniel') || v.name.includes('Luciana')))
-                  || ptVoices[0];
-        if (best) {
-          select.value = best.name;
-          JARVIS_VOICE.selectedVoice = best;
-        }
-      },
-
-      startListening: () => {
-        if (!JARVIS_VOICE.recognition) {
-          JARVIS_VOICE.init();
-        }
-        if (!JARVIS_VOICE.recognition) {
-          showCloudToast("Reconhecimento de voz não suportado neste navegador. Use Google Chrome ou Edge.", "warn");
-          return;
-        }
-        if (JARVIS_VOICE.isSpeaking) {
-          JARVIS_VOICE.stopSpeaking();
-        }
+        // Desativa qualquer síntese de fala pendente do navegador
         try {
-          JARVIS_VOICE.recognition.start();
+          if (window.speechSynthesis) window.speechSynthesis.cancel();
         } catch(e) {}
       },
-
-      stopListening: () => {
-        if (JARVIS_VOICE.recognition && JARVIS_VOICE.isListening) {
-          try { JARVIS_VOICE.recognition.stop(); } catch(e) {}
-        }
-        JARVIS_VOICE.isListening = false;
-        JARVIS_VOICE.updateHUDState('idle');
-      },
-
-      speak: (text, onComplete) => {
-        if (!JARVIS_VOICE.synth) return;
-        JARVIS_VOICE.stopListening();
-        JARVIS_VOICE.synth.cancel();
-
-        JARVIS_VOICE.isSpeaking = true;
-        JARVIS_VOICE.updateHUDState('speaking');
-
-        const responseEl = document.getElementById('jarvis-voice-response-text');
-        if (responseEl) {
-          responseEl.innerText = text;
-        }
-
-        const cleanSpeech = text
-          .replace(/[*_#`~\[\]\(\)]/g, ' ')
-          .replace(/[•\-\—\–]/g, ' ')
-          .replace(/^\d+\.\s+/gm, '')
-          .replace(/https?:\/\/\S+/g, 'link do WhatsApp')
-          .replace(/R\$\s*([\d\.]+)/g, '$1 reais')
-          .replace(/\(34\)\s*(\d{5}-\d{4})/g, 'DDD 34 $1')
-          .replace(/\s+/g, ' ')
-          .trim();
-
-        const utterance = new SpeechSynthesisUtterance(cleanSpeech);
-        utterance.lang = 'pt-BR';
-        utterance.rate = 1.05;
-        utterance.pitch = 1.0;
-
-        if (JARVIS_VOICE.selectedVoice) {
-          utterance.voice = JARVIS_VOICE.selectedVoice;
-        } else {
-          const voices = JARVIS_VOICE.synth.getVoices();
-          const best = voices.find(v => v.lang.includes('pt-BR') || v.lang.includes('pt_BR')) || voices.find(v => v.lang.startsWith('pt'));
-          if (best) utterance.voice = best;
-        }
-
-        utterance.onend = () => {
-          JARVIS_VOICE.isSpeaking = false;
-          JARVIS_VOICE.updateHUDState('idle');
-          if (onComplete) onComplete();
-          const modal = document.getElementById('modal-jarvis-voice');
-          if (JARVIS_VOICE.isContinuous && modal && !modal.classList.contains('hidden')) {
-            setTimeout(() => JARVIS_VOICE.startListening(), 400);
-          }
-        };
-
-        utterance.onerror = () => {
-          JARVIS_VOICE.isSpeaking = false;
-          JARVIS_VOICE.updateHUDState('idle');
-        };
-
-        JARVIS_VOICE.synth.speak(utterance);
-      },
-
+      populateVoiceDropdown: () => {},
+      startListening: () => {},
+      stopListening: () => {},
+      speak: () => {},
       stopSpeaking: () => {
-        if (JARVIS_VOICE.synth) {
-          JARVIS_VOICE.synth.cancel();
-        }
-        JARVIS_VOICE.isSpeaking = false;
-        JARVIS_VOICE.updateHUDState('idle');
+        try {
+          if (window.speechSynthesis) window.speechSynthesis.cancel();
+        } catch(e) {}
       },
-
-      updateHUDState: (state) => {
-        const statusPill = document.getElementById('jarvis-hud-status-pill');
-        const statusText = document.getElementById('jarvis-hud-status-text');
-        const waveContainer = document.getElementById('jarvis-hud-waveforms');
-        const coreOrb = document.getElementById('jarvis-hud-core-orb');
-        const micLabel = document.getElementById('btn-jarvis-hud-mic-label');
-
-        if (state === 'listening') {
-          if (statusPill) statusPill.className = "px-4 py-1.5 rounded-full text-xs font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center gap-2 animate-pulse";
-          if (statusText) statusText.innerText = "🎙️ Ouvindo você em tempo real... Fale naturalmente!";
-          if (waveContainer) waveContainer.classList.remove('opacity-30');
-          if (coreOrb) coreOrb.className = "w-28 h-28 sm:w-36 sm:h-36 rounded-full border-4 border-emerald-400 bg-gradient-to-tr from-[#020202] via-[#064e3b] to-[#020202] flex items-center justify-center cursor-pointer shadow-2xl transition-all duration-300 jarvis-core-pulse z-10";
-          if (micLabel) micLabel.innerText = "Ouvindo... (Clique para pausar)";
-        } else if (state === 'thinking') {
-          if (statusPill) statusPill.className = "px-4 py-1.5 rounded-full text-xs font-mono font-bold bg-[#c9b977]/20 text-[#ecdda2] border border-[#c9b977]/40 flex items-center gap-2 animate-pulse";
-          if (statusText) statusText.innerText = "⏳ JARVIS raciocinando e analisando dados do pátio...";
-          if (waveContainer) waveContainer.classList.add('opacity-30');
-          if (coreOrb) coreOrb.className = "w-28 h-28 sm:w-36 sm:h-36 rounded-full border-4 border-[#c9b977] bg-gradient-to-tr from-[#020202] via-[#451a03] to-[#020202] flex items-center justify-center cursor-pointer shadow-2xl transition-all duration-300 animate-spin z-10";
-          if (micLabel) micLabel.innerText = "Processando...";
-        } else if (state === 'speaking') {
-          if (statusPill) statusPill.className = "px-4 py-1.5 rounded-full text-xs font-mono font-bold bg-[#38bdf8]/20 text-[#38bdf8] border border-[#38bdf8]/40 flex items-center gap-2";
-          if (statusText) statusText.innerText = "🔊 JARVIS falando em áudio com você...";
-          if (waveContainer) waveContainer.classList.remove('opacity-30');
-          if (coreOrb) coreOrb.className = "w-28 h-28 sm:w-36 sm:h-36 rounded-full border-4 border-[#38bdf8] bg-gradient-to-tr from-[#020202] via-[#09203f] to-[#020202] flex items-center justify-center cursor-pointer shadow-2xl transition-all duration-300 jarvis-core-pulse z-10";
-          if (micLabel) micLabel.innerText = "Falando... (Clique para interromper)";
-        } else {
-          if (statusPill) statusPill.className = "px-4 py-1.5 rounded-full text-xs font-mono font-bold bg-[#19191a] text-[#a1a1aa] border border-[#373739] flex items-center gap-2";
-          if (statusText) statusText.innerText = "Pressione o microfone para falar com o JARVIS";
-          if (waveContainer) waveContainer.classList.add('opacity-30');
-          if (coreOrb) coreOrb.className = "w-28 h-28 sm:w-36 sm:h-36 rounded-full border-4 border-[#38bdf8]/60 bg-gradient-to-tr from-[#020202] via-[#09203f] to-[#020202] flex items-center justify-center cursor-pointer shadow-2xl transition-all duration-300 z-10";
-          if (micLabel) micLabel.innerText = "Ativar Microfone";
-        }
-      },
-
-      handleUserVoiceInput: async (spokenText) => {
-        JARVIS_VOICE.updateHUDState('thinking');
-        const actionPill = document.getElementById('jarvis-hud-action-pill');
-
-        // 1. Testa se é comando operacional
-        const actionResult = await JARVIS_ACTIONS.parseAndExecute(spokenText, 'voice');
-        if (actionResult && actionResult.isAction) {
-          if (actionPill) {
-            actionPill.innerHTML = `🚀 <strong>Ação Executada:</strong> ${actionResult.speech}`;
-            actionPill.classList.remove('hidden');
-          }
-          JARVIS_COPILOT.chatHistory.push({ sender: 'user', text: spokenText });
-          JARVIS_COPILOT.chatHistory.push({ sender: 'jarvis', text: actionResult.display });
-          renderJarvisChatHistory();
-          JARVIS_VOICE.speak(actionResult.speech);
-          return;
-        }
-
-        // 2. Superinteligência Conversacional Humana com Gemini
-        const answer = await callJarvisCopilotAI(spokenText);
-        if (actionPill) actionPill.classList.add('hidden');
-        JARVIS_COPILOT.chatHistory.push({ sender: 'user', text: spokenText });
-        JARVIS_COPILOT.chatHistory.push({ sender: 'jarvis', text: answer });
-        renderJarvisChatHistory();
-
-        // Para síntese vocal, resume de forma fluida e humana para não cansar o ouvinte
-        let vocalSpeech = answer;
-        const paragraphs = answer.split('\n\n').filter(p => p.trim());
-        if (paragraphs.length > 2 && answer.length > 300) {
-          vocalSpeech = paragraphs.slice(0, 2).join(' ');
-        }
-        JARVIS_VOICE.speak(vocalSpeech);
-      }
+      updateHUDState: () => {},
+      handleUserVoiceInput: () => {}
     };
 
     function openJarvisVoiceHUD() {
-      if (typeof closeModal === 'function') {
-        closeModal('modal-jarvis-copilot');
-      }
-      openModal('modal-jarvis-voice');
-      JARVIS_VOICE.init();
-      lucide.createIcons();
-
-      const responseEl = document.getElementById('jarvis-voice-response-text');
-      if (responseEl) {
-        responseEl.innerText = "Estou pronto, patrão Diogo. Meus sensores neurais estão conectados aos 19 carros do pátio, aos 5 perfis do Facebook e ao WhatsApp. Pode falar comigo!";
-      }
-
-      setTimeout(() => {
-        JARVIS_VOICE.startListening();
-      }, 500);
+      // Redireciona diretamente para o Chat de Alta Performance do JARVIS
+      openJarvisCopilotModal('chat');
     }
-
-    function closeJarvisVoiceHUD() {
-      JARVIS_VOICE.stopSpeaking();
-      JARVIS_VOICE.stopListening();
-      closeModal('modal-jarvis-voice');
-    }
-
-    function toggleJarvisVoiceRecording() {
-      if (JARVIS_VOICE.isSpeaking) {
-        JARVIS_VOICE.stopSpeaking();
-        JARVIS_VOICE.startListening();
-        return;
-      }
-      if (JARVIS_VOICE.isListening) {
-        JARVIS_VOICE.stopListening();
-      } else {
-        JARVIS_VOICE.startListening();
-      }
-    }
-
-    function toggleJarvisContinuousVoice() {
-      JARVIS_VOICE.isContinuous = !JARVIS_VOICE.isContinuous;
-      const btn = document.getElementById('btn-jarvis-continuous-toggle');
-      const label = document.getElementById('label-jarvis-continuous');
-      if (JARVIS_VOICE.isContinuous) {
-        if (btn) btn.className = "px-3 py-1.5 rounded-xl border border-emerald-500/50 bg-emerald-950/40 text-emerald-400 text-xs font-mono font-bold flex items-center gap-1.5 transition-all";
-        if (label) label.innerText = "Contínuo: LIGADO";
-        showCloudToast('🎙️ Modo Contínuo Ativado: JARVIS ouvirá você sem interrupção!', 'success');
-        if (!JARVIS_VOICE.isListening && !JARVIS_VOICE.isSpeaking) JARVIS_VOICE.startListening();
-      } else {
-        if (btn) btn.className = "px-3 py-1.5 rounded-xl border border-[#373739] bg-[#19191a] text-[#a1a1aa] text-xs font-mono font-bold flex items-center gap-1.5 transition-all";
-        if (label) label.innerText = "Contínuo: DESLIGADO";
-        showCloudToast('Modo Contínuo Desligado.', 'info');
-      }
-    }
-
-    function changeJarvisVoice(voiceName) {
-      if (!JARVIS_VOICE.synth) return;
-      const voices = JARVIS_VOICE.synth.getVoices();
-      const v = voices.find(x => x.name === voiceName);
-      if (v) {
-        JARVIS_VOICE.selectedVoice = v;
-        showCloudToast(`Voz alterada para: ${v.name}`, 'info');
-        JARVIS_VOICE.speak(`Voz alterada com sucesso, patrão. Como soa para você?`);
-      }
-    }
-
-    function simulateVoiceCommand(cmdText) {
-      const userTextEl = document.getElementById('jarvis-voice-user-text');
-      if (userTextEl) userTextEl.innerText = `"${cmdText}"`;
-      JARVIS_VOICE.handleUserVoiceInput(cmdText);
-    }
+    function closeJarvisVoiceHUD() {}
+    function toggleJarvisVoiceRecording() {}
+    function toggleJarvisContinuousVoice() {}
+    function changeJarvisVoice() {}
+    function simulateVoiceCommand() {}
 
     // Character Selection in Studio
     function selectCharacter(charKey) {
@@ -10240,10 +9787,7 @@ Responda EXCLUSIVAMENTE em formato JSON com esta estrutura exata:
       switchView('inventory');
       lucide.createIcons();
 
-      // Inicializar Superinteligência de Voz do JARVIS
-      if (typeof JARVIS_VOICE !== 'undefined') {
-        JARVIS_VOICE.init();
-      }
+
 
       // Inicializar Conexão Nuvem / Supabase se configurado
       if (typeof bellaSupabase !== 'undefined') {
