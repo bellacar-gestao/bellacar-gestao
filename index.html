@@ -124,32 +124,6 @@
 </head>
 <body class="bg-[#020202] text-[#f4f4f5] min-h-screen font-sans flex flex-col antialiased selection:bg-[#c9b977] selection:text-[#020202]">
 
-  <!-- ============================================================= -->
-  <!-- BANNER UNIVERSAL PWA: BAIXAR APP (100% RESPONSIVO)           -->
-  <!-- ============================================================= -->
-  <div id="pwa-universal-banner" class="w-full bg-[#111112] border-b border-[#c9b977]/50 px-2.5 py-2 z-50 shadow-md">
-    <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
-      <div class="flex items-center gap-2 min-w-0">
-        <img src="logo.png" alt="BellaCar Logo" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg shrink-0 object-cover border border-[#c9b977]/40">
-        <div class="min-w-0">
-          <div class="flex items-center gap-1.5">
-            <span class="font-bold text-white text-xs truncate">App BellaCar</span>
-            <span class="px-1.5 py-0.2 rounded-full bg-[#c9b977]/20 text-[#ecdda2] text-[9px] font-mono font-bold border border-[#c9b977]/30 shrink-0">OFICIAL</span>
-          </div>
-          <span class="text-[10px] text-[#a1a1aa] truncate block">Instale na tela inicial</span>
-        </div>
-      </div>
-      <div class="flex items-center gap-1 shrink-0">
-        <button onclick="installPWA()" class="px-2.5 py-1.5 gold-btn-gradient hover:brightness-110 text-black font-black rounded-lg text-xs flex items-center gap-1 shadow-md active:scale-95 transition-all">
-          <i data-lucide="download" class="w-3.5 h-3.5 text-black shrink-0"></i>
-          <span class="whitespace-nowrap font-black">Baixar App</span>
-        </button>
-        <button onclick="document.getElementById('pwa-universal-banner').style.display='none'" class="p-1 text-[#71717a] hover:text-white rounded text-xs leading-none" title="Fechar aviso">
-          ✕
-        </button>
-      </div>
-    </div>
-  </div>
 
   <!-- TOP LUXURY EXECUTIVE BAR -->
   <header class="border-b border-[#373739] bg-[#19191a]/95 backdrop-blur sticky top-0 z-40">
@@ -249,10 +223,6 @@
 
     <!-- MAIN NAVIGATION TABS (VISÍVEL NO MODO ADMIN) -->
     <nav id="admin-nav-bar" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex space-x-2 py-2.5 sm:py-3 border-t border-[#373739] overflow-x-auto text-xs font-semibold scrollbar-none no-scrollbar">
-      <button onclick="installPWA()" class="px-4 py-2 rounded-xl gold-btn-gradient text-black font-black flex items-center gap-2 whitespace-nowrap shrink-0 shadow-md hover:brightness-110 active:scale-95">
-        <i data-lucide="download" class="w-4 h-4 text-black"></i>
-        <span>📲 Baixar App Mobile</span>
-      </button>
       <button onclick="switchView('inventory')" id="nav-inventory" class="active-nav-tab px-4 py-2 rounded-xl border border-transparent text-[#a1a1aa] hover:text-white flex items-center gap-2 transition-all whitespace-nowrap shrink-0">
         <i data-lucide="warehouse" class="w-4 h-4 text-[#c9b977]"></i>
         <span>1. Estoque & Pátio (19 Carros)</span>
@@ -338,20 +308,6 @@
 
         <!-- Termômetro Financeiro & Operacional da Loja -->
         
-        <!-- Banner de Atalho para App Mobile do Diogo -->
-        <div class="p-4 rounded-2xl bg-[#020202] border border-[#c9b977]/60 flex items-center justify-between gap-3 shadow-lg">
-          <div class="flex items-center gap-2.5">
-            <i data-lucide="smartphone" class="w-5 h-5 text-[#c9b977]"></i>
-            <div>
-              <span class="text-xs font-bold text-white block">Instalar App no seu Celular</span>
-              <span class="text-[10px] text-[#a1a1aa]">Acesse o Portal do Dono em 1 toque</span>
-            </div>
-          </div>
-          <button onclick="installPWA()" class="px-3.5 py-1.5 gold-btn-gradient text-black font-black rounded-xl text-xs flex items-center gap-1 shadow shrink-0">
-            <i data-lucide="download" class="w-3.5 h-3.5"></i>
-            <span>Baixar</span>
-          </button>
-        </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
           <div class="bg-[#020202] border border-[#373739] p-4 rounded-2xl space-y-1">
@@ -686,21 +642,6 @@
           </div>
         </div>
 
-        
-        <!-- Banner de Atalho para App Mobile do Vendedor -->
-        <div class="p-4 rounded-2xl bg-[#020202] border border-[#c9b977]/60 flex items-center justify-between gap-3 shadow-lg">
-          <div class="flex items-center gap-2.5">
-            <i data-lucide="smartphone" class="w-5 h-5 text-[#c9b977]"></i>
-            <div>
-              <span class="text-xs font-bold text-white block">Instalar App no seu Celular</span>
-              <span class="text-[10px] text-[#a1a1aa]">Simule propostas e veja pautas direto do pátio</span>
-            </div>
-          </div>
-          <button onclick="installPWA()" class="px-3.5 py-1.5 gold-btn-gradient text-black font-black rounded-xl text-xs flex items-center gap-1 shadow shrink-0">
-            <i data-lucide="download" class="w-3.5 h-3.5"></i>
-            <span>Baixar</span>
-          </button>
-        </div>
 
         <!-- Banner de Notificação de Carro Pronto -->
         <div class="bg-[#020202] border border-[#373739] p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -9796,13 +9737,6 @@ Responda EXCLUSIVAMENTE em formato JSON com esta estrutura exata:
     });
   </script>
 
-      <!-- ============================================================= -->
-  <!-- BOTÃO FLUTUANTE FIXO (FAB): BAIXAR APP NO CELULAR             -->
-  <!-- ============================================================= -->
-  <button id="pwa-floating-btn" onclick="installPWA()" title="Instalar aplicativo BellaCar no celular" style="position: fixed; bottom: 16px; right: 16px; z-index: 99999;" class="px-3.5 py-2.5 sm:px-4 sm:py-3 gold-btn-gradient text-black font-black rounded-2xl shadow-2xl shadow-[#c9b977]/60 flex items-center gap-1.5 border border-black/20 active:scale-90 transition-all hover:scale-105 cursor-pointer">
-    <i data-lucide="download" class="w-4 h-4 sm:w-5 sm:h-5 text-black shrink-0"></i>
-    <span class="text-xs uppercase font-black tracking-wide whitespace-nowrap">📲 Baixar App</span>
-  </button>
-  
+
 </body>
 </html>
