@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gerenciamento BellaCar | Central de Gravações & Conteúdo</title>
-  <meta name="build-version" content="2026.10.14-v4-speed-flow">
+  <meta name="build-version" content="2026.10.14-v5-funnel-viral">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#c9b977">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -19,7 +19,6 @@
   <!-- Tailwind CSS & Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Supabase JS Client v2 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
@@ -63,40 +62,33 @@
       border: 1px solid rgba(55, 55, 59, 0.75);
     }
     .gold-glow {
-      box-shadow: 0 0 20px -3px rgba(201, 185, 119, 0.22);
+      box-shadow: 0 0 25px -4px rgba(201, 185, 119, 0.25);
     }
     .gold-btn {
       background: linear-gradient(135deg, #ecdda2 0%, #c9b977 100%);
       color: #020202;
     }
-    .gold-btn:hover {
-      filter: brightness(1.1);
-    }
+    .gold-btn:hover { filter: brightness(1.1); }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #020202; }
     ::-webkit-scrollbar-thumb { background: #373739; border-radius: 9999px; }
     ::-webkit-scrollbar-thumb:hover { background: #c9b977; }
-    .teleprompter-mirror {
-      transform: scaleX(-1);
-    }
-    @keyframes pulse-subtle {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.6; }
-    }
-    .animate-pulse-subtle {
-      animation: pulse-subtle 2s infinite ease-in-out;
+    .teleprompter-mirror { transform: scaleX(-1); }
+    .funnel-step-badge {
+      background: linear-gradient(135deg, #ecdda2 0%, #c9b977 100%);
+      color: #020202;
     }
   </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-[#c9b977] selection:text-black">
 
   <!-- ========================================== -->
-  <!-- HEADER EXECUTIVO LIMPO & EFICIENTE        -->
+  <!-- HEADER EXECUTIVO LIMPO                    -->
   <!-- ========================================== -->
   <header class="border-b border-[#2e2e33] bg-[#0c0c0d]/95 backdrop-blur-md sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 flex items-center justify-between gap-3">
       
-      <!-- Brand & Status -->
+      <!-- Brand & Título -->
       <div class="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
         <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-tr from-[#c9b977] via-[#ecdda2] to-[#c9b977] p-[1.5px] shadow-md shadow-[#c9b977]/20 shrink-0">
           <div class="w-full h-full bg-[#121213] rounded-xl flex items-center justify-center overflow-hidden">
@@ -109,7 +101,7 @@
               GERENCIAMENTO <span class="text-[#ecdda2]">BELLACAR</span>
             </h1>
             <span class="hidden md:inline-block px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#c9b977]/15 text-[#ecdda2] border border-[#c9b977]/30">
-              V4 ULTRA-FLOW
+              FUNIL VIRAL
             </span>
           </div>
           <!-- Contadores Rápidos -->
@@ -123,20 +115,11 @@
         </div>
       </div>
 
-      <!-- Controles do Topo: Apresentador + IA + Config -->
+      <!-- Controles: Status IA + Bastidores + PWA -->
       <div class="flex items-center gap-2 shrink-0">
         
-        <!-- Seletor do Apresentador Ativo (Sem PINs para não travar a rotina) -->
-        <div class="relative">
-          <select id="speaker-selector" onchange="changeActiveSpeaker(this.value)" class="bg-[#18181b] text-[#ecdda2] border border-[#c9b977]/40 rounded-xl px-2.5 py-1.5 text-xs font-bold focus:outline-none focus:border-[#ecdda2] cursor-pointer shadow-sm pr-7 truncate">
-            <option value="diogo">👑 Diogo (Dono)</option>
-            <option value="carlos">📱 Carlos (Vendas)</option>
-            <option value="guilherme">📱 Guilherme (Vendas)</option>
-          </select>
-        </div>
-
-        <!-- Indicador de Status da IA (Abre modal de chave) -->
-        <button onclick="openModal('modal-settings')" id="hdr-ai-badge" title="Status da Inteligência Artificial" class="px-2 sm:px-3 py-1.5 bg-[#18181b] hover:bg-[#27272a] border border-[#3f3f46] rounded-xl text-xs flex items-center gap-1.5 transition-all">
+        <!-- Indicador de Status da IA -->
+        <button onclick="openModal('modal-settings')" id="hdr-ai-badge" title="Status da Inteligência Artificial" class="px-2.5 py-1.5 bg-[#18181b] hover:bg-[#27272a] border border-[#3f3f46] rounded-xl text-xs flex items-center gap-1.5 transition-all">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" id="ai-status-dot"></span>
           <span class="hidden xs:inline text-[11px] font-bold text-white" id="ai-status-text">Gemini 1.5</span>
         </button>
@@ -157,28 +140,395 @@
   </header>
 
   <!-- ========================================== -->
-  <!-- CONTEÚDO PRINCIPAL (FLUXO ULTRA-FLUIDO)    -->
+  <!-- SELETOR PRINCIPAL DE MODO                  -->
+  <!-- ========================================== -->
+  <div class="border-b border-[#2e2e33] bg-[#0c0c0d]">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <button onclick="switchMainDashboardMode('funnel')" id="btn-mode-funnel" class="px-4 py-2 rounded-xl text-xs font-black flex items-center gap-2 transition-all bg-[#c9b977] text-black shadow-md shadow-[#c9b977]/20">
+          <span>🌪️ Funil Criativo de Gravação</span>
+        </button>
+        <button onclick="switchMainDashboardMode('inventory')" id="btn-mode-inventory" class="px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all bg-[#18181b] text-[#a1a1aa] hover:text-white border border-[#2e2e33]">
+          <i data-lucide="warehouse" class="w-4 h-4 text-[#ecdda2]"></i>
+          <span>Estoque do Pátio (19 Carros)</span>
+        </button>
+      </div>
+
+      <span class="hidden md:inline text-[11px] text-[#71717a] font-mono">
+        Roteiros 100% Inéditos • Foco em Retenção & Conversão
+      </span>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- CONTEÚDO PRINCIPAL                         -->
   <!-- ========================================== -->
   <main class="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-6 flex-1 w-full space-y-6">
 
-    <!-- PASSO 1: VITRINE RÁPIDA DO PÁTIO (19 CARROS) -->
-    <section class="space-y-3">
+    <!-- ============================================================= -->
+    <!-- MODO 1: O FUNIL CRIATIVO DE GRAVAÇÃO (FLUXO INTERATIVO)        -->
+    <!-- ============================================================= -->
+    <section id="view-funnel" class="space-y-6">
+
+      <!-- BANNER EXPLICATIVO DO FUNIL -->
+      <div class="p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-[#18181b] via-[#121213] to-[#18181b] border border-[#2e2e33] flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#c9b977]/20 text-[#ecdda2] border border-[#c9b977]/30 uppercase">
+              FLUXO ESTRATÉGICO DE PRODUÇÃO
+            </span>
+            <span class="text-xs text-[#a1a1aa]">BellaCar Veículos • Uberaba</span>
+          </div>
+          <h2 class="text-base sm:text-xl font-black text-white">
+            Crie o Roteiro Perfeito em 3 Escolhas Rápidas:
+          </h2>
+          <p class="text-xs text-[#a1a1aa]">
+            1. Escolha o Formato ➔ 2. Escolha o Elenco ➔ 3. Escolha o Nível de Tempero (Light ao Fogo no Parquinho) ➔ A IA gera na hora!
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="resetFunnelDefaults()" class="px-3.5 py-2 bg-[#020202] hover:bg-[#27272a] text-[#a1a1aa] hover:text-white border border-[#2e2e33] rounded-xl text-xs font-bold transition-all">
+            Limpar Filtros
+          </button>
+        </div>
+      </div>
+
+      <!-- ETAPA 1: O QUE VOCÊ QUER GRAVAR HOJE? (FORMATOS) -->
+      <div class="glass-luxury rounded-3xl p-4 sm:p-6 space-y-4 border border-[#2e2e33]">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs sm:text-sm font-black uppercase text-white flex items-center gap-2">
+            <span class="w-6 h-6 rounded-lg funnel-step-badge text-xs flex items-center justify-center font-mono font-black">1</span>
+            O Que Você Quer Gravar Hoje? (Escolha o Formato):
+          </h3>
+          <span class="text-[11px] font-mono text-[#c9b977]" id="funnel-format-selected-label">Formato Ativo: Duelo</span>
+        </div>
+
+        <!-- Grade dos 7 Formatos Visuais -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2.5">
+          
+          <!-- 1. Duelo -->
+          <button type="button" onclick="selectFunnelFormat('duelo')" id="fmt-duelo" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#1e1e22] border-[#c9b977] ring-1 ring-[#c9b977] shadow-lg shadow-[#c9b977]/15">
+            <span class="text-2xl">⚔️</span>
+            <div>
+              <span class="text-xs font-bold text-white block">Duelo</span>
+              <span class="text-[10px] text-[#a1a1aa] leading-tight block">2 carros no embate</span>
+            </div>
+          </button>
+
+          <!-- 2. Anúncio de Carro -->
+          <button type="button" onclick="selectFunnelFormat('anuncio')" id="fmt-anuncio" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
+            <span class="text-2xl">🚗</span>
+            <div>
+              <span class="text-xs font-bold text-white block">Anúncio</span>
+              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Vender 1 carro rápido</span>
+            </div>
+          </button>
+
+          <!-- 3. Papo de Patrão -->
+          <button type="button" onclick="selectFunnelFormat('papo_patrao')" id="fmt-papo_patrao" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
+            <span class="text-2xl">👑</span>
+            <div>
+              <span class="text-xs font-bold text-white block">Papo de Patrão</span>
+              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Autoridade do Diogo</span>
+            </div>
+          </button>
+
+          <!-- 4. Desafio / Reality -->
+          <button type="button" onclick="selectFunnelFormat('desafio')" id="fmt-desafio" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
+            <span class="text-2xl">🏆</span>
+            <div>
+              <span class="text-xs font-bold text-white block">Desafio</span>
+              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Aposta da equipe</span>
+            </div>
+          </button>
+
+          <!-- 5. Test Drive -->
+          <button type="button" onclick="selectFunnelFormat('test_drive')" id="fmt-test_drive" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
+            <span class="text-2xl">🏎️</span>
+            <div>
+              <span class="text-xs font-bold text-white block">Test Drive</span>
+              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Acelerando na real</span>
+            </div>
+          </button>
+
+          <!-- 6. Humor / Bastidores -->
+          <button type="button" onclick="selectFunnelFormat('humor')" id="fmt-humor" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
+            <span class="text-2xl">😂</span>
+            <div>
+              <span class="text-xs font-bold text-white block">Humor</span>
+              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Propostas bizarras</span>
+            </div>
+          </button>
+
+          <!-- 7. Trend Viral -->
+          <button type="button" onclick="selectFunnelFormat('trend')" id="fmt-trend" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
+            <span class="text-2xl">🔥</span>
+            <div>
+              <span class="text-xs font-bold text-white block">Trend Viral</span>
+              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Reels em alta</span>
+            </div>
+          </button>
+
+        </div>
+      </div>
+
+      <!-- ETAPA 2 & 3: PARTICIPANTES + NÍVEL DE INTENSIDADE -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        
+        <!-- ETAPA 2: QUEM VAI PARTICIPAR? (1, 2 OU TODOS) -->
+        <div class="glass-luxury rounded-3xl p-4 sm:p-5 space-y-3.5 border border-[#2e2e33]">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs sm:text-sm font-black uppercase text-white flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg funnel-step-badge text-xs flex items-center justify-center font-mono font-black">2</span>
+              Quem Vai Participar? (Escolha 1, 2 ou Todos):
+            </h3>
+            <button onclick="toggleSelectAllSpeakers()" class="text-[11px] text-[#c9b977] hover:underline font-bold">
+              🏆 Os 3 Juntos
+            </button>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2.5">
+            <!-- Diogo -->
+            <button type="button" onclick="toggleSpeakerInFunnel('diogo')" id="spk-btn-diogo" class="p-3 rounded-2xl border text-center transition-all space-y-1 bg-[#1e1e22] border-[#c9b977] text-white">
+              <span class="text-xl block">👑</span>
+              <span class="text-xs font-bold block truncate">Diogo</span>
+              <span class="text-[9px] text-[#ecdda2] font-mono block">O Patrão</span>
+            </button>
+
+            <!-- Carlos -->
+            <button type="button" onclick="toggleSpeakerInFunnel('carlos')" id="spk-btn-carlos" class="p-3 rounded-2xl border text-center transition-all space-y-1 bg-[#1e1e22] border-[#c9b977] text-white">
+              <span class="text-xl block">📱</span>
+              <span class="text-xs font-bold block truncate">Carlos</span>
+              <span class="text-[9px] text-[#c9b977] font-mono block">Consultor</span>
+            </button>
+
+            <!-- Guilherme -->
+            <button type="button" onclick="toggleSpeakerInFunnel('guilherme')" id="spk-btn-guilherme" class="p-3 rounded-2xl border text-center transition-all space-y-1 bg-[#121213] border-[#2e2e33] text-[#a1a1aa]">
+              <span class="text-xl block">⚡</span>
+              <span class="text-xs font-bold block truncate">Guilherme</span>
+              <span class="text-[9px] text-[#71717a] font-mono block">Acelerado</span>
+            </button>
+          </div>
+          <span class="text-[10px] text-[#71717a] block" id="funnel-speakers-selected-desc">Participantes selecionados: Diogo Olegário e Carlos Eduardo</span>
+        </div>
+
+        <!-- ETAPA 3: NÍVEL DE INTENSIDADE / TEMPERO -->
+        <div class="glass-luxury rounded-3xl p-4 sm:p-5 space-y-3.5 border border-[#2e2e33]">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs sm:text-sm font-black uppercase text-white flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg funnel-step-badge text-xs flex items-center justify-center font-mono font-black">3</span>
+              Nível do Vídeo (Tempero & Energia):
+            </h3>
+            <span class="text-[11px] font-mono text-[#c9b977]" id="funnel-intensity-label">Moderado</span>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2.5">
+            <!-- Light -->
+            <button type="button" onclick="selectFunnelIntensity('light')" id="int-light" class="p-3 rounded-2xl border text-left transition-all space-y-1 bg-[#121213] border-[#2e2e33] text-[#a1a1aa] hover:border-[#3f3f46]">
+              <span class="text-lg">🟢</span>
+              <span class="text-xs font-bold text-white block">Light</span>
+              <span class="text-[9px] text-[#a1a1aa] leading-tight block">Elegante e seguro</span>
+            </button>
+
+            <!-- Moderado -->
+            <button type="button" onclick="selectFunnelIntensity('moderado')" id="int-moderado" class="p-3 rounded-2xl border text-left transition-all space-y-1 bg-[#1e1e22] border-amber-400/60 ring-1 ring-amber-400 text-white">
+              <span class="text-lg">🟡</span>
+              <span class="text-xs font-bold text-white block">Moderado</span>
+              <span class="text-[9px] text-amber-200/80 leading-tight block">Vendas e ritmo</span>
+            </button>
+
+            <!-- Fogo no Parquinho -->
+            <button type="button" onclick="selectFunnelIntensity('fogo_no_parquinho')" id="int-fogo_no_parquinho" class="p-3 rounded-2xl border text-left transition-all space-y-1 bg-[#121213] border-[#2e2e33] text-[#a1a1aa] hover:border-[#3f3f46]">
+              <span class="text-lg">🔥</span>
+              <span class="text-xs font-bold text-white block">Fogo Parquinho</span>
+              <span class="text-[9px] text-red-400/80 leading-tight block">Viral, polêmico</span>
+            </button>
+          </div>
+          <span class="text-[10px] text-[#71717a] block" id="funnel-intensity-desc">Tom comercial afiado, quebra de objeções e ritmo dinâmico para prender o público.</span>
+        </div>
+
+      </div>
+
+      <!-- ETAPA 4: VEÍCULO(S) EM DESTAQUE (CONTEXTUAL) -->
+      <div class="glass-luxury rounded-3xl p-4 sm:p-5 space-y-3.5 border border-[#2e2e33]" id="funnel-car-selection-container">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs sm:text-sm font-black uppercase text-white flex items-center gap-2">
+            <span class="w-6 h-6 rounded-lg funnel-step-badge text-xs flex items-center justify-center font-mono font-black">4</span>
+            <span id="funnel-car-section-title">Veículo(s) em Destaque no Vídeo:</span>
+          </h3>
+          <span class="text-[11px] text-[#ecdda2] font-mono">19 carros disponíveis</span>
+        </div>
+
+        <!-- Seletor do Duelo (Carro A vs Carro B) -->
+        <div id="duel-selectors-box" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="bg-[#0c0c0d] p-3 rounded-2xl border border-[#2e2e33] space-y-1.5">
+            <label class="text-[11px] font-mono text-[#c9b977] uppercase font-bold flex items-center gap-1.5">
+              <span>🔵 Carro A (Defendido no Duelo):</span>
+            </label>
+            <select id="duel-select-car-a" class="w-full bg-[#18181b] border border-[#2e2e33] text-xs font-bold text-white rounded-xl p-2.5 outline-none focus:border-[#c9b977]">
+              <!-- Preenchido via JS -->
+            </select>
+          </div>
+
+          <div class="bg-[#0c0c0d] p-3 rounded-2xl border border-[#2e2e33] space-y-1.5">
+            <label class="text-[11px] font-mono text-[#38bdf8] uppercase font-bold flex items-center gap-1.5">
+              <span>🔴 Carro B (Adversário no Duelo):</span>
+            </label>
+            <select id="duel-select-car-b" class="w-full bg-[#18181b] border border-[#2e2e33] text-xs font-bold text-white rounded-xl p-2.5 outline-none focus:border-[#38bdf8]">
+              <!-- Preenchido via JS -->
+            </select>
+          </div>
+        </div>
+
+        <!-- Seletor de Carro Único (Para Anúncio, Test Drive, Humor ou Trend) -->
+        <div id="single-car-selector-box" class="bg-[#0c0c0d] p-3 rounded-2xl border border-[#2e2e33] space-y-1.5 hidden">
+          <label class="text-[11px] font-mono text-[#c9b977] uppercase font-bold">
+            Selecione o Veículo Principal:
+          </label>
+          <select id="single-select-car" class="w-full bg-[#18181b] border border-[#2e2e33] text-xs font-bold text-white rounded-xl p-2.5 outline-none focus:border-[#c9b977]">
+            <!-- Preenchido via JS -->
+          </select>
+        </div>
+      </div>
+
+      <!-- BOTÃO GIGANTE DE DISPARO DA IA -->
+      <div class="text-center pt-2">
+        <button onclick="triggerFunnelGeneration()" id="btn-funnel-generate" class="w-full sm:w-auto px-8 py-4 gold-btn rounded-2xl text-sm sm:text-base font-black flex items-center justify-center gap-3 shadow-xl shadow-[#c9b977]/25 transition-all active:scale-95 mx-auto">
+          <i data-lucide="sparkles" class="w-5 h-5 text-black"></i>
+          <span id="btn-funnel-generate-text">GERAR ROTEIRO INÉDITO AGORA (IA REAL)</span>
+        </button>
+        <span class="text-[11px] text-[#71717a] block mt-2 font-mono">
+          Resposta ultrarrápida • Roteiro inédito adaptado ao elenco e nível selecionados
+        </span>
+      </div>
+
+      <!-- ========================================================= -->
+      <!-- RESULTADO DO FUNIL: O ROTEIRO GERADO PELA IA              -->
+      <!-- ========================================================= -->
+      <div id="funnel-result-container" class="glass-luxury rounded-3xl p-5 sm:p-7 space-y-6 border border-[#c9b977]/40 gold-glow">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#2e2e33]">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-[#c9b977]/20 text-[#ecdda2] font-bold border border-[#c9b977]/40" id="res-badge-format">
+                FORMATO: DUELO
+              </span>
+              <span class="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-red-500/20 text-red-300 font-bold border border-red-500/30" id="res-badge-intensity">
+                FOGO NO PARQUINHO 🔥
+              </span>
+              <span class="text-xs text-[#a1a1aa]" id="res-speakers-list">
+                Elenco: Carlos & Guilherme
+              </span>
+            </div>
+            <h3 class="text-base sm:text-xl font-black text-white" id="res-video-title">
+              Roteiro de Vídeo Viral BellaCar
+            </h3>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="openTeleprompterFromFunnel()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black font-black rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-95 transition-all">
+              <i data-lucide="clapperboard" class="w-4 h-4 text-black"></i>
+              <span>ABRIR NO TELEPROMPTER</span>
+            </button>
+            <button onclick="shareFunnelScriptWhatsApp()" class="px-4 py-2.5 bg-[#25D366] hover:bg-[#20ba59] text-black font-black rounded-xl text-xs flex items-center gap-1.5 shadow transition-all">
+              <i data-lucide="send" class="w-4 h-4 text-black"></i>
+              <span>Grupo WhatsApp</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Gancho dos 3 Segundos -->
+        <div class="bg-[#0c0c0d] p-4 rounded-2xl border border-[#2e2e33] space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-mono uppercase text-[#ecdda2] font-bold flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+              🎯 Gancho de Impacto na Lente da Câmera (0-3s):
+            </span>
+            <button onclick="copyToClipboard(document.getElementById('funnel-hook-display').innerText, 'Gancho copiado!')" class="text-[11px] text-[#c9b977] hover:underline flex items-center gap-1 font-bold">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar
+            </button>
+          </div>
+          <p class="text-sm sm:text-base font-extrabold text-white italic leading-snug" id="funnel-hook-display">
+            "Carregando gancho magnético..."
+          </p>
+        </div>
+
+        <!-- Cenas e Falas Divididas por Personagem -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono uppercase text-[#c9b977] font-bold flex items-center gap-1.5">
+              <i data-lucide="film" class="w-3.5 h-3.5"></i>
+              Desenvolvimento Tomada a Tomada (Com Fala de Cada Apresentador):
+            </span>
+            <button onclick="copyFunnelCompleteScript()" class="text-[11px] text-[#c9b977] hover:underline flex items-center gap-1 font-bold">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Roteiro Completo
+            </button>
+          </div>
+
+          <div id="funnel-scenes-container" class="space-y-3 text-xs">
+            <!-- Injetado dinamicamente com cards coloridos para cada participante -->
+          </div>
+        </div>
+
+        <!-- CTA & Explicação do Algoritmo -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div class="bg-[#0c0c0d] p-3.5 rounded-2xl border border-[#2e2e33] md:col-span-2 space-y-1">
+            <span class="text-[10px] font-mono uppercase text-[#10b981] font-bold block">
+              🚀 Chamada para Ação Final (CTA):
+            </span>
+            <p class="text-xs text-white font-bold leading-relaxed" id="funnel-cta-display">
+              "Comente BELLACAR ou clique no link da bio para chamar no WhatsApp agora!"
+            </p>
+          </div>
+
+          <div class="bg-[#0c0c0d] p-3.5 rounded-2xl border border-[#2e2e33] space-y-1">
+            <span class="text-[10px] font-mono uppercase text-[#38bdf8] font-bold block">
+              📈 Por Que Vai Viralizar:
+            </span>
+            <p class="text-[11px] text-[#a1a1aa] leading-snug" id="funnel-viral-reason">
+              Fórmula de retenção alta nos primeiros 3s e divisão de opiniões para gerar comentários.
+            </p>
+          </div>
+        </div>
+
+        <!-- Ações Inferiores -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#2e2e33]">
+          <button onclick="triggerFunnelGeneration(true)" class="px-4 py-2.5 gold-btn rounded-xl text-xs font-black flex items-center gap-2 shadow active:scale-95 transition-all">
+            <i data-lucide="sparkles" class="w-4 h-4 text-black"></i>
+            <span>Gerar Outra Variação Deste Mesmo Formato</span>
+          </button>
+
+          <div class="flex items-center gap-2">
+            <button onclick="openTeleprompterFromFunnel()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black font-black rounded-xl text-xs flex items-center gap-1.5 shadow">
+              <i data-lucide="clapperboard" class="w-4 h-4 text-black"></i>
+              <span>Ir para o Teleprompter</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ============================================================= -->
+    <!-- MODO 2: ESTOQUE DO PÁTIO (19 CARROS) & OFERTAS RÁPIDAS         -->
+    <!-- ============================================================= -->
+    <section id="view-inventory" class="space-y-6 hidden">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
         <div>
           <h2 class="text-sm sm:text-base font-black tracking-wide text-white uppercase flex items-center gap-2">
-            <span class="w-6 h-6 rounded-lg bg-[#c9b977]/20 text-[#ecdda2] text-xs flex items-center justify-center font-mono font-bold">1</span>
-            Escolha o Veículo para Gravar / Divulgar:
+            <i data-lucide="warehouse" class="w-4 h-4 text-[#c9b977]"></i>
+            Estoque BellaCar (19 Veículos Disponíveis):
           </h2>
-          <p class="text-xs text-[#a1a1aa]">Toque em qualquer carro para abrir instantaneamente o roteiro, anúncio e teleprompter</p>
+          <p class="text-xs text-[#a1a1aa]">Clique em qualquer carro para ver dados de FIPE e gerar anúncios Meta Ads e Stories</p>
         </div>
 
         <!-- Filtros Rápidos & Busca -->
         <div class="flex flex-wrap items-center gap-2">
-          <!-- Campo de Busca Instantânea -->
           <div class="relative flex-1 sm:w-56">
-            <input type="text" id="inventory-search-input" oninput="filterInventory()" placeholder="Buscar modelo (ex: Hilux, Civic)..." class="w-full bg-[#18181b] border border-[#2e2e33] focus:border-[#c9b977] rounded-xl px-3 py-1.5 text-xs text-white placeholder-[#71717a] outline-none transition-colors">
+            <input type="text" id="inventory-search-input" oninput="filterInventory()" placeholder="Buscar modelo (ex: Hilux, Civic)..." class="w-full bg-[#18181b] border border-[#2e2e33] focus:border-[#c9b977] rounded-xl px-3 py-1.5 text-xs text-white placeholder-[#71717a] outline-none">
           </div>
-          <!-- Filtro de Categoria -->
           <select id="category-filter" onchange="filterInventory()" class="bg-[#18181b] text-xs font-semibold text-[#ecdda2] border border-[#2e2e33] rounded-xl px-2.5 py-1.5 outline-none cursor-pointer">
             <option value="all">Todas Categorias</option>
             <option value="SUV">SUVs</option>
@@ -186,7 +536,6 @@
             <option value="Sedan">Sedans</option>
             <option value="Hatch">Hatches</option>
           </select>
-          <!-- Filtro de Status -->
           <select id="status-filter" onchange="filterInventory()" class="bg-[#18181b] text-xs font-semibold text-white border border-[#2e2e33] rounded-xl px-2.5 py-1.5 outline-none cursor-pointer">
             <option value="all">Todos os Status</option>
             <option value="ready">⏳ A Gravar</option>
@@ -197,274 +546,8 @@
 
       <!-- Grid de Veículos Dinâmico -->
       <div id="inventory-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-        <!-- Preenchido via JavaScript -->
+        <!-- Preenchido via JS -->
       </div>
-    </section>
-
-    <!-- PASSO 2: CENTRAL DE PRODUÇÃO DO CARRO SELECIONADO -->
-    <section id="vehicle-production-hub" class="glass-luxury rounded-3xl p-4 sm:p-6 space-y-5 border border-[#c9b977]/30 gold-glow">
-      
-      <!-- Topo do Veículo Ativo -->
-      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-[#2e2e33]">
-        <div class="space-y-1">
-          <div class="flex items-center gap-2 flex-wrap">
-            <span class="w-6 h-6 rounded-lg bg-[#c9b977]/20 text-[#ecdda2] text-xs flex items-center justify-center font-mono font-bold">2</span>
-            <span class="text-[11px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-[#c9b977]/20 text-[#ecdda2] font-bold border border-[#c9b977]/40" id="active-car-category">
-              CATEGORIA
-            </span>
-            <span class="text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30" id="active-car-saving">
-              ABAIXO DA FIPE
-            </span>
-            <span class="text-xs text-[#a1a1aa]" id="active-car-speaker-label">
-              Apresentador: <strong>Carlos Eduardo</strong>
-            </span>
-          </div>
-          <h3 class="text-lg sm:text-2xl font-black text-white tracking-tight" id="active-car-title">
-            Selecione um carro acima
-          </h3>
-          <p class="text-xs text-[#a1a1aa]" id="active-car-finance">
-            Preço Loja: R$ 0 • FIPE: R$ 0 • Entrada Sugerida (25%): R$ 0
-          </p>
-        </div>
-
-        <!-- Ação Rápida de Status do Carro -->
-        <div class="flex items-center gap-2">
-          <button onclick="toggleActiveCarRecordedStatus()" id="btn-toggle-recorded" class="px-4 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 border border-[#3f3f46] bg-[#18181b] text-white hover:border-[#c9b977]">
-            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
-            <span id="btn-toggle-recorded-text">Marcar como Gravado</span>
-          </button>
-          <button onclick="shareActiveCarWhatsApp()" class="px-4 py-2.5 bg-[#25D366] hover:bg-[#20ba59] text-black font-black rounded-xl text-xs flex items-center gap-1.5 shadow-md shadow-[#25D366]/20 transition-all">
-            <i data-lucide="send" class="w-4 h-4"></i>
-            <span>WhatsApp da Loja</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Toggles Rápidos da Caneta do Patrão (Bônus de Fechamento) -->
-      <div class="bg-[#0c0c0d] p-3.5 rounded-2xl border border-[#2e2e33] space-y-2">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-bold text-[#ecdda2] flex items-center gap-1.5">
-            <span>👑</span>
-            <span>Bônus do Diogo para este Vídeo / Anúncio:</span>
-          </span>
-          <span class="text-[10px] text-[#71717a]">Marque os bônus autorizados pelo patrão:</span>
-        </div>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          <label class="flex items-center gap-2 p-2 rounded-xl bg-[#18181b] border border-[#2e2e33] hover:border-[#c9b977]/50 cursor-pointer text-xs transition-colors">
-            <input type="checkbox" id="bonus-tanque" onchange="updateBonuses()" checked class="accent-[#c9b977] w-4 h-4">
-            <span class="text-white font-medium">⛽ Tanque Cheio</span>
-          </label>
-          <label class="flex items-center gap-2 p-2 rounded-xl bg-[#18181b] border border-[#2e2e33] hover:border-[#c9b977]/50 cursor-pointer text-xs transition-colors">
-            <input type="checkbox" id="bonus-transferencia" onchange="updateBonuses()" checked class="accent-[#c9b977] w-4 h-4">
-            <span class="text-white font-medium">📑 Transferência Grátis</span>
-          </label>
-          <label class="flex items-center gap-2 p-2 rounded-xl bg-[#18181b] border border-[#2e2e33] hover:border-[#c9b977]/50 cursor-pointer text-xs transition-colors">
-            <input type="checkbox" id="bonus-garantia" onchange="updateBonuses()" checked class="accent-[#c9b977] w-4 h-4">
-            <span class="text-white font-medium">🛡️ Garantia 1 Ano</span>
-          </label>
-          <label class="flex items-center gap-2 p-2 rounded-xl bg-[#18181b] border border-[#2e2e33] hover:border-[#c9b977]/50 cursor-pointer text-xs transition-colors">
-            <input type="checkbox" id="bonus-cartao" onchange="updateBonuses()" checked class="accent-[#c9b977] w-4 h-4">
-            <span class="text-white font-medium">💳 Entrada em 21x</span>
-          </label>
-        </div>
-      </div>
-
-      <!-- Abas de Produção em 4 Formatos Práticos -->
-      <div class="space-y-4">
-        
-        <!-- Navegação das 4 Abas -->
-        <div class="flex items-center gap-2 border-b border-[#2e2e33] pb-2 overflow-x-auto no-scrollbar">
-          <button onclick="switchProductionTab('tab-video')" id="nav-tab-video" class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap bg-[#c9b977] text-black shadow">
-            <i data-lucide="clapperboard" class="w-4 h-4"></i>
-            <span>1. Gravar Vídeo / Reels (30-45s)</span>
-          </button>
-          <button onclick="switchProductionTab('tab-ad')" id="nav-tab-ad" class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap bg-[#18181b] text-[#a1a1aa] hover:text-white">
-            <i data-lucide="sparkles" class="w-4 h-4 text-[#ecdda2]"></i>
-            <span>2. Anúncio Patrocinado (Meta Ads)</span>
-          </button>
-          <button onclick="switchProductionTab('tab-stories')" id="nav-tab-stories" class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap bg-[#18181b] text-[#a1a1aa] hover:text-white">
-            <i data-lucide="smartphone" class="w-4 h-4 text-[#38bdf8]"></i>
-            <span>3. Sequência de Stories (3 Telas)</span>
-          </button>
-          <button onclick="switchProductionTab('tab-proposal')" id="nav-tab-proposal" class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap bg-[#18181b] text-[#a1a1aa] hover:text-white">
-            <i data-lucide="message-square" class="w-4 h-4 text-[#25D366]"></i>
-            <span>4. Proposta Rápida WhatsApp</span>
-          </button>
-        </div>
-
-        <!-- ABA 1: VÍDEO & TELEPROMPTER -->
-        <div id="tab-video" class="space-y-4">
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
-            
-            <!-- Gancho dos 3 Segundos -->
-            <div class="bg-[#0c0c0d] p-4 rounded-2xl border border-[#2e2e33] space-y-2">
-              <div class="flex items-center justify-between">
-                <span class="text-[11px] font-mono uppercase text-[#ecdda2] font-bold flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-                  Gancho de Impacto (0-3s)
-                </span>
-                <button onclick="copyToClipboard(document.getElementById('video-hook-text').innerText, 'Gancho copiado!')" class="text-[11px] text-[#c9b977] hover:underline flex items-center gap-1">
-                  <i data-lucide="copy" class="w-3 h-3"></i> Copiar
-                </button>
-              </div>
-              <p class="text-sm text-white font-bold italic leading-snug" id="video-hook-text">
-                "Carregando gancho..."
-              </p>
-              <span class="text-[10px] text-[#71717a] block">Fale olhando fixo para a lente da câmera com energia alta.</span>
-            </div>
-
-            <!-- Roteiro Dividido por Tomadas -->
-            <div class="bg-[#0c0c0d] p-4 rounded-2xl border border-[#2e2e33] space-y-2 lg:col-span-2">
-              <div class="flex items-center justify-between">
-                <span class="text-[11px] font-mono uppercase text-[#c9b977] font-bold flex items-center gap-1.5">
-                  <i data-lucide="video" class="w-3.5 h-3.5"></i>
-                  Roteiro de Gravação (30 a 45 Segundos)
-                </span>
-                <span class="text-[10px] text-[#a1a1aa]" id="video-engine-label">Motor de IA Ativo</span>
-              </div>
-              
-              <div class="text-xs text-[#e4e4e7] space-y-2 whitespace-pre-wrap leading-relaxed font-sans bg-[#18181b] p-3 rounded-xl border border-[#2e2e33]" id="video-script-body">
-                Carregando roteiro...
-              </div>
-
-              <!-- CTA do Vídeo -->
-              <div class="p-2.5 rounded-xl bg-[#c9b977]/10 border border-[#c9b977]/30 flex items-center justify-between gap-2">
-                <div class="min-w-0">
-                  <span class="text-[10px] font-mono uppercase text-[#ecdda2] font-bold block">Chamada Final (CTA):</span>
-                  <p class="text-xs text-white font-semibold truncate" id="video-cta-text">"Comente BELLACAR ou toque no link da bio agora!"</p>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Controles de Ação do Vídeo -->
-          <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[#2e2e33]">
-            <div class="flex items-center gap-2">
-              <button onclick="generateContentForActiveCar(true)" id="btn-regen-ai" class="px-4 py-2.5 gold-btn rounded-xl text-xs font-black flex items-center gap-1.5 shadow transition-all active:scale-95">
-                <i data-lucide="sparkles" class="w-4 h-4 text-black"></i>
-                <span id="btn-regen-ai-text">Gerar Outro Roteiro Inédito (IA)</span>
-              </button>
-              <button onclick="copyFullVideoScript()" class="px-3.5 py-2.5 bg-[#18181b] hover:bg-[#27272a] text-[#a1a1aa] hover:text-white border border-[#2e2e33] rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all">
-                <i data-lucide="copy" class="w-4 h-4"></i>
-                <span>Copiar Tudo</span>
-              </button>
-            </div>
-
-            <div class="flex items-center gap-2">
-              <!-- BOTÃO MASTER TELEPROMPTER -->
-              <button onclick="openTeleprompterModal()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black font-black rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition-all active:scale-95">
-                <i data-lucide="clapperboard" class="w-4 h-4 text-black"></i>
-                <span>ABRIR NO TELEPROMPTER</span>
-              </button>
-              <button onclick="sendVideoScriptToWhatsApp()" class="px-4 py-2.5 bg-[#25D366] hover:bg-[#20ba59] text-black font-black rounded-xl text-xs flex items-center gap-1.5 shadow transition-all">
-                <i data-lucide="send" class="w-4 h-4"></i>
-                <span>WhatsApp</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- ABA 2: ANÚNCIO META ADS -->
-        <div id="tab-ad" class="space-y-4 hidden">
-          <div class="bg-[#0c0c0d] p-4 rounded-2xl border border-[#2e2e33] space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-mono uppercase text-[#ecdda2] font-bold">Opções de Headline para o Anúncio:</span>
-              <button onclick="copyToClipboard(document.getElementById('ad-headlines').innerText, 'Headlines copiadas!')" class="text-[11px] text-[#c9b977] hover:underline flex items-center gap-1">
-                <i data-lucide="copy" class="w-3 h-3"></i> Copiar
-              </button>
-            </div>
-            <div id="ad-headlines" class="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs font-bold text-white">
-              <!-- Preenchido via JS -->
-            </div>
-          </div>
-
-          <div class="bg-[#0c0c0d] p-4 rounded-2xl border border-[#2e2e33] space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-mono uppercase text-[#c9b977] font-bold">Texto Principal do Post (Feed & Carrossel):</span>
-              <button onclick="copyToClipboard(document.getElementById('ad-primary-copy').value, 'Texto do anúncio copiado!')" class="text-[11px] text-[#c9b977] hover:underline flex items-center gap-1 font-bold">
-                <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Texto Completo
-              </button>
-            </div>
-            <textarea id="ad-primary-copy" rows="8" class="w-full bg-[#18181b] border border-[#2e2e33] rounded-xl p-3.5 text-xs text-[#f4f4f5] font-sans leading-relaxed outline-none focus:border-[#c9b977]"></textarea>
-            
-            <!-- Link Rastreado -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 bg-[#18181b] rounded-xl border border-[#2e2e33]">
-              <div class="min-w-0 flex-1">
-                <span class="text-[10px] font-mono text-[#a1a1aa] block uppercase">Link de WhatsApp com Mensagem Rastreada:</span>
-                <span class="text-xs font-mono text-[#38bdf8] truncate block" id="ad-tracked-url">https://...</span>
-              </div>
-              <button onclick="copyToClipboard(document.getElementById('ad-tracked-url').innerText, 'Link copiado com sucesso!')" class="px-3 py-1.5 bg-[#27272a] hover:bg-[#3f3f46] text-white rounded-lg text-xs font-bold flex items-center gap-1 shrink-0">
-                <i data-lucide="link" class="w-3.5 h-3.5"></i> Copiar Link
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- ABA 3: STORIES (3 TELAS) -->
-        <div id="tab-stories" class="space-y-4 hidden">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <!-- Story 1 -->
-            <div class="bg-[#0c0c0d] p-4 rounded-2xl border border-[#2e2e33] space-y-2">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-mono text-[#ecdda2] font-bold">STORY 1: Enquete Interativa</span>
-                <span class="text-[10px] text-[#71717a]">15 seg</span>
-              </div>
-              <div class="text-xs text-[#a1a1aa] bg-[#18181b] p-3 rounded-xl border border-[#2e2e33]" id="story-1-content">
-                Carregando...
-              </div>
-            </div>
-            <!-- Story 2 -->
-            <div class="bg-[#0c0c0d] p-4 rounded-2xl border border-[#2e2e33] space-y-2">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-mono text-[#ecdda2] font-bold">STORY 2: Walkaround & Detalhes</span>
-                <span class="text-[10px] text-[#71717a]">15 seg</span>
-              </div>
-              <div class="text-xs text-[#a1a1aa] bg-[#18181b] p-3 rounded-xl border border-[#2e2e33]" id="story-2-content">
-                Carregando...
-              </div>
-            </div>
-            <!-- Story 3 -->
-            <div class="bg-[#0c0c0d] p-4 rounded-2xl border border-[#2e2e33] space-y-2">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-mono text-[#ecdda2] font-bold">STORY 3: Link de WhatsApp</span>
-                <span class="text-[10px] text-[#71717a]">15 seg</span>
-              </div>
-              <div class="text-xs text-[#a1a1aa] bg-[#18181b] p-3 rounded-xl border border-[#2e2e33]" id="story-3-content">
-                Carregando...
-              </div>
-            </div>
-          </div>
-          <div class="flex justify-end">
-            <button onclick="copyAllStories()" class="px-4 py-2 bg-[#18181b] hover:bg-[#27272a] text-white border border-[#2e2e33] rounded-xl text-xs font-bold flex items-center gap-1.5">
-              <i data-lucide="copy" class="w-4 h-4 text-[#c9b977]"></i>
-              <span>Copiar Sequência dos 3 Stories</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- ABA 4: PROPOSTA RÁPIDA WHATSAPP -->
-        <div id="tab-proposal" class="space-y-3 hidden">
-          <div class="bg-[#0c0c0d] p-4 rounded-2xl border border-[#2e2e33] space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-mono uppercase text-[#ecdda2] font-bold">Mensagem de Atendimento para o WhatsApp do Cliente:</span>
-              <button onclick="copyToClipboard(document.getElementById('proposal-text').value, 'Proposta copiada!')" class="text-[11px] text-[#c9b977] hover:underline flex items-center gap-1 font-bold">
-                <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Mensagem
-              </button>
-            </div>
-            <textarea id="proposal-text" rows="7" class="w-full bg-[#18181b] border border-[#2e2e33] rounded-xl p-3.5 text-xs text-[#f4f4f5] font-sans leading-relaxed outline-none focus:border-[#c9b977]"></textarea>
-            
-            <div class="flex justify-end gap-2">
-              <button onclick="openClientWhatsAppPrompt()" class="px-4 py-2 bg-[#25D366] hover:bg-[#20ba59] text-black font-black rounded-xl text-xs flex items-center gap-1.5 shadow transition-all">
-                <i data-lucide="send" class="w-4 h-4"></i>
-                <span>Disparar para Número de Cliente</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
     </section>
 
   </main>
@@ -473,7 +556,6 @@
   <!-- MODAL: TELEPROMPTER PROFISSIONAL EM TELA   -->
   <!-- ========================================== -->
   <div id="modal-teleprompter" class="fixed inset-0 bg-[#020202] z-50 flex flex-col p-4 sm:p-8 hidden">
-    <!-- Barra Superior de Controle do Teleprompter -->
     <div class="flex items-center justify-between border-b border-[#2e2e33] pb-3 mb-3">
       <div class="flex items-center gap-2">
         <span class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></span>
@@ -484,26 +566,22 @@
       
       <!-- Controles de Velocidade & Tamanho -->
       <div class="flex items-center gap-2 sm:gap-3">
-        <!-- Fonte -->
         <div class="flex items-center bg-[#18181b] rounded-xl border border-[#2e2e33] p-1">
           <button onclick="adjustTeleprompterFontSize(-4)" class="px-2 py-1 text-xs text-[#a1a1aa] hover:text-white font-mono font-bold">A-</button>
           <span class="text-[11px] font-mono px-2 text-[#ecdda2]" id="tp-font-size-label">36px</span>
           <button onclick="adjustTeleprompterFontSize(4)" class="px-2 py-1 text-xs text-[#a1a1aa] hover:text-white font-mono font-bold">A+</button>
         </div>
 
-        <!-- Velocidade -->
         <div class="flex items-center bg-[#18181b] rounded-xl border border-[#2e2e33] p-1">
           <button onclick="adjustTeleprompterSpeed(-1)" class="px-2 py-1 text-xs text-[#a1a1aa] hover:text-white font-mono font-bold">V-</button>
           <span class="text-[11px] font-mono px-2 text-[#ecdda2]" id="tp-speed-label">3x</span>
           <button onclick="adjustTeleprompterSpeed(1)" class="px-2 py-1 text-xs text-[#a1a1aa] hover:text-white font-mono font-bold">V+</button>
         </div>
 
-        <!-- Espelhar (Mirror) -->
-        <button onclick="toggleTeleprompterMirror()" id="btn-tp-mirror" class="px-2.5 py-1.5 bg-[#18181b] text-[#a1a1aa] hover:text-white border border-[#2e2e33] rounded-xl text-xs font-bold" title="Espelhar texto para vidro refletor">
+        <button onclick="toggleTeleprompterMirror()" id="btn-tp-mirror" class="px-2.5 py-1.5 bg-[#18181b] text-[#a1a1aa] hover:text-white border border-[#2e2e33] rounded-xl text-xs font-bold">
           🪞 Espelhar
         </button>
 
-        <!-- Botão Fechar -->
         <button onclick="closeTeleprompterModal()" class="px-3 py-1.5 bg-[#27272a] hover:bg-red-950 text-white rounded-xl text-xs font-bold">
           ✕ Fechar
         </button>
@@ -513,7 +591,7 @@
     <!-- Área de Leitura Dinâmica do Teleprompter -->
     <div id="tp-content-area" class="flex-1 overflow-y-auto px-4 py-8 space-y-8 select-none cursor-pointer" onclick="toggleTeleprompterPlay()">
       <div class="max-w-4xl mx-auto space-y-6 text-center" id="tp-text-container">
-        <!-- Texto injetado via JS com fonte grande -->
+        <!-- Texto injetado via JS -->
       </div>
     </div>
 
@@ -554,7 +632,7 @@
             <i data-lucide="sparkles" class="w-4 h-4 text-[#c9b977]"></i>
             <span>Google Gemini AI (Geração Instantânea)</span>
           </span>
-          <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20" id="gemini-current-model-tag">
+          <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
             gemini-1.5-flash
           </span>
         </div>
@@ -591,9 +669,6 @@
             Conectado
           </span>
         </div>
-        <p class="text-xs text-[#a1a1aa]">
-          Sincroniza o status dos carros e gravações em tempo real entre celulares e computadores da equipe.
-        </p>
         <div class="flex items-center gap-2">
           <button onclick="syncWithSupabaseNow()" class="px-3.5 py-2 bg-[#18181b] hover:bg-[#27272a] text-[#ecdda2] border border-[#2e2e33] rounded-xl text-xs font-bold flex items-center gap-1.5">
             <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
@@ -605,30 +680,13 @@
         </div>
       </div>
 
-      <!-- 3. Robô Facebook Enterprise (Acesso Rápido) -->
-      <div class="bg-[#0c0c0d] p-4 rounded-2xl border border-[#2e2e33] space-y-2">
-        <span class="text-xs font-bold text-white flex items-center gap-1.5">
-          <i data-lucide="bot" class="w-4 h-4 text-[#38bdf8]"></i>
-          <span>Automação & Robô Facebook (Grupos)</span>
-        </span>
-        <p class="text-xs text-[#a1a1aa]">
-          Os anúncios gerados nesta ferramenta podem ser enviados diretamente para a fila da nuvem executada pelo robô no PC.
-        </p>
-        <div class="flex items-center gap-2">
-          <button onclick="openRobotQueueViewer()" class="px-3.5 py-2 bg-[#18181b] hover:bg-[#27272a] text-[#38bdf8] border border-[#2e2e33] rounded-xl text-xs font-bold">
-            Ver Fila de Postagens na Nuvem
-          </button>
-        </div>
-      </div>
-
     </div>
   </div>
 
   <!-- ========================================== -->
-  <!-- JAVASCRIPT DO SISTEMA: MOTOR V4 ULTRA-FAST -->
+  <!-- JAVASCRIPT: MOTOR V5 DO FUNIL VIRAL        -->
   <!-- ========================================== -->
   <script>
-    // Registro do PWA com Service Worker v3
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js').catch(() => {});
@@ -646,11 +704,10 @@
         deferredInstallPrompt.prompt();
         deferredInstallPrompt.userChoice.then(() => { deferredInstallPrompt = null; });
       } else {
-        alert("Para instalar o aplicativo:\n• No Android/Chrome: Toque nos 3 pontinhos e 'Instalar aplicativo'\n• No iPhone/Safari: Toque em Compartilhar e 'Adicionar à Tela de Início'");
+        alert("Para instalar:\n• No Android/Chrome: Toque nos 3 pontinhos e 'Instalar aplicativo'\n• No iPhone/Safari: Toque em Compartilhar e 'Adicionar à Tela de Início'");
       }
     }
 
-    // Telefones Oficiais BellaCar (Uberaba - MG)
     const PHONE_NUMBERS = {
       diogo: '5534988675857',
       carlos: '5534984073712',
@@ -662,7 +719,6 @@
       guilherme: 'Guilherme'
     };
 
-    // 19 Veículos Oficiais BellaCar
     const OFFICIAL_INVENTORY = [
       { id: 'car_416533', name: 'Toyota Hilux 2.7 SRV 4x4 CD Aut. (2020)', price: 169900, fipe: 176700, status: 'ready', speaker: 'diogo', category: 'Picape' },
       { id: 'car_401745', name: 'Honda Civic 2.0 EXL CVT (2017)', price: 106900, fipe: 111200, status: 'ready', speaker: 'carlos', category: 'Sedan' },
@@ -685,21 +741,28 @@
       { id: 'car_412911', name: 'Ford Fiesta 1.0 Rocam S Flex (2013/2014)', price: 33900, fipe: 35300, status: 'ready', speaker: 'guilherme', category: 'Hatch' }
     ];
 
-    // Estado da Aplicação
     let appInventory = [];
-    let selectedCar = null;
-    let activeSpeakerKey = 'diogo';
-    let activeProductionTab = 'tab-video';
-    let activeBonuses = { tanque: true, transferencia: true, garantia: true, cartao: true };
+    
+    // ESTADO DO FUNIL CRIATIVO
+    let funnelState = {
+      format: 'duelo', // duelo, anuncio, papo_patrao, desafio, test_drive, humor, trend
+      speakers: ['carlos', 'guilherme'], // array com 'diogo', 'carlos', 'guilherme'
+      intensity: 'moderado', // light, moderado, fogo_no_parquinho
+      carAId: 'car_401745', // Honda Civic
+      carBId: 'car_413999', // Honda HR-V
+      singleCarId: 'car_416533' // Toyota Hilux
+    };
 
-    // Teleprompter Engine
+    let lastGeneratedScript = null;
+
+    // Teleprompter State
     let tpScrollInterval = null;
     let tpSpeed = 3;
-    let tpFontSize = 36;
+    let tpFontSize = 34;
     let tpIsPlaying = false;
     let tpIsMirrored = false;
 
-    // Supabase Client (Credenciais públicas anônimas com fallback de persistência local)
+    // Supabase
     const SUPABASE_CONFIG = {
       url: 'https://pxqnufoimbleheocdhke.supabase.co',
       anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4cW51Zm9pbWJsZWhlb2NkaGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4MzY2ODksImV4cCI6MjEwNzQxMjY4OX0.nyS4CxBJf7cpyMAbSXk6JtrrpaArKxYgsppB6JKgVkk'
@@ -707,19 +770,18 @@
     let sbClient = null;
 
     // =============================================================
-    // INICIALIZAÇÃO DO SISTEMA
+    // INICIALIZAÇÃO
     // =============================================================
     window.addEventListener('DOMContentLoaded', () => {
       initSupabase();
       loadStoredInventory();
       initAIConfig();
+      populateCarDropdowns();
+      updateFunnelUI();
       renderInventory();
       
-      // Seleciona o primeiro carro automaticamente
-      if (appInventory.length > 0) {
-        selectCar(appInventory[0].id);
-      }
-      
+      // Gera automaticamente o primeiro roteiro do funil
+      triggerFunnelGeneration(false);
       lucide.createIcons();
     });
 
@@ -733,19 +795,13 @@
             badge.className = 'text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20';
           }
         }
-      } catch (e) {
-        console.warn("Supabase local mode");
-      }
+      } catch (e) {}
     }
 
     function loadStoredInventory() {
       const stored = localStorage.getItem('bellacar_inventory_v5');
       if (stored) {
-        try {
-          appInventory = JSON.parse(stored);
-        } catch (e) {
-          appInventory = [...OFFICIAL_INVENTORY];
-        }
+        try { appInventory = JSON.parse(stored); } catch (e) { appInventory = [...OFFICIAL_INVENTORY]; }
       } else {
         appInventory = [...OFFICIAL_INVENTORY];
         saveInventory();
@@ -777,497 +833,526 @@
       if (savingEl) savingEl.innerText = `R$ ${totalSaving.toLocaleString('pt-BR')} abaixo da FIPE`;
     }
 
-    // =============================================================
-    // GESTÃO DA INTELIGÊNCIA ARTIFICIAL (GEMINI 1.5 FLASH ULTRA-FAST)
-    // =============================================================
-    function initAIConfig() {
-      const key = getGeminiKey();
-      const dot = document.getElementById('ai-status-dot');
-      const text = document.getElementById('ai-status-text');
-      const input = document.getElementById('gemini-api-key-input');
+    function switchMainDashboardMode(mode) {
+      const viewFunnel = document.getElementById('view-funnel');
+      const viewInventory = document.getElementById('view-inventory');
+      const btnFunnel = document.getElementById('btn-mode-funnel');
+      const btnInventory = document.getElementById('btn-mode-inventory');
 
-      if (input && key) input.value = key;
-
-      if (key && key.length >= 15) {
-        if (dot) dot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
-        if (text) text.innerText = "Gemini 1.5 Flash";
+      if (mode === 'funnel') {
+        viewFunnel.classList.remove('hidden');
+        viewInventory.classList.add('hidden');
+        btnFunnel.className = "px-4 py-2 rounded-xl text-xs font-black flex items-center gap-2 transition-all bg-[#c9b977] text-black shadow-md shadow-[#c9b977]/20";
+        btnInventory.className = "px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all bg-[#18181b] text-[#a1a1aa] hover:text-white border border-[#2e2e33]";
       } else {
-        if (dot) dot.className = "w-2 h-2 rounded-full bg-amber-400";
-        if (text) text.innerText = "Modo Neural";
+        viewFunnel.classList.add('hidden');
+        viewInventory.classList.remove('hidden');
+        btnFunnel.className = "px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all bg-[#18181b] text-[#a1a1aa] hover:text-white border border-[#2e2e33]";
+        btnInventory.className = "px-4 py-2 rounded-xl text-xs font-black flex items-center gap-2 transition-all bg-[#c9b977] text-black shadow-md shadow-[#c9b977]/20";
       }
-    }
-
-    function getGeminiKey() {
-      return (localStorage.getItem('bellacar_gemini_key_v5') || '').trim();
-    }
-
-    async function testAndSaveGeminiKey() {
-      const input = document.getElementById('gemini-api-key-input');
-      const key = (input?.value || '').trim();
-      const btn = document.getElementById('btn-save-gemini');
-
-      if (!key) {
-        alert("Por favor, cole a chave de API do Google Gemini.");
-        return;
-      }
-
-      if (btn) btn.innerHTML = 'Testando...';
-
-      // Teste com o modelo oficial rápido: gemini-1.5-flash
-      try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 6000);
-
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          signal: controller.signal,
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: "Responda apenas: OK" }] }]
-          })
-        });
-        clearTimeout(timeout);
-
-        if (res.ok) {
-          localStorage.setItem('bellacar_gemini_key_v5', key);
-          initAIConfig();
-          alert("✓ Sucesso! Sua IA Real (Google Gemini 1.5 Flash) está 100% conectada e ultra-rápida!");
-          closeModal('modal-settings');
-          if (selectedCar) generateContentForActiveCar(true);
-        } else {
-          const errData = await res.json().catch(() => ({}));
-          alert(`Erro na chave do Gemini:\n${errData.error?.message || 'Chave inválida ou modelo indisponível'}`);
-        }
-      } catch (err) {
-        alert(`Falha de conexão com a Google:\n${err.message}`);
-      } finally {
-        if (btn) btn.innerHTML = 'Salvar & Testar';
-      }
-    }
-
-    async function clearLeakedKeysFromSupabase() {
-      if (!confirm("Deseja apagar qualquer chave ou token gravado anteriormente no banco de dados público da nuvem por segurança?")) return;
-      try {
-        if (sbClient) {
-          await sbClient.from('store_settings').delete().eq('key', 'gemini_api_key');
-          await sbClient.from('store_settings').delete().eq('key', 'gemini_model');
-        }
-        alert("✓ Chaves removidas com sucesso do banco de dados na nuvem! Suas credenciais agora ficam protegidas apenas no seu dispositivo.");
-      } catch (e) {
-        alert("Erro ao limpar dados na nuvem: " + e.message);
-      }
-    }
-
-    // Chamada de IA de Alta Velocidade (Gemini 1.5 Flash com timeout seguro de 8s)
-    async function callGemini(promptText) {
-      const key = getGeminiKey();
-      if (!key || key.length < 15) return null;
-
-      const models = ['gemini-1.5-flash', 'gemini-2.0-flash'];
-      for (const m of models) {
-        try {
-          const controller = new AbortController();
-          const timeout = setTimeout(() => controller.abort(), 8000);
-
-          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${key}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            signal: controller.signal,
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: promptText }] }],
-              generationConfig: {
-                temperature: 0.85,
-                topP: 0.95,
-                maxOutputTokens: 900
-              }
-            })
-          });
-          clearTimeout(timeout);
-
-          if (res.ok) {
-            const data = await res.json();
-            const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (text) return text;
-          }
-        } catch (e) {
-          console.warn(`Tentativa Gemini (${m}) falhou:`, e.message);
-        }
-      }
-      return null;
-    }
-
-    // =============================================================
-    // RENDERIZAÇÃO DA VITRINE DE VEÍCULOS (PASSO 1)
-    // =============================================================
-    function renderInventory() {
-      const grid = document.getElementById('inventory-grid');
-      if (!grid) return;
-
-      const searchVal = (document.getElementById('inventory-search-input')?.value || '').toLowerCase();
-      const catVal = document.getElementById('category-filter')?.value || 'all';
-      const statusVal = document.getElementById('status-filter')?.value || 'all';
-
-      const filtered = appInventory.filter(c => {
-        const matchesSearch = c.name.toLowerCase().includes(searchVal);
-        const matchesCat = catVal === 'all' || c.category === catVal;
-        const matchesStatus = statusVal === 'all' || c.status === statusVal;
-        return matchesSearch && matchesCat && matchesStatus;
-      });
-
-      if (filtered.length === 0) {
-        grid.innerHTML = `
-          <div class="col-span-full p-8 text-center bg-[#121213] rounded-2xl border border-[#2e2e33] text-[#a1a1aa] text-xs">
-            Nenhum veículo encontrado com os filtros selecionados.
-          </div>
-        `;
-        return;
-      }
-
-      grid.innerHTML = filtered.map(c => {
-        const isSelected = selectedCar && selectedCar.id === c.id;
-        const isDone = c.status === 'done';
-        const diffFipe = (c.fipe || 0) - (c.price || 0);
-
-        return `
-          <div onclick="selectCar('${c.id}')" class="p-3.5 rounded-2xl border transition-all cursor-pointer space-y-2.5 ${
-            isSelected 
-              ? 'bg-[#1e1e22] border-[#c9b977] ring-1 ring-[#c9b977] shadow-lg shadow-[#c9b977]/15' 
-              : 'bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46] hover:bg-[#18181b]'
-          }">
-            <div class="flex items-start justify-between gap-2">
-              <span class="text-[10px] font-mono px-2 py-0.5 rounded-md font-bold uppercase ${
-                c.category === 'SUV' ? 'bg-amber-400/15 text-amber-300 border border-amber-400/30' :
-                c.category === 'Picape' ? 'bg-blue-400/15 text-blue-300 border border-blue-400/30' :
-                c.category === 'Sedan' ? 'bg-purple-400/15 text-purple-300 border border-purple-400/30' :
-                'bg-emerald-400/15 text-emerald-300 border border-emerald-400/30'
-              }">${c.category}</span>
-
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${
-                isDone 
-                  ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' 
-                  : 'bg-zinc-800 text-zinc-400 border border-zinc-700'
-              }">
-                ${isDone ? '✓ Gravado' : '⏳ A Gravar'}
-              </span>
-            </div>
-
-            <div>
-              <h4 class="text-xs sm:text-sm font-bold text-white leading-snug line-clamp-2">${c.name}</h4>
-              <div class="flex items-baseline gap-2 mt-1">
-                <span class="text-sm sm:text-base font-black text-[#ecdda2] font-mono">R$ ${(c.price || 0).toLocaleString('pt-BR')}</span>
-                ${diffFipe > 0 ? `<span class="text-[10px] font-mono text-emerald-400 font-bold">-R$ ${diffFipe.toLocaleString('pt-BR')} FIPE</span>` : ''}
-              </div>
-            </div>
-
-            <div class="flex items-center justify-between text-[11px] text-[#71717a] pt-1 border-t border-[#2e2e33]/80">
-              <span class="truncate">Resp: <strong class="text-zinc-300">${SPEAKER_NAMES[c.speaker] || 'Carlos'}</strong></span>
-              <span class="text-[#c9b977] font-bold flex items-center gap-1">
-                <span>Roteiro</span> →
-              </span>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function filterInventory() {
-      renderInventory();
-    }
-
-    // =============================================================
-    // SELEÇÃO DO VEÍCULO & GERAÇÃO DE CONTEÚDO (PASSO 2)
-    // =============================================================
-    function selectCar(carId) {
-      const car = appInventory.find(c => c.id === carId);
-      if (!car) return;
-
-      selectedCar = car;
-      renderInventory();
-      updateVehicleHeaderUI();
-      generateContentForActiveCar(false);
-
-      // Scroll suave para a central do carro em telas pequenas
-      if (window.innerWidth < 1024) {
-        document.getElementById('vehicle-production-hub')?.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-
-    function updateVehicleHeaderUI() {
-      if (!selectedCar) return;
-
-      const titleEl = document.getElementById('active-car-title');
-      const catEl = document.getElementById('active-car-category');
-      const savingEl = document.getElementById('active-car-saving');
-      const speakerEl = document.getElementById('active-car-speaker-label');
-      const financeEl = document.getElementById('active-car-finance');
-      const btnToggle = document.getElementById('btn-toggle-recorded-text');
-
-      const diff = (selectedCar.fipe || 0) - (selectedCar.price || 0);
-      const down = Math.round(selectedCar.price * 0.25);
-      const inst = Math.round((selectedCar.price - down) / 48);
-
-      if (titleEl) titleEl.innerText = selectedCar.name;
-      if (catEl) catEl.innerText = selectedCar.category;
-      if (savingEl) {
-        savingEl.innerText = diff > 0 ? `R$ ${diff.toLocaleString('pt-BR')} ABAIXO DA TABELA FIPE` : 'MENOR PREÇO DO PÁTIO';
-      }
-      if (speakerEl) {
-        speakerEl.innerHTML = `Apresentador Oficial: <strong class="text-white">${SPEAKER_NAMES[activeSpeakerKey] || 'Carlos Eduardo'}</strong>`;
-      }
-      if (financeEl) {
-        financeEl.innerText = `Preço: R$ ${(selectedCar.price || 0).toLocaleString('pt-BR')} • Tabela FIPE: R$ ${(selectedCar.fipe || 0).toLocaleString('pt-BR')} • Entrada sugerida: R$ ${down.toLocaleString('pt-BR')} + parcelas de aprox. R$ ${inst.toLocaleString('pt-BR')}`;
-      }
-      if (btnToggle) {
-        btnToggle.innerText = selectedCar.status === 'done' ? 'Gravado (Desmarcar)' : 'Marcar como Gravado';
-      }
-    }
-
-    function changeActiveSpeaker(speakerKey) {
-      activeSpeakerKey = speakerKey;
-      if (selectedCar) {
-        selectedCar.speaker = speakerKey;
-        saveInventory();
-        updateVehicleHeaderUI();
-        generateContentForActiveCar(false);
-      }
-    }
-
-    function updateBonuses() {
-      activeBonuses.tanque = document.getElementById('bonus-tanque')?.checked ?? true;
-      activeBonuses.transferencia = document.getElementById('bonus-transferencia')?.checked ?? true;
-      activeBonuses.garantia = document.getElementById('bonus-garantia')?.checked ?? true;
-      activeBonuses.cartao = document.getElementById('bonus-cartao')?.checked ?? true;
-
-      if (selectedCar) generateContentForActiveCar(false);
-    }
-
-    function toggleActiveCarRecordedStatus() {
-      if (!selectedCar) return;
-      selectedCar.status = selectedCar.status === 'done' ? 'ready' : 'done';
-      saveInventory();
-      renderInventory();
-      updateVehicleHeaderUI();
-      if (selectedCar.status === 'done') {
-        alert(`✓ Parabéns! Gravação de "${selectedCar.name}" registrada com sucesso!`);
-      }
-    }
-
-    // =============================================================
-    // MOTOR DE GERAÇÃO INTELIGENTE (SEM REPETIÇÃO & ULTRA RÁPIDO)
-    // =============================================================
-    async function generateContentForActiveCar(forceWithAI = false) {
-      if (!selectedCar) return;
-
-      const speakerName = SPEAKER_NAMES[activeSpeakerKey] || 'Carlos Eduardo';
-      const speakerPhone = PHONE_NUMBERS[activeSpeakerKey] || PHONE_NUMBERS.carlos;
-      const priceFmt = `R$ ${(selectedCar.price || 0).toLocaleString('pt-BR')}`;
-      const fipeFmt = `R$ ${(selectedCar.fipe || 0).toLocaleString('pt-BR')}`;
-      const diffFipe = (selectedCar.fipe || 0) - (selectedCar.price || 0);
-      const diffFmt = diffFipe > 0 ? `R$ ${diffFipe.toLocaleString('pt-BR')}` : null;
-      const downFmt = `R$ ${(Math.round(selectedCar.price * 0.25)).toLocaleString('pt-BR')}`;
-      const instFmt = `R$ ${(Math.round((selectedCar.price * 0.75) / 48)).toLocaleString('pt-BR')}`;
-
-      // Monta lista de bônus ativos
-      const bonusesList = [];
-      if (activeBonuses.tanque) bonusesList.push('Tanque Cheio na entrega');
-      if (activeBonuses.transferencia) bonusesList.push('Transferência Grátis por nossa conta');
-      if (activeBonuses.garantia) bonusesList.push('Garantia de 1 Ano de Motor e Câmbio');
-      if (activeBonuses.cartao) bonusesList.push('Entrada parcelada em até 21x no cartão');
-      const bonusText = bonusesList.length ? bonusesList.join(' • ') : 'Condições comerciais especiais autorizadas';
-
-      const btnRegen = document.getElementById('btn-regen-ai-text');
-      if (forceWithAI && btnRegen) btnRegen.innerText = 'Criando com IA...';
-
-      let aiScriptData = null;
-
-      // 1. Tenta gerar via IA Real se tiver chave ou for solicitado
-      if (getGeminiKey() && (forceWithAI || Math.random() > 0.4)) {
-        try {
-          const prompt = `Você é o roteirista de elite da concessionária BELLACAR VEÍCULOS em Uberaba - MG.
-Crie um ROTEIRO DE VÍDEO VIRAL INÉDITO para o apresentador ${speakerName} gravar no pátio com o carro "${selectedCar.name}".
-Preço: ${priceFmt} (${diffFmt ? `${diffFmt} abaixo da FIPE` : 'oportunidade de estoque'}).
-Condição: Entrada de ${downFmt} + parcelas de ${instFmt}.
-Bônus do Dono: ${bonusText}.
-Estilo do Apresentador: ${speakerName === 'Diogo Olegário' ? 'Autoridade máxima do dono, seguro, dinâmico e sem rodeios' : 'Consultor atencioso, que convida para o test-drive e valoriza o carro'}.
-Responda ESTRITAMENTE em formato JSON puro, sem blocos markdown:
-{
-  "hook": "Frase de 3 segundos matadora, provocativa e curiosa para prender a atenção na lente",
-  "body": "Take 1 (0-10s): Frente do carro e laudo cautelar aprovado.\nTake 2 (10-25s): Interior, bancos e multimídia.\nTake 3 (25-40s): Condição de preço e bônus da Caneta do Patrão.",
-  "cta": "Chamada para ação direta mandando chamar no WhatsApp agora"
-}`;
-          const aiRaw = await callGemini(prompt);
-          if (aiRaw) {
-            const clean = aiRaw.replace(/```json/gi, '').replace(/```/g, '').trim();
-            aiScriptData = JSON.parse(clean);
-          }
-        } catch (e) {
-          console.warn("Fallback para gerador neural local:", e);
-        }
-      }
-
-      if (btnRegen) btnRegen.innerText = 'Gerar Outro Roteiro Inédito (IA)';
-
-      // 2. Se a IA não respondeu ou estamos offline, usa o Motor Neural Local Dinâmico (35+ Ganchos Variados)
-      if (!aiScriptData || !aiScriptData.hook) {
-        aiScriptData = getDynamicProceduralScript(selectedCar, speakerName, priceFmt, diffFmt, downFmt, instFmt, bonusText);
-        document.getElementById('video-engine-label').innerText = 'Motor Neural Procedural';
-      } else {
-        document.getElementById('video-engine-label').innerText = '🟢 Gerado por Google Gemini 1.5';
-      }
-
-      // 3. Atualiza ABA 1: Vídeo & Teleprompter
-      document.getElementById('video-hook-text').innerText = aiScriptData.hook;
-      document.getElementById('video-script-body').innerText = aiScriptData.body;
-      document.getElementById('video-cta-text').innerText = aiScriptData.cta;
-
-      // 4. Atualiza ABA 2: Anúncio Meta Ads
-      const headlinesContainer = document.getElementById('ad-headlines');
-      if (headlinesContainer) {
-        const h1 = `A Caneta do Patrão liberou: Bônus exclusivo no ${selectedCar.name}!`;
-        const h2 = `${selectedCar.name} em Uberaba: ${diffFmt ? `${diffFmt} abaixo da FIPE` : 'Condição de Queima'}!`;
-        const h3 = `Oportunidade na BellaCar: Entrada ${downFmt} + parcelas que cabem no bolso!`;
-        headlinesContainer.innerHTML = `
-          <div class="p-2.5 rounded-xl bg-[#18181b] border border-[#2e2e33]">1. "${h1}"</div>
-          <div class="p-2.5 rounded-xl bg-[#18181b] border border-[#2e2e33]">2. "${h2}"</div>
-          <div class="p-2.5 rounded-xl bg-[#18181b] border border-[#2e2e33]">3. "${h3}"</div>
-        `;
-      }
-
-      const trackedMsg = encodeURIComponent(`Olá ${speakerName}! Vi o anúncio do ${selectedCar.name} na BellaCar e gostaria de ver as condições e fotos!`);
-      const trackedUrl = `https://wa.me/${speakerPhone}?text=${trackedMsg}`;
-      document.getElementById('ad-tracked-url').innerText = trackedUrl;
-
-      const adPrimaryText = `🔥 OFERTA EXCLUSIVA DO PÁTIO BELLACAR VEÍCULOS\n\n` +
-        `Quem procura um seminovo com garantia de verdade e laudo cautelar aprovado em Uberaba sabe onde encontrar: entrou no estoque esse impecável ${selectedCar.name}!\n\n` +
-        `⭐ DESTAQUES DESTE VEÍCULO:\n` +
-        `• Laudo Cautelar 100% Aprovado (Estrutura e procedência garantida)\n` +
-        `• Mecânica totalmente revisada com garantia oficial de motor e câmbio\n` +
-        `• Pneus em ótimo estado e higienização interna premium\n\n` +
-        `💰 CONDIÇÃO AUTORIZADA PELO DONO:\n` +
-        `• Valor de oportunidade: ${priceFmt} ${diffFmt ? `(R$ ${diffFmt} abaixo da FIPE)` : ''}\n` +
-        `• Sugestão facilitada: Entrada de ${downFmt} + parcelas de ${instFmt}\n` +
-        `• Bônus ativos da Caneta do Patrão: ${bonusText}\n\n` +
-        `⚠️ Aceitamos seu carro ou moto na troca com a melhor avaliação do Triângulo Mineiro!\n\n` +
-        `📲 Fale direto com o consultor ${speakerName} pelo WhatsApp:\n` +
-        `${trackedUrl}`;
-      document.getElementById('ad-primary-copy').value = adPrimaryText;
-
-      // 5. Atualiza ABA 3: Stories (3 Telas)
-      document.getElementById('story-1-content').innerHTML = `
-        <strong class="text-white block mb-1">Visual:</strong> Foto frontal do ${selectedCar.name} no pátio.<br>
-        <strong class="text-white block mt-2 mb-1">Enquete no Instagram:</strong><br>
-        "Você prefere cor clara ou escura para esse modelo?"<br>
-        [ Cor Clara ☀️ / Cor Escura 🌙 ]
-      `;
-      document.getElementById('story-2-content').innerHTML = `
-        <strong class="text-white block mb-1">Visual:</strong> Vídeo selfie do ${speakerName} ligando o carro e mostrando o painel.<br>
-        <strong class="text-white block mt-2 mb-1">Fala rápida:</strong><br>
-        "Galera, olha o estado de conservação desse ${selectedCar.name}! Acabamento impecável, laudo 100% aprovado e cheirinho de novo!"
-      `;
-      document.getElementById('story-3-content').innerHTML = `
-        <strong class="text-white block mb-1">Visual:</strong> Foto das rodas e lateral com figurinha de link oficial.<br>
-        <strong class="text-white block mt-2 mb-1">Texto do Story:</strong><br>
-        "Preço especial de queima com entrada de ${downFmt}! Toque no link e garanta antes de vender!"<br>
-        <strong class="text-[#38bdf8] block mt-1">Link: wa.me/${speakerPhone}</strong>
-      `;
-
-      // 6. Atualiza ABA 4: Proposta WhatsApp
-      const proposalText = `Olá! Tudo bem? Aqui é o ${speakerName} da BellaCar Veículos.\n\n` +
-        `Sobre o *${selectedCar.name}* que você demonstrou interesse:\n\n` +
-        `• Valor promocional: *${priceFmt}* ${diffFmt ? `(R$ ${diffFmt} abaixo da FIPE)` : ''}\n` +
-        `• Condição de financiamento sugerida: Entrada de *${downFmt}* + parcelas de aprox. *${instFmt}*\n` +
-        `• Bônus especiais autorizados hoje: ${bonusText}\n` +
-        `• Procedência: Laudo Cautelar 100% Aprovado e revisado com garantia.\n\n` +
-        `Quer que eu te envie um vídeo detalhado do carro ou simule com o seu valor de entrada sem compromisso?`;
-      document.getElementById('proposal-text').value = proposalText;
-    }
-
-    // Motor Neural Procedural com Grande Variedade (Nunca repete o mesmo texto)
-    function getDynamicProceduralScript(car, speaker, price, diff, down, inst, bonus) {
-      const hooks = [
-        `"Para tudo o que você está fazendo se você procura um ${car.name}... Olha o que o ${speaker} acabou de liberar no pátio da BellaCar!"`,
-        `"Quanto custa ter essa máquina na sua garagem hoje? Se liga na condição especial que preparamos para esse ${car.name}!"`,
-        `"Se você quer um ${car.name} impecável, periciado e com valor de oportunidade real em Uberaba, esse vídeo é pra você!"`,
-        `"Aviso rápido de estoque: acabou de entrar no pátio da BellaCar esse ${car.name} com laudo 100% aprovado e condição agressiva!"`,
-        `"Se você ganha a partir de 3 mil reais, você já consegue sair de chave na mão com esse ${car.name} hoje mesmo!"`,
-        `"Chega de procurar carro maquiado na internet: vem ver de perto a procedência e conservação desse ${car.name}!"`,
-        `"O Diogo pegou a caneta e autorizou bônus exclusivo nesse carro aqui... dá uma olhada no estado dele!"`,
-        `"Você teria coragem de pagar tabela cheia sabendo que esse ${car.name} está ${diff ? `${diff} abaixo da FIPE` : 'com preço imbatível'} aqui na BellaCar?"`,
-        `"Quem acompanha a BellaCar sabe que carro desse nível não esquenta vaga no estoque: olha os detalhes desse ${car.name}!"`
-      ];
-
-      const categoryDetails = {
-        SUV: 'posição de dirigir alta e confortável, amplo espaço para a família e porta-malas gigante',
-        Picape: 'força bruta de tração, caçamba espaçosa e robustez tanto para o trabalho quanto para a estrada',
-        Sedan: 'porta-malas espaçoso, conforto de rodagem impecável e sofisticação para viagens longas',
-        Hatch: 'economia incomparável de combustível, facilidade absurda de manobrar e custo-benefício que cabe no bolso'
-      };
-
-      const detail = categoryDetails[car.category] || 'conservação impecável e laudo cautelar 100% aprovado';
-      const chosenHook = hooks[Math.floor(Math.random() * hooks.length)];
-
-      return {
-        hook: chosenHook,
-        body: `1. (0-10s) Câmera na dianteira: Mostre a imponência dos faróis e a lataria alinhada, ressaltando o Laudo Cautelar 100% Aprovado.\n2. (10-25s) Câmera interna: Entre na cabine, mostre o painel e os bancos, destacando que o veículo entrega ${detail}.\n3. (25-40s) Câmera no apresentador: Anuncie o valor de ${price} com entrada sugerida de ${down} e parcelas de ${inst}, reforçando os bônus: ${bonus}.`,
-        cta: `"Clica agora no link da bio ou comenta BELLACAR para falar direto com o ${speaker} no WhatsApp antes que outro cliente reserve!"`
-      };
-    }
-
-    // Navegação entre as 4 Abas de Produção
-    function switchProductionTab(tabId) {
-      activeProductionTab = tabId;
-      ['tab-video', 'tab-ad', 'tab-stories', 'tab-proposal'].forEach(id => {
-        const el = document.getElementById(id);
-        const nav = document.getElementById('nav-' + id);
-        if (el) el.classList.toggle('hidden', id !== tabId);
-        if (nav) {
-          if (id === tabId) {
-            nav.className = "px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap bg-[#c9b977] text-black shadow";
-          } else {
-            nav.className = "px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap bg-[#18181b] text-[#a1a1aa] hover:text-white";
-          }
-        }
-      });
       lucide.createIcons();
     }
 
     // =============================================================
-    // MODAL DE TELEPROMPTER DE ALTA PERFORMANCE (TELA CHEIA)
+    // CONTROLES DO FUNIL CRIATIVO (ETAPAS 1, 2, 3 E 4)
     // =============================================================
-    function openTeleprompterModal() {
-      if (!selectedCar) return;
+    function selectFunnelFormat(formatKey) {
+      funnelState.format = formatKey;
+      
+      // Atualiza visual dos cards de formato
+      document.querySelectorAll('.funnel-format-card').forEach(btn => {
+        btn.className = "funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]";
+      });
+      const selectedBtn = document.getElementById('fmt-' + formatKey);
+      if (selectedBtn) {
+        selectedBtn.className = "funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#1e1e22] border-[#c9b977] ring-1 ring-[#c9b977] shadow-lg shadow-[#c9b977]/15";
+      }
+
+      // Se for Papo de Patrão, garante que o Diogo esteja incluído
+      if (formatKey === 'papo_patrao' && !funnelState.speakers.includes('diogo')) {
+        funnelState.speakers = ['diogo'];
+      }
+
+      updateFunnelUI();
+      triggerFunnelGeneration(false);
+    }
+
+    function toggleSpeakerInFunnel(speakerKey) {
+      if (funnelState.speakers.includes(speakerKey)) {
+        // Não deixa ficar sem nenhum participante
+        if (funnelState.speakers.length > 1) {
+          funnelState.speakers = funnelState.speakers.filter(s => s !== speakerKey);
+        }
+      } else {
+        funnelState.speakers.push(speakerKey);
+      }
+      updateFunnelSpeakersUI();
+      triggerFunnelGeneration(false);
+    }
+
+    function toggleSelectAllSpeakers() {
+      funnelState.speakers = ['diogo', 'carlos', 'guilherme'];
+      updateFunnelSpeakersUI();
+      triggerFunnelGeneration(false);
+    }
+
+    function selectFunnelIntensity(intensityKey) {
+      funnelState.intensity = intensityKey;
+      
+      ['light', 'moderado', 'fogo_no_parquinho'].forEach(k => {
+        const btn = document.getElementById('int-' + k);
+        if (btn) {
+          if (k === intensityKey) {
+            if (k === 'light') btn.className = "p-3 rounded-2xl border text-left transition-all space-y-1 bg-[#1e1e22] border-emerald-400 ring-1 ring-emerald-400 text-white";
+            if (k === 'moderado') btn.className = "p-3 rounded-2xl border text-left transition-all space-y-1 bg-[#1e1e22] border-amber-400 ring-1 ring-amber-400 text-white";
+            if (k === 'fogo_no_parquinho') btn.className = "p-3 rounded-2xl border text-left transition-all space-y-1 bg-[#1e1e22] border-red-500 ring-1 ring-red-500 text-white shadow-lg shadow-red-500/20";
+          } else {
+            btn.className = "p-3 rounded-2xl border text-left transition-all space-y-1 bg-[#121213] border-[#2e2e33] text-[#a1a1aa] hover:border-[#3f3f46]";
+          }
+        }
+      });
+
+      const label = document.getElementById('funnel-intensity-label');
+      const desc = document.getElementById('funnel-intensity-desc');
+      if (intensityKey === 'light') {
+        if (label) label.innerText = "Light (Elegante & Confiança)";
+        if (desc) desc.innerText = "Tom institucional de alto nível, foco em laudo aprovado, procedência e garantia da loja.";
+      } else if (intensityKey === 'moderado') {
+        if (label) label.innerText = "Moderado (Comercial Dinâmico)";
+        if (desc) desc.innerText = "Ritmo vendedor acelerado, quebra de objeções, comparação de preços e CTA para chamar no WhatsApp.";
+      } else {
+        if (label) label.innerText = "Fogo no Parquinho 🔥";
+        if (desc) desc.innerText = "Polêmico, provocativo, choque de opiniões, humor ácido e debate quente para explodir o algoritmo de comentários!";
+      }
+
+      triggerFunnelGeneration(false);
+    }
+
+    function updateFunnelUI() {
+      // 1. Atualiza rótulo do formato
+      const fmtLabel = document.getElementById('funnel-format-selected-label');
+      const formatNames = {
+        duelo: '⚔️ Duelo de Carros',
+        anuncio: '🚗 Anúncio de Carro',
+        papo_patrao: '👑 Papo de Patrão',
+        desafio: '🏆 Desafio / Reality',
+        test_drive: '🏎️ Test Drive Sincero',
+        humor: '😂 Humor / Bastidores',
+        trend: '🔥 Trend Viral'
+      };
+      if (fmtLabel) fmtLabel.innerText = "Formato Ativo: " + (formatNames[funnelState.format] || 'Duelo');
+
+      // 2. Alterna entre Seletor Duplo (Duelo) ou Seletor Simples (Demais)
+      const isDuel = funnelState.format === 'duelo';
+      const duelBox = document.getElementById('duel-selectors-box');
+      const singleBox = document.getElementById('single-car-selector-box');
+      const carTitle = document.getElementById('funnel-car-section-title');
+
+      if (isDuel) {
+        if (duelBox) duelBox.classList.remove('hidden');
+        if (singleBox) singleBox.classList.add('hidden');
+        if (carTitle) carTitle.innerText = "Os 2 Carros em Disputa no Duelo:";
+      } else {
+        if (duelBox) duelBox.classList.add('hidden');
+        if (singleBox) singleBox.classList.remove('hidden');
+        if (carTitle) carTitle.innerText = "Veículo Principal em Foco no Vídeo:";
+      }
+
+      updateFunnelSpeakersUI();
+    }
+
+    function updateFunnelSpeakersUI() {
+      ['diogo', 'carlos', 'guilherme'].forEach(spk => {
+        const btn = document.getElementById('spk-btn-' + spk);
+        const isSelected = funnelState.speakers.includes(spk);
+        if (btn) {
+          if (isSelected) {
+            btn.className = "p-3 rounded-2xl border text-center transition-all space-y-1 bg-[#1e1e22] border-[#c9b977] ring-1 ring-[#c9b977] text-white shadow-md shadow-[#c9b977]/10";
+          } else {
+            btn.className = "p-3 rounded-2xl border text-center transition-all space-y-1 bg-[#121213] border-[#2e2e33] text-[#71717a] hover:border-[#3f3f46]";
+          }
+        }
+      });
+
+      const desc = document.getElementById('funnel-speakers-selected-desc');
+      const names = funnelState.speakers.map(s => SPEAKER_NAMES[s]).join(' • ');
+      if (desc) desc.innerText = "Participantes ativos: " + (names || 'Nenhum selecionado');
+    }
+
+    function populateCarDropdowns() {
+      const selectA = document.getElementById('duel-select-car-a');
+      const selectB = document.getElementById('duel-select-car-b');
+      const selectSingle = document.getElementById('single-select-car');
+
+      const optionsHtml = appInventory.map(c => `
+        <option value="${c.id}">[${c.category}] ${c.name} - R$ ${(c.price||0).toLocaleString('pt-BR')}</option>
+      `).join('');
+
+      if (selectA) {
+        selectA.innerHTML = optionsHtml;
+        selectA.value = funnelState.carAId;
+        selectA.onchange = (e) => { funnelState.carAId = e.target.value; triggerFunnelGeneration(false); };
+      }
+      if (selectB) {
+        selectB.innerHTML = optionsHtml;
+        selectB.value = funnelState.carBId;
+        selectB.onchange = (e) => { funnelState.carBId = e.target.value; triggerFunnelGeneration(false); };
+      }
+      if (selectSingle) {
+        selectSingle.innerHTML = `
+          <option value="showroom">📍 Showroom Geral da Loja (Sem foco em um único carro)</option>
+          ${optionsHtml}
+        `;
+        selectSingle.value = funnelState.singleCarId;
+        selectSingle.onchange = (e) => { funnelState.singleCarId = e.target.value; triggerFunnelGeneration(false); };
+      }
+    }
+
+    function resetFunnelDefaults() {
+      funnelState = {
+        format: 'duelo',
+        speakers: ['carlos', 'guilherme'],
+        intensity: 'moderado',
+        carAId: 'car_401745',
+        carBId: 'car_413999',
+        singleCarId: 'car_416533'
+      };
+      selectFunnelFormat('duelo');
+      selectFunnelIntensity('moderado');
+      updateFunnelUI();
+      populateCarDropdowns();
+      triggerFunnelGeneration(true);
+    }
+
+    // =============================================================
+    // MOTOR DE GERAÇÃO INTELIGENTE DO FUNIL (GEMINI 1.5 + PROCEDURAL)
+    // =============================================================
+    async function triggerFunnelGeneration(forceAI = false) {
+      const btn = document.getElementById('btn-funnel-generate-text');
+      if (btn) btn.innerText = "Gerando Roteiro Inédito com IA...";
+
+      const carA = appInventory.find(c => c.id === funnelState.carAId) || appInventory[0];
+      const carB = appInventory.find(c => c.id === funnelState.carBId) || appInventory[1];
+      const singleCar = funnelState.singleCarId === 'showroom' ? { name: 'Pátio Showroom BellaCar', price: 0, fipe: 0, category: 'Showroom' } : (appInventory.find(c => c.id === funnelState.singleCarId) || carA);
+
+      const speakerList = funnelState.speakers.map(s => SPEAKER_NAMES[s]);
+      const format = funnelState.format;
+      const intensity = funnelState.intensity;
+
+      let generated = null;
+
+      // Se tiver chave Gemini, chama a IA oficial
+      if (getGeminiKey() && (forceAI || Math.random() > 0.3)) {
+        try {
+          const prompt = `Você é o roteirista de vídeos virais e tráfego da concessionária BELLACAR VEÍCULOS em Uberaba - MG.
+Crie um ROTEIRO DE VÍDEO VIRAL INÉDITO para Reels e TikTok com os seguintes parâmetros:
+FORMATO DO VÍDEO: "${format.toUpperCase()}"
+PARTICIPANTES: ${speakerList.join(', ')}
+NÍVEL DE INTENSIDADE / TEMPERO: "${intensity.toUpperCase()}" (se for FOGO NO PARQUINHO, seja provocativo, polêmico, gere choque de opiniões para bombar em comentários).
+CARRO(S) ENVOLVIDO(S):
+${format === 'duelo' ? `• Carro A: ${carA.name} (R$ ${carA.price.toLocaleString('pt-BR')})\n• Carro B: ${carB.name} (R$ ${carB.price.toLocaleString('pt-BR')})` : `• Carro: ${singleCar.name} (R$ ${(singleCar.price||0).toLocaleString('pt-BR')})`}
+
+ESTRUTURA DE PERSONALIDADE DOS PARTICIPANTES:
+- Diogo Olegário: O Dono, autoridade máxima, fala com certeza, "Caneta do Patrão", quem manda na loja.
+- Carlos Eduardo: Vendedor consultivo, técnico, focado em procedência, conforto e detalhes.
+- Guilherme: Vendedor jovem, acelerado, fala de financiamento, facilidade e pressa de fechar.
+
+Responda ESTRITAMENTE em formato JSON puro, sem blocos markdown:
+{
+  "title": "Título magnético do vídeo",
+  "hook": "Gancho de 3 segundos falado na lente com alta energia",
+  "scenes": [
+    { "speaker": "Nome de quem fala", "time": "0-10s", "camera": "Enquadramento da câmera", "line": "Fala natural e direta" }
+  ],
+  "cta": "Chamada para ação matadora",
+  "viralReason": "Por que o algoritmo vai entregar e reter as pessoas neste vídeo"
+}`;
+          const aiResponse = await callGemini(prompt);
+          if (aiResponse) {
+            const clean = aiResponse.replace(/```json/gi, '').replace(/```/g, '').trim();
+            generated = JSON.parse(clean);
+          }
+        } catch (e) {
+          console.warn("Fallback procedural do funil acionado:", e);
+        }
+      }
+
+      // Se a IA não respondeu ou offline, usa o Motor Procedural do Funil
+      if (!generated || !generated.hook) {
+        generated = getProceduralFunnelScript(format, funnelState.speakers, intensity, carA, carB, singleCar);
+      }
+
+      lastGeneratedScript = generated;
+      renderFunnelResult(generated, carA, carB, singleCar);
+
+      if (btn) btn.innerText = "GERAR ROTEIRO INÉDITO AGORA (IA REAL)";
+    }
+
+    // Renderiza o Roteiro na Tela com Falas Formatadas
+    function renderFunnelResult(data, carA, carB, singleCar) {
+      const container = document.getElementById('funnel-result-container');
+      if (!container) return;
+
+      const titleEl = document.getElementById('res-video-title');
+      const badgeFmt = document.getElementById('res-badge-format');
+      const badgeInt = document.getElementById('res-badge-intensity');
+      const spkListEl = document.getElementById('res-speakers-list');
+      const hookEl = document.getElementById('funnel-hook-display');
+      const scenesEl = document.getElementById('funnel-scenes-container');
+      const ctaEl = document.getElementById('funnel-cta-display');
+      const viralEl = document.getElementById('funnel-viral-reason');
+
+      const formatNames = {
+        duelo: 'DUELO DE CARROS',
+        anuncio: 'ANÚNCIO DE CARRO',
+        papo_patrao: 'PAPO DE PATRÃO',
+        desafio: 'DESAFIO / REALITY',
+        test_drive: 'TEST DRIVE SINCERO',
+        humor: 'HUMOR / BASTIDORES',
+        trend: 'TREND VIRAL'
+      };
+
+      if (titleEl) titleEl.innerText = data.title || "Roteiro de Vídeo BellaCar";
+      if (badgeFmt) badgeFmt.innerText = "FORMATO: " + (formatNames[funnelState.format] || 'VÍDEO');
+      if (badgeInt) {
+        badgeInt.innerText = funnelState.intensity.toUpperCase() + (funnelState.intensity === 'fogo_no_parquinho' ? ' 🔥' : '');
+        badgeInt.className = funnelState.intensity === 'fogo_no_parquinho' 
+          ? "text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-red-500/20 text-red-300 font-bold border border-red-500/30"
+          : (funnelState.intensity === 'moderado' 
+            ? "text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30"
+            : "text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30");
+      }
+      if (spkListEl) {
+        spkListEl.innerText = "Elenco: " + funnelState.speakers.map(s => SPEAKER_NAMES[s]).join(' & ');
+      }
+      if (hookEl) hookEl.innerText = data.hook;
+      if (ctaEl) ctaEl.innerText = data.cta;
+      if (viralEl) viralEl.innerText = data.viralReason;
+
+      // Cenas
+      if (scenesEl && data.scenes && data.scenes.length) {
+        scenesEl.innerHTML = data.scenes.map((sc, idx) => {
+          const isDiogo = sc.speaker.toLowerCase().includes('diogo');
+          const isCarlos = sc.speaker.toLowerCase().includes('carlos');
+          const isGui = sc.speaker.toLowerCase().includes('gui');
+
+          const speakerColor = isDiogo 
+            ? 'text-[#ecdda2] border-[#c9b977]/50 bg-[#c9b977]/10' 
+            : (isCarlos ? 'text-[#38bdf8] border-[#38bdf8]/50 bg-[#38bdf8]/10' : 'text-emerald-400 border-emerald-500/50 bg-emerald-500/10');
+          
+          const icon = isDiogo ? '👑' : (isCarlos ? '📱' : '⚡');
+
+          return `
+            <div class="p-3.5 rounded-2xl bg-[#0c0c0d] border border-[#2e2e33] space-y-2">
+              <div class="flex items-center justify-between border-b border-[#2e2e33] pb-2">
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-black border ${speakerColor} flex items-center gap-1">
+                    <span>${icon}</span>
+                    <span>${sc.speaker}</span>
+                  </span>
+                  <span class="text-[10px] text-[#71717a] font-mono">${sc.time || `Take ${idx+1}`}</span>
+                </div>
+                <span class="text-[10px] font-mono text-[#a1a1aa]">🎥 ${sc.camera || 'Câmera dinâmica'}</span>
+              </div>
+              <p class="text-xs sm:text-sm text-zinc-100 font-medium leading-relaxed italic">
+                "${sc.line}"
+              </p>
+            </div>
+          `;
+        }).join('');
+      }
+
+      lucide.createIcons();
+    }
+
+    // =============================================================
+    // MOTOR PROCEDURAL OFFLINE DE ALTA VARIEDADE PARA OS 7 FORMATOS
+    // =============================================================
+    function getProceduralFunnelScript(format, speakers, intensity, carA, carB, singleCar) {
+      const spk1 = SPEAKER_NAMES[speakers[0]] || 'Diogo Olegário';
+      const spk2 = SPEAKER_NAMES[speakers[1]] || 'Carlos Eduardo';
+      const spk3 = SPEAKER_NAMES[speakers[2]] || 'Guilherme';
+      const multi = speakers.length > 1;
+
+      if (format === 'duelo') {
+        const hooks = {
+          light: `"Se você tivesse R$ ${carA.price.toLocaleString('pt-BR')} na mão hoje, qual dessas duas máquinas você levaria para casa?"`,
+          moderado: `"Duelo de titãs no pátio da BellaCar: de um lado o ${carA.name}, do outro o ${carB.name}. Quem vence na sua garagem?"`,
+          fogo_no_parquinho: `"Eu avisei que ia dar briga no pátio da BellaCar! O ${spk1} acha que o ${carA.name} humilha o ${carB.name}... Olha isso aqui!"`
+        };
+
+        return {
+          title: `Duelo: ${carA.name} vs ${carB.name}`,
+          hook: hooks[intensity] || hooks.moderado,
+          scenes: [
+            {
+              speaker: spk1,
+              time: '0-12s',
+              camera: `Plano fechado no ${carA.name}`,
+              line: `Aqui não tem comparação! O ${carA.name} entrega conforto, presença e está com laudo 100% aprovado aqui na BellaCar por R$ ${carA.price.toLocaleString('pt-BR')}!`
+            },
+            {
+              speaker: multi ? spk2 : spk1,
+              time: '12-25s',
+              camera: `Câmera vira rápido para o ${carB.name}`,
+              line: `Espera aí, ${spk1}! Olha para esse ${carB.name}: custo-benefício imbatível, porta-malas espaçoso e FIPE muito mais vantajosa! Quem entende de carro escolhe ele!`
+            },
+            {
+              speaker: speakers.includes('diogo') ? 'Diogo Olegário' : spk1,
+              time: '25-40s',
+              camera: 'Diogo ou apresentador no meio dos dois carros',
+              line: `Para acabar com a discussão: o Diogo pegou a caneta e liberou tanque cheio e transferência para quem fechar qualquer um dos dois hoje!`
+            }
+          ],
+          cta: `"Comenta aqui embaixo: você é time ${carA.category} ou time ${carB.category}? Quero ver quem entende de verdade!"`,
+          viralReason: "Formato de duelo divide a audiência em dois grupos opostos, multiplicando os comentários em até 4x no algoritmo."
+        };
+      }
+
+      if (format === 'anuncio') {
+        return {
+          title: `Oferta Agressiva: ${singleCar.name}`,
+          hook: intensity === 'fogo_no_parquinho' 
+            ? `"Se você estava quase comprando um carro maquiado na internet por tabela cheia... para tudo e olha esse ${singleCar.name}!"` 
+            : `"Olha a oportunidade de ouro que acabou de entrar no showroom da BellaCar: ${singleCar.name} com procedência garantida!"`,
+          scenes: [
+            {
+              speaker: spk1,
+              time: '0-10s',
+              camera: 'Apresentador ao lado do farol dianteiro',
+              line: `Carro periciado, laudo cautelar 100% aprovado e estado de conservação que você não encontra em outro lugar de Uberaba.`
+            },
+            {
+              speaker: multi ? spk2 : spk1,
+              time: '10-25s',
+              camera: 'Câmera entra no interior do veículo',
+              line: `Acabamento impecável, cheirinho de novo e mecânica revisada com garantia total de motor e câmbio.`
+            },
+            {
+              speaker: spk1,
+              time: '25-40s',
+              camera: 'Plano médio mostrando o carro e o pátio',
+              line: `Entrada facilitada com parcelas que cabem no seu bolso e você ainda sai de tanque cheio entregue pelo Diogo!`
+            }
+          ],
+          cta: `"Toca no link da bio agora mesmo e chama a nossa equipe no WhatsApp antes que outro cliente reserve!"`,
+          viralReason: "Vídeo focado em quebra de objeções imediatas e condição comercial clara para converter visualizações em leads no WhatsApp."
+        };
+      }
+
+      if (format === 'papo_patrao') {
+        return {
+          title: `Papo de Patrão com Diogo Olegário`,
+          hook: intensity === 'fogo_no_parquinho'
+            ? `"Tem coisa que as outras lojas têm medo de falar para você, mas aqui na BellaCar eu falo na lata!"`
+            : `"Você sabe por que tem tanta gente caindo em golpe de carro na internet hoje em dia? O patrão vai te explicar em 40 segundos."`,
+          scenes: [
+            {
+              speaker: 'Diogo Olegário',
+              time: '0-15s',
+              camera: 'Diogo caminhando com autoridade pelo pátio',
+              line: `Desconfie de preço milagroso. Carro sem procedência, com histórico de leilão escondido e sem laudo cautelar aprovado é dor de cabeça garantida!`
+            },
+            {
+              speaker: 'Diogo Olegário',
+              time: '15-30s',
+              camera: 'Diogo apontando para o estoque e laudos',
+              line: `Aqui na BellaCar cada carro passa por uma vistoria rigorosa. Eu só coloco no meu pátio carro que eu teria coragem de botar a minha família dentro para viajar.`
+            },
+            {
+              speaker: multi ? spk2 : 'Diogo Olegário',
+              time: '30-40s',
+              camera: 'Consultor ao lado do Diogo',
+              line: `É por isso que aqui nós damos garantia e transparência de verdade. Quer fazer um negócio seguro em Uberaba?`
+            }
+          ],
+          cta: `"Vem tomar um café com a gente na BellaCar ou chama a gente no WhatsApp para conferir os laudos de cada carro!"`,
+          viralReason: "Vídeos com o dono da empresa geram a maior taxa de confiança e aniquilam desconfiança de clientes indecisos."
+        };
+      }
+
+      // Default para outros formatos (Humor / Desafio / Test Drive / Trend)
+      return {
+        title: `Gravação Dinâmica: ${format.toUpperCase()} na BellaCar`,
+        hook: `"Para tudo o que você está fazendo se você gosta de carro e quer ver o que a equipe da BellaCar aprontou hoje!"`,
+        scenes: [
+          {
+            speaker: spk1,
+            time: '0-12s',
+            camera: 'Câmera dinâmica pegando a equipe na loja',
+            line: `A gente recebeu uma proposta no WhatsApp que não deu para aguentar... vocês não vão acreditar no que pediram na troca!`
+          },
+          {
+            speaker: multi ? spk2 : spk1,
+            time: '12-25s',
+            camera: 'Reação dos vendedores rindo ou mostrando o carro',
+            line: `O cliente queria dar um carro que nem liga e ainda queria volta em dinheiro! Aqui a gente avalia o seu usado com respeito, mas milagre só no céu!`
+          },
+          {
+            speaker: spk1,
+            time: '25-40s',
+            camera: 'Plano aberto no showroom',
+            line: `Se você quer uma avaliação séria e justa do seu carro ou moto, a BellaCar está de portas abertas em Uberaba!`
+          }
+        ],
+        cta: `"Comenta aqui embaixo a proposta mais sem noção que você já viu na vida!"`,
+        viralReason: "Humor e bastidores humanizam a marca e criam conexão genuína com os clientes da cidade."
+      };
+    }
+
+    // =============================================================
+    // TELEPROMPTER ADAPTADO AO FUNIL CRIATIVO
+    // =============================================================
+    function openTeleprompterFromFunnel() {
+      if (!lastGeneratedScript) return;
 
       const modal = document.getElementById('modal-teleprompter');
       const title = document.getElementById('tp-car-title');
       const container = document.getElementById('tp-text-container');
 
-      const hook = document.getElementById('video-hook-text')?.innerText || '';
-      const body = document.getElementById('video-script-body')?.innerText || '';
-      const cta = document.getElementById('video-cta-text')?.innerText || '';
+      if (title) title.innerText = `${lastGeneratedScript.title || 'TELEPROMPTER'} • BELLACAR`;
 
-      if (title) title.innerText = `${selectedCar.name} • TELEPROMPTER`;
+      let scenesHtml = '';
+      if (lastGeneratedScript.scenes) {
+        scenesHtml = lastGeneratedScript.scenes.map(sc => {
+          const isDiogo = sc.speaker.toLowerCase().includes('diogo');
+          const isCarlos = sc.speaker.toLowerCase().includes('carlos');
+          const colorClass = isDiogo ? 'text-[#ecdda2]' : (isCarlos ? 'text-[#38bdf8]' : 'text-emerald-400');
+          const icon = isDiogo ? '👑' : (isCarlos ? '📱' : '⚡');
+
+          return `
+            <div class="mb-8 space-y-2 border-b border-[#2e2e33]/50 pb-6">
+              <div class="text-sm font-mono uppercase font-black tracking-widest ${colorClass} flex items-center justify-center gap-1.5">
+                <span>${icon}</span>
+                <span>${sc.speaker} (${sc.time || ''})</span>
+              </div>
+              <div class="text-white font-extrabold leading-relaxed" style="font-size: ${tpFontSize}px">
+                "${sc.line}"
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
 
       if (container) {
         container.innerHTML = `
-          <div class="text-[#c9b977] font-bold text-lg mb-4 tracking-wider uppercase">
+          <div class="text-[#c9b977] font-bold text-sm tracking-wider uppercase mb-2">
             🎯 GANCHO INICIAL (3 SEGUNDOS):
           </div>
-          <p class="font-extrabold text-white leading-relaxed mb-10" style="font-size: ${tpFontSize}px">
-            ${hook}
+          <p class="font-black text-white leading-relaxed mb-10 text-yellow-300" style="font-size: ${Math.round(tpFontSize * 1.1)}px">
+            ${lastGeneratedScript.hook}
           </p>
 
-          <div class="text-[#38bdf8] font-bold text-lg mb-4 tracking-wider uppercase">
-            🎙️ DESENVOLVIMENTO DO VÍDEO:
+          <div class="text-zinc-400 font-bold text-xs tracking-wider uppercase mb-6">
+            🎙️ FALAS DO VÍDEO (POR PARTICIPANTE):
           </div>
-          <div class="text-zinc-200 font-bold leading-relaxed mb-10 space-y-6" style="font-size: ${Math.round(tpFontSize * 0.9)}px">
-            ${body.replace(/\n/g, '<br><br>')}
-          </div>
+          ${scenesHtml}
 
-          <div class="text-[#10b981] font-bold text-lg mb-4 tracking-wider uppercase">
-            🚀 CHAMADA DE AÇÃO (CTA):
+          <div class="text-[#10b981] font-bold text-sm tracking-wider uppercase mt-8 mb-2">
+            🚀 CHAMADA FINAL (CTA):
           </div>
           <p class="font-extrabold text-white leading-relaxed" style="font-size: ${tpFontSize}px">
-            ${cta}
+            ${lastGeneratedScript.cta}
           </p>
         `;
       }
@@ -1287,11 +1372,8 @@ Responda ESTRITAMENTE em formato JSON puro, sem blocos markdown:
     }
 
     function toggleTeleprompterPlay() {
-      if (tpIsPlaying) {
-        pauseTeleprompter();
-      } else {
-        startTeleprompter();
-      }
+      if (tpIsPlaying) pauseTeleprompter();
+      else startTeleprompter();
     }
 
     function startTeleprompter() {
@@ -1325,9 +1407,9 @@ Responda ESTRITAMENTE em formato JSON puro, sem blocos markdown:
     }
 
     function adjustTeleprompterFontSize(delta) {
-      tpFontSize = Math.max(22, Math.min(64, tpFontSize + delta));
+      tpFontSize = Math.max(22, Math.min(60, tpFontSize + delta));
       document.getElementById('tp-font-size-label').innerText = `${tpFontSize}px`;
-      openTeleprompterModal();
+      openTeleprompterFromFunnel();
     }
 
     function adjustTeleprompterSpeed(delta) {
@@ -1340,9 +1422,7 @@ Responda ESTRITAMENTE em formato JSON puro, sem blocos markdown:
       tpIsMirrored = !tpIsMirrored;
       const container = document.getElementById('tp-text-container');
       const btn = document.getElementById('btn-tp-mirror');
-      if (container) {
-        container.classList.toggle('teleprompter-mirror', tpIsMirrored);
-      }
+      if (container) container.classList.toggle('teleprompter-mirror', tpIsMirrored);
       if (btn) {
         btn.className = tpIsMirrored 
           ? "px-2.5 py-1.5 bg-[#c9b977] text-black border border-[#c9b977] rounded-xl text-xs font-bold"
@@ -1352,16 +1432,9 @@ Responda ESTRITAMENTE em formato JSON puro, sem blocos markdown:
 
     function finishRecordingFromTeleprompter() {
       closeTeleprompterModal();
-      if (selectedCar) {
-        selectedCar.status = 'done';
-        saveInventory();
-        renderInventory();
-        updateVehicleHeaderUI();
-        alert(`✓ Parabéns! Gravação de "${selectedCar.name}" marcada como CONCLUÍDA!`);
-      }
+      alert(`✓ Parabéns! Gravação concluída com sucesso!`);
     }
 
-    // Tecla Espaço aciona Play/Pause no Teleprompter
     window.addEventListener('keydown', e => {
       const modal = document.getElementById('modal-teleprompter');
       if (modal && !modal.classList.contains('hidden') && e.code === 'Space') {
@@ -1371,62 +1444,201 @@ Responda ESTRITAMENTE em formato JSON puro, sem blocos markdown:
     });
 
     // =============================================================
-    // UTILITÁRIOS & DISPAROS DE WHATSAPP
+    // COMPARTILHAMENTO & CÓPIAS
     // =============================================================
-    function copyToClipboard(text, successMsg = 'Copiado para a área de transferência!') {
+    function copyToClipboard(text, successMsg = 'Copiado!') {
       if (!text) return;
       navigator.clipboard.writeText(text).then(() => {
         alert("✓ " + successMsg);
-      }).catch(() => {
-        alert("Texto selecionado. Pressione Ctrl+C para copiar.");
       });
     }
 
-    function copyFullVideoScript() {
-      const hook = document.getElementById('video-hook-text')?.innerText || '';
-      const body = document.getElementById('video-script-body')?.innerText || '';
-      const cta = document.getElementById('video-cta-text')?.innerText || '';
-      const full = `*ROTEIRO DE VÍDEO | BELLACAR VEÍCULOS*\n\n*GANCHO (0-3s):*\n${hook}\n\n*ROTEIRO:*\n${body}\n\n*CHAMADA:* ${cta}`;
-      copyToClipboard(full, 'Roteiro completo copiado!');
+    function copyFunnelCompleteScript() {
+      if (!lastGeneratedScript) return;
+      let text = `*ROTEIRO VIRAL BELLACAR VEÍCULOS*\n*Título:* ${lastGeneratedScript.title}\n\n*GANCHO (0-3s):*\n${lastGeneratedScript.hook}\n\n*DESENVOLVIMENTO:*\n`;
+      if (lastGeneratedScript.scenes) {
+        lastGeneratedScript.scenes.forEach(sc => {
+          text += `\n• ${sc.speaker} (${sc.time || ''}): "${sc.line}"`;
+        });
+      }
+      text += `\n\n*CHAMADA:* ${lastGeneratedScript.cta}`;
+      copyToClipboard(text, 'Roteiro completo do funil copiado!');
     }
 
-    function sendVideoScriptToWhatsApp() {
-      const phone = PHONE_NUMBERS[activeSpeakerKey] || PHONE_NUMBERS.carlos;
-      const hook = document.getElementById('video-hook-text')?.innerText || '';
-      const body = document.getElementById('video-script-body')?.innerText || '';
-      const cta = document.getElementById('video-cta-text')?.innerText || '';
-      const msg = encodeURIComponent(`*ROTEIRO PARA GRAVAÇÃO - BELLACAR*\n\n*Veículo:* ${selectedCar?.name}\n\n*Gancho:* ${hook}\n\n${body}\n\n*CTA:* ${cta}`);
-      window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
-    }
-
-    function shareActiveCarWhatsApp() {
-      if (!selectedCar) return;
-      const phone = PHONE_NUMBERS[activeSpeakerKey] || PHONE_NUMBERS.carlos;
-      const text = document.getElementById('ad-primary-copy')?.value || '';
-      const encoded = encodeURIComponent(`*OFERTA BELLACAR VEÍCULOS:*\n\n${text}`);
-      window.open(`https://wa.me/${phone}?text=${encoded}`, '_blank');
-    }
-
-    function copyAllStories() {
-      const s1 = document.getElementById('story-1-content')?.innerText || '';
-      const s2 = document.getElementById('story-2-content')?.innerText || '';
-      const s3 = document.getElementById('story-3-content')?.innerText || '';
-      const full = `*SEQUÊNCIA DE STORIES BELLACAR:*\n\n*STORY 1 (ENQUETE):*\n${s1}\n\n*STORY 2 (WALKAROUND):*\n${s2}\n\n*STORY 3 (LINK):*\n${s3}`;
-      copyToClipboard(full, 'Sequência de 3 Stories copiada!');
-    }
-
-    function openClientWhatsAppPrompt() {
-      const rawNum = prompt("Digite o DDD + Número do cliente (ex: 34988675857):");
-      if (!rawNum) return;
-      const clean = rawNum.replace(/\D/g, '');
-      const num = clean.startsWith('55') ? clean : '55' + clean;
-      const text = document.getElementById('proposal-text')?.value || '';
-      window.open(`https://wa.me/${num}?text=${encodeURIComponent(text)}`, '_blank');
+    function shareFunnelScriptWhatsApp() {
+      if (!lastGeneratedScript) return;
+      const phone = PHONE_NUMBERS.diogo;
+      let text = `*NOVO ROTEIRO GERADO NO FUNIL BELLACAR*\n*Título:* ${lastGeneratedScript.title}\n\n*Gancho:* ${lastGeneratedScript.hook}\n\n`;
+      if (lastGeneratedScript.scenes) {
+        lastGeneratedScript.scenes.forEach(sc => {
+          text += `${sc.speaker}: "${sc.line}"\n`;
+        });
+      }
+      text += `\n*CTA:* ${lastGeneratedScript.cta}`;
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
     }
 
     // =============================================================
-    // MODAL DE BASTIDORES & GESTÃO
+    // VITRINE DO ESTOQUE (MODO 2)
     // =============================================================
+    function renderInventory() {
+      const grid = document.getElementById('inventory-grid');
+      if (!grid) return;
+
+      const searchVal = (document.getElementById('inventory-search-input')?.value || '').toLowerCase();
+      const catVal = document.getElementById('category-filter')?.value || 'all';
+      const statusVal = document.getElementById('status-filter')?.value || 'all';
+
+      const filtered = appInventory.filter(c => {
+        const matchesSearch = c.name.toLowerCase().includes(searchVal);
+        const matchesCat = catVal === 'all' || c.category === catVal;
+        const matchesStatus = statusVal === 'all' || c.status === statusVal;
+        return matchesSearch && matchesCat && matchesStatus;
+      });
+
+      grid.innerHTML = filtered.map(c => {
+        const isDone = c.status === 'done';
+        const diffFipe = (c.fipe || 0) - (c.price || 0);
+
+        return `
+          <div class="p-3.5 rounded-2xl border bg-[#121213] border-[#2e2e33] space-y-2.5">
+            <div class="flex items-start justify-between gap-2">
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded-md font-bold uppercase bg-amber-400/15 text-amber-300 border border-amber-400/30">
+                ${c.category}
+              </span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${isDone ? 'bg-emerald-500/20 text-emerald-400' : 'bg-zinc-800 text-zinc-400'}">
+                ${isDone ? '✓ Gravado' : '⏳ A Gravar'}
+              </span>
+            </div>
+            <div>
+              <h4 class="text-xs sm:text-sm font-bold text-white line-clamp-2">${c.name}</h4>
+              <div class="flex items-baseline gap-2 mt-1">
+                <span class="text-sm font-black text-[#ecdda2] font-mono">R$ ${(c.price || 0).toLocaleString('pt-BR')}</span>
+                ${diffFipe > 0 ? `<span class="text-[10px] font-mono text-emerald-400 font-bold">-R$ ${diffFipe.toLocaleString('pt-BR')} FIPE</span>` : ''}
+              </div>
+            </div>
+            <div class="flex items-center justify-between pt-1 border-t border-[#2e2e33]">
+              <span class="text-[11px] text-[#71717a]">${SPEAKER_NAMES[c.speaker] || 'Carlos'}</span>
+              <button onclick="loadCarInFunnel('${c.id}')" class="text-xs text-[#c9b977] hover:underline font-bold">
+                Gravar no Funil →
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterInventory() { renderInventory(); }
+
+    function loadCarInFunnel(carId) {
+      funnelState.format = 'anuncio';
+      funnelState.singleCarId = carId;
+      selectFunnelFormat('anuncio');
+      switchMainDashboardMode('funnel');
+      document.getElementById('single-select-car').value = carId;
+      triggerFunnelGeneration(true);
+    }
+
+    // =============================================================
+    // IA CONFIG & BASTIDORES
+    // =============================================================
+    function initAIConfig() {
+      const key = getGeminiKey();
+      const dot = document.getElementById('ai-status-dot');
+      const text = document.getElementById('ai-status-text');
+      const input = document.getElementById('gemini-api-key-input');
+
+      if (input && key) input.value = key;
+      if (key && key.length >= 15) {
+        if (dot) dot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
+        if (text) text.innerText = "Gemini 1.5 Flash";
+      } else {
+        if (dot) dot.className = "w-2 h-2 rounded-full bg-amber-400";
+        if (text) text.innerText = "Modo Neural";
+      }
+    }
+
+    function getGeminiKey() {
+      return (localStorage.getItem('bellacar_gemini_key_v5') || '').trim();
+    }
+
+    async function testAndSaveGeminiKey() {
+      const input = document.getElementById('gemini-api-key-input');
+      const key = (input?.value || '').trim();
+      const btn = document.getElementById('btn-save-gemini');
+
+      if (!key) { alert("Por favor, cole a chave de API do Gemini."); return; }
+      if (btn) btn.innerHTML = 'Testando...';
+
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 6000);
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          signal: controller.signal,
+          body: JSON.stringify({ contents: [{ parts: [{ text: "OK" }] }] })
+        });
+        clearTimeout(timeout);
+
+        if (res.ok) {
+          localStorage.setItem('bellacar_gemini_key_v5', key);
+          initAIConfig();
+          alert("✓ Sucesso! Google Gemini 1.5 Flash conectado!");
+          closeModal('modal-settings');
+          triggerFunnelGeneration(true);
+        } else {
+          alert("Chave inválida ou modelo indisponível.");
+        }
+      } catch (err) {
+        alert("Erro na conexão com a Google: " + err.message);
+      } finally {
+        if (btn) btn.innerHTML = 'Salvar & Testar';
+      }
+    }
+
+    async function clearLeakedKeysFromSupabase() {
+      if (!confirm("Limpar chaves salvas na nuvem?")) return;
+      try {
+        if (sbClient) {
+          await sbClient.from('store_settings').delete().eq('key', 'gemini_api_key');
+          await sbClient.from('store_settings').delete().eq('key', 'gemini_model');
+        }
+        alert("✓ Limpeza concluída!");
+      } catch (e) { alert("Erro: " + e.message); }
+    }
+
+    async function callGemini(promptText) {
+      const key = getGeminiKey();
+      if (!key || key.length < 15) return null;
+
+      const models = ['gemini-1.5-flash', 'gemini-2.0-flash'];
+      for (const m of models) {
+        try {
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 8000);
+
+          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${key}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            signal: controller.signal,
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: promptText }] }],
+              generationConfig: { temperature: 0.85, topP: 0.95, maxOutputTokens: 1100 }
+            })
+          });
+          clearTimeout(timeout);
+
+          if (res.ok) {
+            const data = await res.json();
+            const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (text) return text;
+          }
+        } catch (e) {}
+      }
+      return null;
+    }
+
     function openModal(id) {
       document.getElementById(id)?.classList.remove('hidden');
       lucide.createIcons();
@@ -1437,10 +1649,7 @@ Responda ESTRITAMENTE em formato JSON puro, sem blocos markdown:
     }
 
     async function syncWithSupabaseNow() {
-      if (!sbClient) {
-        alert("Conexão com a nuvem não inicializada. Verifique sua conexão com a internet.");
-        return;
-      }
+      if (!sbClient) { alert("Supabase não carregado."); return; }
       try {
         const { data, error } = await sbClient.from('inventory').select('*');
         if (!error && Array.isArray(data) && data.length > 0) {
@@ -1455,36 +1664,19 @@ Responda ESTRITAMENTE em formato JSON puro, sem blocos markdown:
           }));
           saveInventory();
           renderInventory();
-          alert("✓ Dados sincronizados com sucesso da Nuvem Supabase!");
-        } else {
-          // Se a tabela estiver vazia, sobe o inventário local oficial
-          await sbClient.from('inventory').upsert(appInventory.map(c => ({
-            id: c.id,
-            name: c.name,
-            price: c.price,
-            fipe: c.fipe,
-            status: c.status,
-            actor: SPEAKER_NAMES[c.speaker] || 'Carlos',
-            category: c.category
-          })));
-          alert("✓ Estoque oficial da BellaCar enviado e sincronizado na Nuvem Supabase!");
+          populateCarDropdowns();
+          alert("✓ Sincronizado com a nuvem!");
         }
-      } catch (e) {
-        alert("Erro na sincronização: " + e.message);
-      }
+      } catch (e) { alert("Erro: " + e.message); }
     }
 
     function restoreOfficialInventory() {
-      if (!confirm("Deseja restaurar a lista oficial dos 19 veículos originais da BellaCar?")) return;
+      if (!confirm("Restaurar os 19 carros originais?")) return;
       appInventory = [...OFFICIAL_INVENTORY];
       saveInventory();
       renderInventory();
-      if (appInventory.length > 0) selectCar(appInventory[0].id);
-      alert("✓ 19 Veículos originais restaurados com sucesso!");
-    }
-
-    function openRobotQueueViewer() {
-      alert("A fila do Robô na nuvem Supabase está ativa. Os anúncios marcados serão sincronizados automaticamente com o executável local.");
+      populateCarDropdowns();
+      alert("✓ 19 Carros restaurados!");
     }
   </script>
 
