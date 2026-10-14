@@ -500,6 +500,32 @@
           </div>
         </div>
 
+        <!-- Premissa Cinematográfica & Dica do Diretor -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div class="bg-gradient-to-br from-[#1a1811] to-[#0c0c0d] p-4 rounded-2xl border border-[#c9b977]/30 md:col-span-2 space-y-1.5 shadow-lg shadow-black/40">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-mono uppercase text-[#c9b977] font-black flex items-center gap-1.5 tracking-wider">
+                <i data-lucide="clapperboard" class="w-3.5 h-3.5 text-[#c9b977]"></i>
+                <span>A GRANDE IDEIA DO DIRETOR (PREMISSA NARRATIVA):</span>
+              </span>
+              <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 uppercase">Cinema & Conflito</span>
+            </div>
+            <p class="text-xs sm:text-sm text-zinc-100 font-semibold leading-relaxed" id="funnel-premise-display">
+              Carregando premissa cinematográfica...
+            </p>
+          </div>
+
+          <div class="bg-[#0c0c0d] p-4 rounded-2xl border border-[#2e2e33] space-y-1.5">
+            <span class="text-[11px] font-mono uppercase text-[#38bdf8] font-bold flex items-center gap-1.5">
+              <i data-lucide="video" class="w-3.5 h-3.5 text-[#38bdf8]"></i>
+              <span>COMO FILMAR (DIREÇÃO & TONS):</span>
+            </span>
+            <p class="text-[11px] text-[#a1a1aa] leading-relaxed" id="funnel-directortip-display">
+              Câmera na mão com cortes rápidos estilo The Office.
+            </p>
+          </div>
+        </div>
+
         <!-- Gancho dos 3 Segundos -->
         <div class="bg-[#0c0c0d] p-4 rounded-2xl border border-[#2e2e33] space-y-2">
           <div class="flex items-center justify-between">
@@ -1152,32 +1178,47 @@
         const apiKey = getGeminiKey();
         if (forceAI && apiKey && apiKey.length >= 15) {
           try {
-            const profilesPrompt = funnelState.speakers.map(s => `- ${SPEAKER_NAMES[s]}: ${SPEAKER_PROFILES[s]?.title}. Tom: ${SPEAKER_PROFILES[s]?.tone} Bordão: "${SPEAKER_PROFILES[s]?.catchphrase}"`).join('\n');
+            const profilesPrompt = funnelState.speakers.map(s => `- ${SPEAKER_NAMES[s]}: ${SPEAKER_PROFILES[s]?.title}. Tom: ${SPEAKER_PROFILES[s]?.tone}. Bordão: "${SPEAKER_PROFILES[s]?.catchphrase}"`).join('\n');
 
-            const prompt = `Você é o roteirista oficial de vídeos virais da concessionária BELLACAR VEÍCULOS em Uberaba - MG.
-Crie um ROTEIRO DE VÍDEO VIRAL INÉDITO para Reels e TikTok com os parâmetros:
-FORMATO DO VÍDEO: "${format.toUpperCase()}"
-PARTICIPANTES: ${speakerList.join(', ')}
-NÍVEL DE INTENSIDADE / TEMPERO: "${intensity.toUpperCase()}" (se for FOGO NO PARQUINHO, use humor ácido, provoque, faça os vendedores brigarem amigavelmente pelos carros, cite ruas e pontos de Uberaba como Leopoldino de Oliveira, Barão do Rio Branco, etc).
-CARRO(S) ENVOLVIDO(S):
+            const prompt = `AJA COMO UM SHOWRUNNER E DIRETOR DE CINEMA DE ALTO NÍVEL, premiado por comédia dramática e vídeos virais de altíssima retenção para Reels e TikTok (estilo 'The Office', 'Succession' e criadores automotivos virais como Donut Media e Auto Super).
+Sua missão é dirigir e roteirizar o trio da BELLACAR VEÍCULOS em Uberaba - MG.
+
+CRÍTICA CONTRA MONOTONIA (LEIA COM ATENÇÃO):
+1. PROIBIDO PANFLETO DE VENDEDOR: NUNCA crie listas chatas de opcionais ("veículo com ar condicionado gelando, procedência garantida, venha conferir"). Isso é CHATO, monótono e faz o público passar o vídeo em 1 segundo!
+2. O CARRO NÃO É O VENDEDOR, É O PANO DE FUNDO: O vídeo é uma PEQUENA CENA DE CINEMA, uma aposta arriscada entre os participantes, uma discussão cômica de ego, um segredo de bastidores ou uma situação de estresse cômico. O carro é o troféu, a vítima ou a razão da briga!
+3. CADA CENA PRECISA DE UMA AÇÃO FÍSICA E ADEREÇOS (PROPS): Descreva o que os atores estão FAZENDO fisicamente (segurando ferramentas, abrindo capô de surpresa, medindo espaço com trena, correndo com maquininha de cartão, comendo pão de queijo, encarando a lente em choque).
+4. LINGUAGEM MOCKUMENTARY (THE OFFICE): Use quebra da quarta parede (olhar constrangido pra câmera), zooms rápidos nos rostos quando alguém fala besteira, cortes secos e pausas cômicas.
+5. CULTURA DE UBERABA: Use o calor do Triângulo Mineiro, clientes exigentes da região, Av. Leopoldino de Oliveira, Barão do Rio Branco, calçadão, etc.
+
+PARÂMETROS DE PRODUÇÃO:
+- FORMATO CINEMATOGRÁFICO: "${format.toUpperCase()}"
+- ELENCO: ${speakerList.join(', ')}
+- NÍVEL DE INTENSIDADE: "${intensity.toUpperCase()}" (se for FOGO NO PARQUINHO, aumente a tensão cômica, provocações afiadas e apostas com o bolso!)
+- VEÍCULO(S):
 ${format === 'duelo' ? `• Carro A: ${carA.name} (R$ ${carA.price.toLocaleString('pt-BR')})\n• Carro B: ${carB.name} (R$ ${carB.price.toLocaleString('pt-BR')})` : `• Carro: ${singleCar.name} (R$ ${(singleCar.price||0).toLocaleString('pt-BR')})`}
 
-PERSONALIDADES REAIS DOS PARTICIPANTES:
+ELENCO E ARQUÉTIPOS:
 ${profilesPrompt}
 
-REGRA OBRIGATÓRIA: NUNCA use termos como "laudo aprovado", "laudo cautelar", "laudo pericial" ou "periciado", pois a BellaCar NÃO realiza esse tipo de serviço de laudo. Em vez disso, enfatize: PROCEDÊNCIA GARANTIDA, MECÂNICA RIGOROSAMENTE REVISADA, GARANTIA DE MOTOR E CÂMBIO, CONSERVAÇÃO IMPECÁVEL, DOCUMENTAÇÃO EM DIA e A PALAVRA E AUTORIDADE DO DIOGO E DA BELLACAR.
+REGRA DE NEGÓCIO INVIOLÁVEL: NUNCA use termos de laudo, laudo pericial, aprovado ou cautelar (a loja NÃO faz serviço de laudo). Use: PROCEDÊNCIA GARANTIDA, MECÂNICA RIGOROSAMENTE REVISADA, GARANTIA OFICIAL DE MOTOR E CÂMBIO e A PALAVRA DO DIOGO.
 
-VARIAÇÃO OBRIGATÓRIA: Crie um roteiro 100% INÉDITO, com ângulo e diálogos diferentes de qualquer geração anterior!
-
-Responda ESTRITAMENTE em formato JSON com esta estrutura:
+ESTRUTURA DE RESPOSTA OBRIGATÓRIA (ESTRITAMENTE JSON):
 {
-  "title": "Título magnético do vídeo",
-  "hook": "Gancho matador dos primeiros 3 segundos falado na lente com alta energia",
+  "title": "Título magnético cinematográfico",
+  "premise": "A premissa criativa e o conflito central da cena (A grande ideia do diretor)",
+  "directorTip": "Nota de direção para os atores: postura, iluminação, tom de voz e truque de edição/câmera",
+  "hook": "Gancho magnético nos primeiros 3 segundos falado na lente com quebra radical de padrão",
   "scenes": [
-    { "speaker": "Nome exato de quem fala", "time": "0-10s", "camera": "Enquadramento da câmera", "line": "Fala autêntica com a personalidade dele" }
+    {
+      "speaker": "Nome exato do personagem",
+      "time": "0-8s",
+      "camera": "Enquadramento e movimento de câmera (ex: Zoom rápido estilo The Office)",
+      "action": "Ação física detalhada e adereços: o que ele faz com o corpo, mãos e olhar",
+      "line": "Fala afiada, natural, cheia de personalidade e sem clichês de vendedor"
+    }
   ],
-  "cta": "Chamada para ação matadora",
-  "viralReason": "Por que o algoritmo vai entregar e reter as pessoas neste vídeo"
+  "cta": "Chamada para ação orgânica e irresistível para o WhatsApp",
+  "viralReason": "Por que esta dinâmica narrativa e conflito prendem o público até o final"
 }`;
 
             const aiResponse = await callGemini(prompt);
@@ -1275,6 +1316,11 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
         hunter: 'CAÇADOR DE OFERTA'
       };
 
+      const premiseEl = document.getElementById('funnel-premise-display');
+      const directorTipEl = document.getElementById('funnel-directortip-display');
+      if (premiseEl) premiseEl.innerText = data.premise || "Conflito cômico e disputa acirrada entre o trio da BellaCar em torno do veículo.";
+      if (directorTipEl) directorTipEl.innerText = data.directorTip || "Câmera dinâmica com cortes rápidos estilo The Office, zooms dramáticos e quebra de 4ª parede.";
+
       if (titleEl) titleEl.innerText = data.title || "Roteiro de Vídeo BellaCar";
       if (badgeFmt) badgeFmt.innerText = "FORMATO: " + (formatNames[funnelState.format] || funnelState.format.toUpperCase());
       if (badgeInt) {
@@ -1292,7 +1338,7 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
       if (ctaEl) ctaEl.innerText = data.cta;
       if (viralEl) viralEl.innerText = data.viralReason;
 
-      // Cenas Formatadas por Apresentador
+      // Cenas Formatadas por Apresentador com Ação Física & Câmera
       if (scenesEl && data.scenes && data.scenes.length) {
         scenesEl.innerHTML = data.scenes.map((sc, idx) => {
           const spkLower = (sc.speaker || '').toLowerCase();
@@ -1305,23 +1351,39 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
             : (isCarlos ? 'border-[#38bdf8]/50 bg-[#38bdf8]/10 text-[#38bdf8]' : 'border-emerald-500/50 bg-emerald-500/10 text-emerald-400');
           
           const icon = isDiogo ? '👑' : (isCarlos ? '📱' : '⚡');
-          const catchphrase = isDiogo ? SPEAKER_PROFILES.diogo.catchphrase : (isCarlos ? SPEAKER_PROFILES.carlos.catchphrase : SPEAKER_PROFILES.guilherme.catchphrase);
 
           return `
-            <div class="p-3.5 rounded-2xl bg-[#0c0c0d] border border-[#2e2e33] space-y-2">
+            <div class="p-3.5 sm:p-4 rounded-2xl bg-[#0c0c0d] border border-[#2e2e33] space-y-2.5">
               <div class="flex items-center justify-between border-b border-[#2e2e33] pb-2">
                 <div class="flex items-center gap-2">
-                  <span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-black border ${borderCol} flex items-center gap-1">
+                  <span class="px-2.5 py-0.5 rounded-md text-[10px] font-mono font-black border ${borderCol} flex items-center gap-1">
                     <span>${icon}</span>
                     <span>${sc.speaker}</span>
                   </span>
                   <span class="text-[10px] text-[#71717a] font-mono">${sc.time || `Take ${idx+1}`}</span>
                 </div>
-                <span class="text-[10px] font-mono text-[#a1a1aa]">🎥 ${sc.camera || 'Câmera dinâmica'}</span>
+                <span class="text-[10px] font-mono text-[#a1a1aa] flex items-center gap-1">
+                  <span>🎥</span>
+                  <span>${sc.camera || 'Câmera dinâmica'}</span>
+                </span>
               </div>
-              <p class="text-xs sm:text-sm text-zinc-100 font-medium leading-relaxed italic">
-                "${sc.line}"
-              </p>
+
+              ${sc.action ? `
+                <div class="bg-[#18181b] border border-amber-500/25 rounded-xl px-3 py-1.5 flex items-start gap-2 text-amber-200/90 text-xs">
+                  <span class="text-xs mt-0.5">🎭</span>
+                  <div>
+                    <span class="text-[9px] uppercase font-mono font-bold text-amber-300 block tracking-wider">Ação / Marcação de Cena & Props:</span>
+                    <span class="italic font-mono text-[11px]">${sc.action}</span>
+                  </div>
+                </div>
+              ` : ''}
+
+              <div class="pl-2.5 border-l-2 border-[#c9b977]/40 py-0.5">
+                <span class="text-[9px] uppercase font-mono text-[#71717a] block mb-0.5 font-bold">Fala do Roteiro:</span>
+                <p class="text-xs sm:text-sm text-zinc-100 font-semibold leading-relaxed italic">
+                  "${sc.line}"
+                </p>
+              </div>
             </div>
           `;
         }).join('');
@@ -1339,6 +1401,11 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
     }
 
     function getProceduralFunnelScript(format, speakers, intensity, carA, carB, singleCar) {
+      const raw = _getRawProceduralScript(format, speakers, intensity, carA, carB, singleCar);
+      return enrichWithCinemaDirection(raw, format, speakers, intensity, carA, carB, singleCar);
+    }
+
+    function _getRawProceduralScript(format, speakers, intensity, carA, carB, singleCar) {
       const hasDiogo = speakers.includes('diogo');
       const hasCarlos = speakers.includes('carlos');
       const hasGui = speakers.includes('guilherme');
@@ -2295,6 +2362,98 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
     }
 
     // =============================================================
+    // ENRIQUECEDOR CINEMATOGRÁFICO DE ROTEIROS (SHOWRUNNER & AÇÕES)
+    // =============================================================
+    function enrichWithCinemaDirection(res, format, speakers, intensity, carA, carB, singleCar) {
+      if (!res) return res;
+
+      const singleName = singleCar?.name || 'Seminovo BellaCar';
+      const carAName = carA?.name || 'Carro A';
+      const carBName = carB?.name || 'Carro B';
+      const s1 = SPEAKER_NAMES[speakers[0]] || 'Diogo Olegário';
+      const s2 = speakers[1] ? SPEAKER_NAMES[speakers[1]] : 'Carlos Eduardo';
+
+      const premisePool = {
+        duelo: [
+          `Disputa de ego e discussão de bastidores: ${s1} defende o ${carAName} como o ápice do status executivo, enquanto ${s2} jura que quem compra o ${carBName} é quem realmente entende de economia, até o patrão intervir e forçar uma decisão ao vivo.`,
+          `Guerra de vendas no pátio: dois vendedores apostam o próprio almoço no melhor restaurante de Uberaba sobre qual desses dois carros sai primeiro do estoque hoje.`,
+          `O confronto definitivo: colocamos lado a lado o carro mais desejado da cidade contra a escolha mais inteligente e racional do mercado.`
+        ],
+        anuncio: [
+          `Situação de estresse no pátio: Diogo descobre que colocaram o ${singleName} com condição agressiva de queima de estoque sem avisar a diretoria e agora o WhatsApp não para de tocar.`,
+          `O achado escondido: o cliente ia comprar um seminovo maquiado em marketplace, mas a equipe interceptou o negócio para mostrar o que é uma procedência de verdade.`,
+          `Contagem regressiva de pátio: o veículo acabou de entrar, passou pela revisão rigorosa e a equipe sabe que ele não dura até o final da tarde.`
+        ],
+        test_drive: [
+          `Test drive sem filtro: o apresentador pisa fundo nas subidas e curvas de Uberaba para provar se a dirigibilidade é tão macia e forte quanto a fama do modelo.`,
+          `O teste cego do passageiro: Carlos desafia Diogo a adivinhar as imperfeições da pista enquanto o carro absorve os impactos no asfalto com silêncio absoluto.`,
+          `A prova dos nove na rua: acelerando forte na Leopoldino de Oliveira para testar freio, ar condicionado no calor do meio-dia e isolamento acústico.`
+        ],
+        papo_patrao: [
+          `Reunião de diretoria vazada: Diogo reúne os vendedores no meio do showroom com a caneta na mão para cortar a burocracia e liberar condições que nenhuma loja tradicional tem coragem de dar.`,
+          `A palavra do Diogo: o dono da loja assume o microfone pessoalmente para mandar a real sobre procedência, garantias sem enrolação e respeito com o dinheiro do trabalhador de Uberaba.`
+        ],
+        desafio: [
+          `Desafio do cronômetro: Guilherme aposta que aprova a ficha de financiamento no WhatsApp antes de Carlos conseguir explicar todos os opcionais técnicos do carro.`,
+          `Aposta de alto risco: se o cliente encontrar qualquer detalhe de estrutura ou defeito de mecânica, o Diogo paga o tanque cheio na hora.`
+        ],
+        comedia: [
+          `Esquete cômica: o cliente clássico indeciso chega querendo comprar um carro que gaste como 1.0, ande como V8 e custe o preço de uma bicicleta.`,
+          `O vendedor desesperado: Carlos tenta não deixar o cliente bater a porta com força enquanto Diogo já está puxando a caneta do patrão para assinar a proposta.`
+        ],
+        polemica: [
+          `A grande verdade proibida do mercado de usados: a equipe expõe o que as lojas tradicionais escondem e por que a procedência em contrato é a única segurança real.`,
+          `Desmontando o mito: será que esse motor dá problema mesmo ou é falta de dono que não faz a revisão que a BellaCar entrega de fábrica?`
+        ]
+      };
+
+      if (!res.premise) {
+        res.premise = pick(premisePool[format] || [
+          `Conflito cômico e negociação acirrada entre o trio da BellaCar em torno do ${singleName}: o carro é o troféu no meio de uma disputa de vendas e prestígio.`,
+          `Bastidores da loja: a equipe descobre uma proposta irrecusável e tenta convencer o patrão a assinar a liberação imediata da caneta.`,
+          `Esquete de alta retenção: a realidade sem filtro de quem compra e vende seminovos em Uberaba, quebrando todos os clichês de vendedor chato.`
+        ]);
+      }
+
+      if (!res.directorTip) {
+        res.directorTip = pick([
+          `Estilo mockumentary / The Office: câmera na mão com leve tremor, zooms rápidos nas reações e quebra da 4ª parede encarando a lente em momentos de choque.`,
+          `Dinâmica de alta energia: corte seco a cada 3-4 segundos, movimentação de corpo contínua e diálogos afiados com sobreposição de vozes nas discussões.`,
+          `Câmera dramática: planos fechados nos rostos com expressões cômicas, seguidos de plano aberto revelando o carro como a grande surpresa.`
+        ]);
+      }
+
+      if (res.scenes && Array.isArray(res.scenes)) {
+        res.scenes.forEach(sc => {
+          if (!sc.action) {
+            const spkLower = (sc.speaker || '').toLowerCase();
+            if (spkLower.includes('diogo')) {
+              sc.action = pick([
+                `[Diogo joga o molho de chaves do carro na mão do vendedor, aponta a caneta do patrão para a lente e corta a enrolação]`,
+                `[Diogo cruza os braços com autoridade diante do capô, balança a cabeça em desaprovação cômica e encara a lente]`,
+                `[Diogo puxa o contrato assinado do bolso, bate na palma da mão e faz sinal para encerrar a discussão]`
+              ]);
+            } else if (spkLower.includes('carlos')) {
+              sc.action = pick([
+                `[Carlos passa um pano de microfibra no alinhamento do farol com cuidado obsessivo, quase chorando de apego pelo carro]`,
+                `[Carlos abre o capô com uma lanterna na mão, aponta para o motor limpo e olha chocado para o Diogo]`,
+                `[Carlos puxa o manual do proprietário da gaveta como se fosse um documento sagrado e aponta para os carimbos]`
+              ]);
+            } else {
+              sc.action = pick([
+                `[Guilherme saca a maquininha de cartão do bolso como um pistoleiro de faroeste e digita a parcela em 21x]`,
+                `[Guilherme mostra a tela do celular vibrando com mensagens de clientes querendo reservar o carro]`,
+                `[Guilherme corre pelo pátio com o contrato na mão e sussurra animado olhando diretamente para a câmera]`
+              ]);
+            }
+          }
+        });
+      }
+
+      return res;
+    }
+
+    // =============================================================
     // TELEPROMPTER ADAPTADO AO FUNIL
     // =============================================================
     function openTeleprompterFromFunnel() {
@@ -2321,6 +2480,11 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
                 <span>${icon}</span>
                 <span>${sc.speaker} (${sc.time || ''})</span>
               </div>
+              ${sc.action ? `
+                <div class="text-amber-300/90 font-mono text-xs sm:text-sm max-w-2xl mx-auto italic bg-[#18181b]/80 border border-amber-500/20 rounded-xl p-2.5 my-2">
+                  🎭 [AÇÃO: ${sc.action}]
+                </div>
+              ` : ''}
               <div class="text-white font-extrabold leading-relaxed" style="font-size: ${tpFontSize}px">
                 "${sc.line}"
               </div>
@@ -2331,6 +2495,15 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
 
       if (container) {
         container.innerHTML = `
+          ${lastGeneratedScript.premise ? `
+            <div class="mb-6 p-4 rounded-2xl bg-[#18181b] border border-[#c9b977]/30 text-left max-w-3xl mx-auto">
+              <div class="text-xs font-mono font-bold text-[#c9b977] uppercase flex items-center gap-1 mb-1">
+                <span>🎬</span> PREMISSA DO DIRETOR:
+              </div>
+              <p class="text-xs text-zinc-200 leading-relaxed">${lastGeneratedScript.premise}</p>
+            </div>
+          ` : ''}
+
           <div class="text-[#c9b977] font-bold text-sm tracking-wider uppercase mb-2">
             🎯 GANCHO INICIAL (3 SEGUNDOS):
           </div>
@@ -2450,26 +2623,34 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
 
     function copyFunnelCompleteScript() {
       if (!lastGeneratedScript) return;
-      let text = `*ROTEIRO VIRAL BELLACAR VEÍCULOS*\n*Título:* ${lastGeneratedScript.title}\n\n*GANCHO (0-3s):*\n${lastGeneratedScript.hook}\n\n*CENAS:*\n`;
+      let text = `*ROTEIRO CINEMATOGRÁFICO BELLACAR*\n*Título:* ${lastGeneratedScript.title}\n`;
+      if (lastGeneratedScript.premise) text += `*Premissa:* ${lastGeneratedScript.premise}\n`;
+      if (lastGeneratedScript.directorTip) text += `*Direção de Cena:* ${lastGeneratedScript.directorTip}\n`;
+      text += `\n*🎯 GANCHO (0-3s):*\n${lastGeneratedScript.hook}\n\n*🎬 CENAS & AÇÕES:*\n`;
       if (lastGeneratedScript.scenes) {
         lastGeneratedScript.scenes.forEach(sc => {
-          text += `\n• ${sc.speaker} (${sc.time || ''}): "${sc.line}"`;
+          text += `\n• ${sc.speaker} (${sc.time || ''}):\n`;
+          if (sc.action) text += `  🎭 [Ação: ${sc.action}]\n`;
+          text += `  💬 "${sc.line}"\n`;
         });
       }
-      text += `\n\n*CHAMADA:* ${lastGeneratedScript.cta}`;
-      copyToClipboard(text, 'Roteiro completo do funil copiado!');
+      text += `\n*🚀 CHAMADA:* ${lastGeneratedScript.cta}`;
+      copyToClipboard(text, 'Roteiro cinematográfico copiado!');
     }
 
     function shareFunnelScriptWhatsApp() {
       if (!lastGeneratedScript) return;
       const phone = PHONE_NUMBERS.diogo;
-      let text = `*NOVO ROTEIRO GERADO NO FUNIL BELLACAR*\n*Título:* ${lastGeneratedScript.title}\n\n*Gancho:* ${lastGeneratedScript.hook}\n\n`;
+      let text = `*🎬 NOVO ROTEIRO CINEMATOGRÁFICO BELLACAR*\n*Título:* ${lastGeneratedScript.title}\n`;
+      if (lastGeneratedScript.premise) text += `*Premissa:* ${lastGeneratedScript.premise}\n`;
+      text += `\n*🎯 Gancho:* ${lastGeneratedScript.hook}\n\n*Roteiro:*\n`;
       if (lastGeneratedScript.scenes) {
         lastGeneratedScript.scenes.forEach(sc => {
-          text += `${sc.speaker}: "${sc.line}"\n`;
+          text += `\n*${sc.speaker}*: "${sc.line}"`;
+          if (sc.action) text += `\n[Ação: ${sc.action}]`;
         });
       }
-      text += `\n*CTA:* ${lastGeneratedScript.cta}`;
+      text += `\n\n*CTA:* ${lastGeneratedScript.cta}`;
       window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
     }
 
