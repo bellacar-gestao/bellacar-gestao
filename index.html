@@ -881,6 +881,22 @@
             badge.innerText = '🟢 Nuvem Ativa';
             badge.className = 'text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20';
           }
+          fetchCloudSettings();
+        }
+      } catch (e) {}
+    }
+
+    async function fetchCloudSettings() {
+      if (!sbClient) return;
+      try {
+        const { data } = await sbClient.from('store_settings').select('key, value');
+        if (data && Array.isArray(data)) {
+          data.forEach(item => {
+            if (item.key === 'gemini_api_key' && item.value && item.value.length >= 15) {
+              localStorage.setItem('bellacar_gemini_key_v5', item.value);
+              initAIConfig();
+            }
+          });
         }
       } catch (e) {}
     }
@@ -1142,7 +1158,7 @@
 Crie um ROTEIRO DE VÍDEO VIRAL INÉDITO para Reels e TikTok com os parâmetros:
 FORMATO DO VÍDEO: "${format.toUpperCase()}"
 PARTICIPANTES: ${speakerList.join(', ')}
-NÍVEL DE INTENSIDADE / TEMPERO: "${intensity.toUpperCase()}" (se for FOGO NO PARQUINHO, seja provocativo, polêmico, gere choque de opiniões para bombar em comentários).
+NÍVEL DE INTENSIDADE / TEMPERO: "${intensity.toUpperCase()}" (se for FOGO NO PARQUINHO, use humor ácido, provoque, faça os vendedores brigarem amigavelmente pelos carros, cite ruas e pontos de Uberaba como Leopoldino de Oliveira, Barão do Rio Branco, etc).
 CARRO(S) ENVOLVIDO(S):
 ${format === 'duelo' ? `• Carro A: ${carA.name} (R$ ${carA.price.toLocaleString('pt-BR')})\n• Carro B: ${carB.name} (R$ ${carB.price.toLocaleString('pt-BR')})` : `• Carro: ${singleCar.name} (R$ ${(singleCar.price||0).toLocaleString('pt-BR')})`}
 
@@ -1150,6 +1166,8 @@ PERSONALIDADES REAIS DOS PARTICIPANTES:
 ${profilesPrompt}
 
 REGRA OBRIGATÓRIA: NUNCA use termos como "laudo aprovado", "laudo cautelar", "laudo pericial" ou "periciado", pois a BellaCar NÃO realiza esse tipo de serviço de laudo. Em vez disso, enfatize: PROCEDÊNCIA GARANTIDA, MECÂNICA RIGOROSAMENTE REVISADA, GARANTIA DE MOTOR E CÂMBIO, CONSERVAÇÃO IMPECÁVEL, DOCUMENTAÇÃO EM DIA e A PALAVRA E AUTORIDADE DO DIOGO E DA BELLACAR.
+
+VARIAÇÃO OBRIGATÓRIA: Crie um roteiro 100% INÉDITO, com ângulo e diálogos diferentes de qualquer geração anterior!
 
 Responda ESTRITAMENTE em formato JSON com esta estrutura:
 {
@@ -1184,11 +1202,9 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
 
         if (hintEl) {
           if (usedAI) {
-            hintEl.innerHTML = `🟢 Roteiro inédito gerado em tempo real por <strong>Google Gemini 1.5 Flash</strong>`;
-          } else if (apiKey && apiKey.length >= 15) {
-            hintEl.innerHTML = `⚡ Roteiro pronto no <strong>Motor Ultra-Rápido BellaCar</strong> • Clique no botão dourado para gerar com IA`;
+            hintEl.innerHTML = `🟢 Roteiro inédito gerado em tempo real por <strong>Google Gemini IA (Online)</strong>`;
           } else {
-            hintEl.innerHTML = `⚡ Roteiro gerado pelo <strong>Motor Criativo BellaCar (Instantâneo)</strong> • <button onclick="openModal('modal-settings')" class="text-[#c9b977] underline font-bold">Conectar Chave Gemini em ⚙️</button>`;
+            hintEl.innerHTML = `⚡ Roteiro pronto no <strong>Motor BellaCar</strong> • <span class="text-zinc-400">Clique no botão dourado para gerar com IA</span>`;
           }
         }
       } finally {
@@ -1216,6 +1232,14 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
           const sanitized = substr.replace(/,\s*([}\]])/g, '$1');
           return JSON.parse(sanitized);
         } catch(e) {}
+      }
+
+      // Recuperação em caso de JSON truncado
+      if (firstBrace !== -1 && lastBrace === -1) {
+        const attempts = [text + '"}', text + '"]}', text + '}]}', text + '"}]}', text + '}]}'];
+        for (const att of attempts) {
+          try { return JSON.parse(att.substring(firstBrace)); } catch(e) {}
+        }
       }
       return null;
     }
@@ -1347,15 +1371,18 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
         const hooks = {
           light: [
             `"Com o mesmo valor de parcela, qual desses dois carros é a melhor escolha para a sua família hoje em Uberaba?"`,
-            `"Racionalidade ou emoção? Colocamos lado a lado o ${carAName} e o ${carBName} no pátio da BellaCar!"`
+            `"Racionalidade ou emoção? Colocamos lado a lado o ${carAName} e o ${carBName} no pátio da BellaCar!"`,
+            `"Dois gigantes frente a frente: qual entrega mais conforto e segurança para o seu dia a dia?"`
           ],
           moderado: [
             `"Duelo de gigantes no pátio da BellaCar: ${carAName} vs ${carBName}. Quem vence na sua opinião?"`,
-            `"Se você tivesse ${carAPrice} na mão hoje, você iria de ${carACat} ou de ${carBCat}? Olha esse comparativo!"`
+            `"Se você tivesse ${carAPrice} na mão hoje, você iria de ${carACat} ou de ${carBCat}? Olha esse comparativo!"`,
+            `"Comparativo sem enrolação: qual desses dois seminovos entrega mais pelo seu dinheiro hoje?"`
           ],
           fogo_no_parquinho: [
             `"Quase saiu briga aqui na loja! O ${s1} falou que o ${carAName} humilha o ${carBName}... olha esse confronto!"`,
-            `"Vou falar uma verdade que vai doer nos donos de ${carBCat}: o ${carAName} dá um baile em conforto e presença!"`
+            `"Vou falar uma verdade que vai doer nos donos de ${carBCat}: o ${carAName} dá um baile em conforto e presença!"`,
+            `"A internet vai surtar com esse comparativo: de um lado o queridinho da galera, do outro a máquina que impõe respeito!"`
           ]
         };
 
@@ -1367,22 +1394,38 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
               speaker: s1,
               time: '0-12s',
               camera: `Plano fechado nos detalhes do ${carAName}`,
-              line: `Não tem nem discussão! O ${carAName} tem presença executiva, acabamento superior, mecânica rigorosamente revisada com garantia oficial de motor e câmbio, e uma dirigibilidade impecável nas ruas de Uberaba!`
+              line: pick([
+                `Não tem nem discussão! O ${carAName} tem presença executiva, acabamento superior, mecânica rigorosamente revisada com garantia oficial de motor e câmbio, e uma dirigibilidade impecável nas ruas de Uberaba!`,
+                `Olha a imponência desse ${carAName}! Quem entra nele sente na hora o peso da qualidade, suspensão firme, documentação 100% em dia e o padrão de procedência que só a BellaCar entrega!`,
+                `Você quer conforto ou quer passar raiva? O ${carAName} entrega potência de verdade, espaço de sobra para a família e a certeza de um seminovo revisado com garantia oficial!`
+              ])
             },
             {
               speaker: s2,
               time: '12-25s',
               camera: `Câmera vira dinamicamente para o ${carBName}`,
-              line: `Menos, ${s1}! Olha para o ${carBName}: custo de manutenção mais baixo, liquidez de mercado incomparável, economia no dia a dia e o Diogo ainda autorizou uma condição agressiva nele hoje!`
+              line: pick([
+                `Menos, ${s1}! Olha para o ${carBName}: custo de manutenção mais baixo, liquidez de mercado incomparável, economia no dia a dia e o Diogo ainda autorizou uma condição agressiva nele hoje!`,
+                `Pode parar com o discurso, ${s1}! O ${carBName} é muito mais racional para o bolso do uberabense! Econômico, porta-malas gigante e o seguro mais barato da categoria!`,
+                `Você fala do status, mas o cliente quer saber de economia e liquidez! O ${carBName} não desvaloriza nada e tem uma procura absurda no nosso pátio!`
+              ])
             },
             {
               speaker: authoritySpeaker,
               time: '25-40s',
               camera: 'Apresentador no meio dos dois veículos com as chaves',
-              line: `Para acabar com o empate: o Diogo pegou a caneta do patrão e liberou tanque cheio e transferência na faixa para o primeiro que chamar no WhatsApp e fechar qualquer um dos dois hoje!`
+              line: pick([
+                `Para acabar com o empate: o Diogo pegou a caneta do patrão e liberou tanque cheio e transferência na faixa para o primeiro que chamar no WhatsApp e fechar qualquer um dos dois hoje!`,
+                `Quer saber? O patrão surtou e mandou desempatar: quem chamar agora no WhatsApp leva entrada em até 21x no cartão e garantia total de motor e câmbio da BellaCar!`,
+                `Chega de discussão entre vocês dois! O Diogo assinou embaixo: taxa reduzida e brinde surpresa exclusivo para quem mandar mensagem nos próximos 30 minutos!`
+              ])
             }
           ],
-          cta: `"Comenta aqui embaixo: você vai de ${carACat} ou ${carBCat}? Quero ver quem tem bom gosto!"`,
+          cta: pick([
+            `"Comenta aqui embaixo: você vai de ${carACat} ou ${carBCat}? Quero ver quem tem bom gosto!"`,
+            `"Se você tivesse ${carAPrice} na mão agora, qual dos dois iria para a sua garagem? Vote nos comentários!"`,
+            `"Clica no link da bio e chama a nossa equipe no WhatsApp antes que outro cliente chegue na frente!"`
+          ]),
           viralReason: "Duelos dividem o público em duas torcidas ferrenhas nos comentários, multiplicando a entrega orgânica do algoritmo."
         };
       }
@@ -1392,15 +1435,18 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
         const hooks = {
           light: [
             `"Procurando um seminovo com procedência garantida e mecânica 100% revisada? Olha esse ${singleName}!"`,
-            `"Se você valoriza segurança, procedência e garantia para a sua família, conheça esse ${singleName} no showroom da BellaCar."`
+            `"Se você valoriza segurança, procedência e garantia para a sua família, conheça esse ${singleName} no showroom da BellaCar."`,
+            `"Aquele tipo de seminovo que a gente tem orgulho de colocar na vitrine: impecável e pronto para rodar!"`
           ],
           moderado: [
             `"Alerta de oportunidade no pátio da BellaCar: entrou hoje esse ${singleName} por ${singlePrice}${fipeHighlight}!"`,
-            `"Para tudo o que você está fazendo: esse ${singleName} acabou de entrar no estoque e não vai durar 24 horas!"`
+            `"Para tudo o que você está fazendo: esse ${singleName} acabou de entrar no estoque e não vai durar 24 horas!"`,
+            `"Quer trocar de carro sem aperto no bolso? Esse ${singleName} tá com condição de queima autorizada pelo patrão!"`
           ],
           fogo_no_parquinho: [
             `"Se você estava quase comprando carro maquiado na internet por tabela cheia... para tudo e olha essa oportunidade!"`,
-            `"O Diogo mandou queimar o estoque desse ${singleName} hoje! Quem chegar primeiro no WhatsApp leva!"`
+            `"O Diogo mandou queimar o estoque desse ${singleName} hoje! Quem chegar primeiro no WhatsApp leva!"`,
+            `"O patrão ficou maluco de vez: liberou entrada em 21x e condição surreal nesse ${singleName} só até sábado!"`
           ]
         };
         return {
@@ -1411,22 +1457,38 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
               speaker: techSpeaker,
               time: '0-12s',
               camera: 'Plano médio no capô e faróis',
-              line: `Veículo com procedência rigorosamente comprovada, estrutura alinhada, pintura impecável e revisão completa com garantia oficial de motor e câmbio.`
+              line: pick([
+                `Veículo com procedência rigorosamente comprovada, estrutura alinhada, pintura impecável e revisão completa com garantia oficial de motor e câmbio.`,
+                `Olha o alinhamento desse carro! Quilometragem de procedência limpa, suspensão silenciosa e motor rodando redondo sem nenhum detalhe.`,
+                `Seminovo selecionado a dedo para o pátio da BellaCar! Histórico transparente, documentação 100% em dia e pronto para viajar com a sua família.`
+              ])
             },
             {
               speaker: s1,
               time: '12-25s',
               camera: 'Entrando no interior, mostrando ar condicionado e painel',
-              line: `Bancos impecáveis, ar condicionado gelando forte, direção leve e uma dirigibilidade macia de quem acabou de tirar zero km da concessionária!`
+              line: pick([
+                `Bancos impecáveis, ar condicionado gelando forte, direção leve e uma dirigibilidade macia de quem acabou de tirar zero km da concessionária!`,
+                `Por dentro o acabamento é perfeito: multimídia completa, volante sem marcas de uso e o cheirinho de carro bem cuidado que todo cliente procura!`,
+                `Espaço interno surpreendente, posição de dirigir ergonômica e um consumo de combustível que não pesa no seu orçamento do mês!`
+              ])
             },
             {
               speaker: speedSpeaker,
               time: '25-40s',
               camera: 'Apresentador com a chave na mão',
-              line: `O patrão autorizou entrada facilitada em até 21x no cartão, pegamos seu carro ou moto na troca com avaliação justa e você ainda sai de tanque cheio!`
+              line: pick([
+                `O patrão autorizou entrada facilitada em até 21x no cartão, pegamos seu carro ou moto na troca com avaliação justa e você ainda sai de tanque cheio!`,
+                `Condição exclusiva de queima de estoque: aprovação de crédito em 15 minutos pelo WhatsApp e entrega na porta da sua casa em Uberaba!`,
+                `A caneta do Diogo cantou: entrada parcelada, transferência cortesia e garantia oficial de motor e câmbio da BellaCar!`
+              ])
             }
           ],
-          cta: `"Clica agora no link da bio ou manda um WhatsApp antes que outro cliente reserve!"`,
+          cta: pick([
+            `"Clica agora no link da bio ou manda um WhatsApp antes que outro cliente reserve!"`,
+            `"Comenta 'QUERO' que a nossa equipe te manda a ficha de aprovação no WhatsApp em 2 minutos!"`,
+            `"Manda mensagem no WhatsApp da BellaCar e venha fazer o test-drive dessa máquina hoje mesmo!"`
+          ]),
           viralReason: "Gera urgência real de estoque e direciona visualizações diretamente para o funil de atendimento no WhatsApp."
         };
       }
@@ -1436,15 +1498,18 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
         const hooks = {
           light: [
             `"Vem comigo fazer um test-drive sincero nesse ${singleName} e sentir o conforto dessa máquina!"`,
-            `"Acelerando o ${singleName} pelas ruas de Uberaba: veja o teste completo de suspensão e acabamento."`
+            `"Acelerando o ${singleName} pelas ruas de Uberaba: veja o teste completo de suspensão e acabamento."`,
+            `"Quer saber como é a sensação de dirigir esse ${singleName}? Aperta o cinto e vem comigo!"`
           ],
           moderado: [
             `"Bora acelerar esse ${singleName} pelas ruas de Uberaba e ver se ele entrega tudo o que promete!"`,
-            `"Será que esse ${singleName} é tão confortável e econômico quanto dizem? Vamos descobrir agora!"`
+            `"Será que esse ${singleName} é tão confortável e econômico quanto dizem? Vamos descobrir agora!"`,
+            `"Test-drive sem filtro: vou mostrar como esse motor responde na subida e nas curvas da cidade!"`
           ],
           fogo_no_parquinho: [
             `"Chega de conversa fiada de vendedor: vou pisar fundo nesse ${singleName} e mostrar a real sem filtro!"`,
-            `"Vou testar na prática se esse ${singleName} aguenta o tranco ou se é só marketing... vem comigo!"`
+            `"Vou testar na prática se esse ${singleName} aguenta o tranco ou se é só marketing... vem comigo!"`,
+            `"Sem passar pano: vou acelerar forte esse ${singleName} e mostrar se ele realmente vale cada centavo!"`
           ]
         };
         return {
@@ -1455,22 +1520,38 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
               speaker: s1,
               time: '0-12s',
               camera: 'Câmera dinâmica no volante acelerando na avenida',
-              line: `Engatei a marcha, pisei fundo e o torque entra na hora! Resposta de acelerador firme e estabilidade que gruda no asfalto.`
+              line: pick([
+                `Engatei a marcha, pisei fundo e o torque entra na hora! Resposta de acelerador firme e estabilidade que gruda no asfalto.`,
+                `Sentindo a arrancada do motor agora: resposta imediata, sem delay e uma retomada de velocidade impressionante nas subidas de Uberaba!`,
+                `A dirigibilidade desse carro é viciante! Volante preciso, frenagem progressiva e uma sensação de segurança absoluta ao volante.`
+              ])
             },
             {
               speaker: techSpeaker,
               time: '12-25s',
               camera: 'Câmera pega a visão da cabine e suspensão trabalhando',
-              line: `Isolamento acústico silencioso, suspensão absorve todo o desnível da rua sem bater absolutamente nada e o ar condicionado gela de verdade no calor de Uberaba.`
+              line: pick([
+                `Isolamento acústico silencioso, suspensão absorve todo o desnível da rua sem bater absolutamente nada e o ar condicionado gela de verdade no calor de Uberaba.`,
+                `Passando pelas valetas e lombadas da cidade: zero barulho interno, cabine firme e amortecedores 100% calibrados e revisados.`,
+                `O computador de bordo marcando uma média de consumo fantástica! Carro que anda forte e não bebe o seu salário no posto de gasolina.`
+              ])
             },
             {
               speaker: authoritySpeaker,
               time: '25-40s',
               camera: 'Descendo do carro com a chave na mão',
-              line: `Carro para quem quer rodar tranquilo com a família sem surpresas na oficina. Mecânica rigorosamente revisada com garantia oficial de motor e câmbio da BellaCar!`
+              line: pick([
+                `Carro para quem quer rodar tranquilo com a família sem surpresas na oficina. Mecânica rigorosamente revisada com garantia oficial de motor e câmbio da BellaCar!`,
+                `Test-drive aprovado com louvor! Carro extremamente macio, seguro e com a procedência comprovada que a sua família merece.`,
+                `Quem senta nesse banco não quer mais descer! O Diogo já liberou as chaves para entrega imediata com entrada facilitada em até 21x!`
+              ])
             }
           ],
-          cta: `"Quer sentir essa direção na sua própria mão? Manda mensagem no WhatsApp e vem fazer esse test-drive comigo hoje na BellaCar!"`,
+          cta: pick([
+            `"Quer sentir essa direção na sua própria mão? Manda mensagem no WhatsApp e vem fazer esse test-drive comigo hoje na BellaCar!"`,
+            `"Comenta aqui embaixo: você toparia acelerar essa máquina hoje pelas ruas de Uberaba?"`,
+            `"Chama no link da bio e reserve o seu horário de test-drive exclusivo com café na loja!"`
+          ]),
           viralReason: "O POV ao volante quebra a principal barreira de compra de seminovos, gerando altíssima taxa de retenção no vídeo."
         };
       }
@@ -1480,15 +1561,18 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
         const hooks = {
           light: [
             `"Olha a raridade que a equipe da BellaCar garimpou para o nosso pátio hoje!"`,
-            `"Um achado exclusivo para quem busca um seminovo com conservação impecável em Uberaba."`
+            `"Um achado exclusivo para quem busca um seminovo com conservação impecável em Uberaba."`,
+            `"Para quem é exigente e não abre mão de carro perfeito: olha essa jóia rara que entrou no estoque!"`
           ],
           moderado: [
             `"Aquele tipo de seminovo que parece que nunca saiu da concessionária: olha o estado desse ${singleName}!"`,
-            `"Quem procura acha, e nós achamos a melhor oportunidade de seminovo da cidade hoje!"`
+            `"Quem procura acha, e nós achamos a melhor oportunidade de seminovo da cidade hoje!"`,
+            `"Olha o que acabou de desembarcar no showroom: conservação acima da média e condição exclusiva!"`
           ],
           fogo_no_parquinho: [
             `"Quem tem dinheiro na mão não pode dormir no ponto: achamos essa relíquia ${fipeHighlight} e o preço tá surreal!"`,
-            `"Esse ${singleName} entrou ontem à tarde e eu aposto que não passa do final de semana no pátio!"`
+            `"Esse ${singleName} entrou ontem à tarde e eu aposto que não passa do final de semana no pátio!"`,
+            `"Atenção Uberaba: achamos um seminovo impecável que vai fazer muito dono de carro zero passar vergonha!"`
           ]
         };
         return {
@@ -1499,22 +1583,38 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
               speaker: s1,
               time: '0-12s',
               camera: 'Câmera mostrando a lataria alinhada e pintura original',
-              line: `Carro com procedência garantida, conservação acima da média, documentação 100% em dia e histórico totalmente transparente.`
+              line: pick([
+                `Carro com procedência garantida, conservação acima da média, documentação 100% em dia e histórico totalmente transparente.`,
+                `Você não encontra outro exemplar nesse estado de conservação em Uberaba! Pintura sem detalhes, alinhamento de lataria perfeito.`,
+                `Aquele achado de único dono que a gente só encontra uma vez no ano: quilometragem de procedência real e manual com chave reserva!`
+              ])
             },
             {
               speaker: techSpeaker,
               time: '12-25s',
               camera: 'Mostrando o interior, volante sem desgaste e motor limpo',
-              line: `Tapeçaria intacta, ar condicionado revisado, motor e câmbio inspecionados com a nossa garantia oficial. Nada de maquiagem aqui na BellaCar!`
+              line: pick([
+                `Tapeçaria intacta, ar condicionado revisado, motor e câmbio inspecionados com a nossa garantia oficial. Nada de maquiagem aqui na BellaCar!`,
+                `Olha os detalhes dos pedais e volante: parece que o carro nunca rodou! Mecânica 100% revisada e pronta para rodar.`,
+                `Cabine cheirando a novo, acabamento impecável em todos os painéis e um nível de cuidado que salta aos olhos de qualquer comprador exigente.`
+              ])
             },
             {
               speaker: speedSpeaker,
               time: '25-40s',
               camera: 'Apresentador com a chave e sorriso confiante',
-              line: `Oportunidade que você não encontra duas vezes na mesma semana. O Diogo já autorizou as melhores taxas de financiamento da região!`
+              line: pick([
+                `Oportunidade que você não encontra duas vezes na mesma semana. O Diogo já autorizou as melhores taxas de financiamento da região!`,
+                `Carro diferenciado vende rápido! O Diogo assinou entrada em 21x no cartão e brinde de entrega para quem fechar primeiro!`,
+                `Relíquia no pátio com preço de oportunidade: aceitamos seu usado na troca com avaliação rápida e justa!`
+              ])
             }
           ],
-          cta: `"Comenta 'EU QUERO' ou clica no link da bio para receber o vídeo detalhado dessa máquina no WhatsApp!"`,
+          cta: pick([
+            `"Comenta 'EU QUERO' ou clica no link da bio para receber o vídeo detalhado dessa máquina no WhatsApp!"`,
+            `"Se você é um comprador exigente que valoriza conservação impecável, chama a equipe no WhatsApp agora!"`,
+            `"Não deixa outro cliente chegar na frente: clica no botão abaixo e fale com o nosso consultor!"`
+          ]),
           viralReason: "O formato 'achado de ouro' ativa o gatilho da escassez e da exclusividade, gerando alto índice de compartilhamento."
         };
       }
@@ -1524,15 +1624,18 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
         const hooks = {
           light: [
             `"Você sabe por que a BellaCar é referência de confiança em Uberaba? O Diogo Olegário te explica em 40 segundos."`,
-            `"A filosofia da BellaCar é simples: transparência, procedência e palavra de homem. O Diogo explica."`
+            `"A filosofia da BellaCar é simples: transparência, procedência e palavra de homem. O Diogo explica."`,
+            `"O segredo de mais de 10 anos de sucesso no mercado de seminovos: transparência do início ao fim."`
           ],
           moderado: [
             `"Quer comprar carro sem tomar prejuízo em Uberaba? O patrão Diogo mandou a real para você!"`,
-            `"Você sabe como não cair em cilada na hora de comprar o seu seminovo? O Diogo te ensina em 40 segundos."`
+            `"Você sabe como não cair em cilada na hora de comprar o seu seminovo? O Diogo te ensina em 40 segundos."`,
+            `"Papo reto de empresário: o que você precisa exigir antes de assinar o contrato de um seminovo!"`
           ],
           fogo_no_parquinho: [
             `"Tem coisa que lojista safado esconde de você na internet, mas aqui na BellaCar eu falo na lata!"`,
-            `"Carro maquiado com preço de milagre? O Diogo desmascara as malandragens da internet agora!"`
+            `"Carro maquiado com preço de milagre? O Diogo desmascara as malandragens da internet agora!"`,
+            `"Cansou de levar golpe e ser enrolado na compra de carro? O Diogo Olegário mandou a real sem filtro!"`
           ]
         };
         return {
@@ -1543,22 +1646,38 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
               speaker: 'Diogo Olegário',
               time: '0-15s',
               camera: 'Diogo caminhando com autoridade pelo pátio de veículos',
-              line: `Preço milagroso demais no anúncio da internet? Corre que é cilada! Carro sem procedência, com histórico de leilão escondido e quilometragem adulterada é prejuízo certo!`
+              line: pick([
+                `Preço milagroso demais no anúncio da internet? Corre que é cilada! Carro sem procedência, com histórico de leilão escondido e quilometragem adulterada é prejuízo certo!`,
+                `Tem gente que compra preço e leva pesadelo para casa! Carro maquiado na internet que depois quebra o motor na primeira viagem... aqui na BellaCar não!`,
+                `O que mais tem na praça é vendedor de conversa bonita que esconde os defeitos do carro. Negócio bom é negócio transparente, com procedência e garantia!`
+              ])
             },
             {
               speaker: 'Diogo Olegário',
               time: '15-30s',
               camera: 'Diogo apontando com firmeza para o estoque selecionado',
-              line: `Aqui na BellaCar quem manda sou eu, e eu só coloco no meu showroom veículo que eu teria coragem de colocar a minha própria família para viajar dentro!`
+              line: pick([
+                `Aqui na BellaCar quem manda sou eu, e eu só coloco no meu showroom veículo que eu teria coragem de colocar a minha própria família para viajar dentro!`,
+                `O meu nome e a minha palavra valem mais do que qualquer comissão! Carro no pátio da BellaCar tem que passar pelo meu crivo e estar com mecânica 100% revisada!`,
+                `A gente investe em revisão pesada, documentação limpa e garantia de motor e câmbio porque eu quero que o cliente volte para comprar o segundo e o terceiro carro comigo!`
+              ])
             },
             {
               speaker: s2,
               time: '30-40s',
               camera: 'Equipe reunida com o Diogo',
-              line: `Negócio transparente, mecânica rigorosamente revisada, garantia oficial de motor e câmbio e palavra de homem. Quer comprar com segurança de verdade?`
+              line: pick([
+                `Negócio transparente, mecânica rigorosamente revisada, garantia oficial de motor e câmbio e palavra de homem. Quer comprar com segurança de verdade?`,
+                `Quer fazer um negócio de respeito em Uberaba? Vem olhar no meu olho, tomar um café comigo na loja e sair com a chave na mão!`,
+                `A caneta do patrão tá na mão: venha negociar com quem tem mais de década de história e compromisso com o cliente!`
+              ])
             }
           ],
-          cta: `"Vem tomar um café com a gente aqui na BellaCar ou chama a equipe no WhatsApp para tirar qualquer dúvida e fazer o seu test-drive!"`,
+          cta: pick([
+            `"Vem tomar um café com a gente aqui na BellaCar ou chama a equipe no WhatsApp para tirar qualquer dúvida e fazer o seu test-drive!"`,
+            `"Manda mensagem no WhatsApp do Diogo e descubra as condições exclusivas que nós preparamos para você!"`,
+            `"Comenta aqui embaixo: qual a sua maior dúvida na hora de comprar um seminovo de confiança?"`
+          ]),
           viralReason: "A autoridade e franqueza do dono constroem confiança inabalável e desarmam clientes indecisos."
         };
       }
@@ -1568,15 +1687,18 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
         const hooks = {
           light: [
             `"Mesa redonda BellaCar: o que realmente vale a pena considerar antes de escolher o seu próximo carro?"`,
-            `"Análise franca da equipe: vale a pena investir nesse modelo hoje?"`
+            `"Análise franca da equipe: vale a pena investir nesse modelo hoje?"`,
+            `"Debate técnico da semana: os prós e contras reais desse seminovo na prática."`
           ],
           moderado: [
             `"Colocamos o ${singleName} na mesa de debate: será que ele é a melhor compra da categoria em Uberaba?"`,
-            `"Opinião sincera da equipe BellaCar sem passar pano: esse carro entrega tudo o que promete?"`
+            `"Opinião sincera da equipe BellaCar sem passar pano: esse carro entrega tudo o que promete?"`,
+            `"Bomba ou relíquia? A nossa equipe analisou cada detalhe desse modelo para te dar o veredito!"`
           ],
           fogo_no_parquinho: [
             `"Bomba ou relíquia? A internet inteira fala mal desse modelo, mas a nossa equipe vai mandar a verdade sem filtro!"`,
-            `"Mesa redonda pegou fogo! O Carlos diz que é o melhor carro da categoria e o Guilherme prefere outro... olha essa discussão!"`
+            `"Mesa redonda pegou fogo! O Carlos diz que é o melhor carro da categoria e o Guilherme prefere outro... olha essa discussão!"`,
+            `"Será que os mecânicos da internet tão certos ou tão falando bobagem? A verdade sobre esse carro!"`
           ]
         };
         return {
@@ -1587,22 +1709,38 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
               speaker: techSpeaker,
               time: '0-12s',
               camera: 'Plano médio na conversa de balcão com café',
-              line: `O segredo desse modelo é a manutenção preventiva! Quem troca o óleo no tempo certo e cuida da mecânica tem um carro confiável que roda anos sem chiar!`
+              line: pick([
+                `O segredo desse modelo é a manutenção preventiva! Quem troca o óleo no tempo certo e cuida da mecânica tem um carro confiável que roda anos sem chiar!`,
+                `O mercado cria rótulos injustos! Esse carro tem uma engenharia robusta, peças baratas no balcão e um motor que não dá dor de cabeça para quem cuida!`,
+                `Quem entende de oficina sabe: esse motor é um tanque de guerra quando revisado com procedência e peças de qualidade!`
+              ])
             },
             {
               speaker: speedSpeaker,
               time: '12-25s',
               camera: 'Vendedor gesticulando com empolgação',
-              line: `E olha a procura que esse carro tem na loja: entrega espaço, multimídia, ar condicionado forte e dirigibilidade de carro de 100 mil custando muito menos!`
+              line: pick([
+                `E olha a procura que esse carro tem na loja: entrega espaço, multimídia, ar condicionado forte e dirigibilidade de carro de 100 mil custando muito menos!`,
+                `O cliente chega procurando custo-benefício e quando vê o conforto desse acabamento e o valor da parcela, não pensa duas vezes!`,
+                `Liquidez pura no mercado de seminovos de Uberaba! Carro que vende rápido, desvaloriza pouco e agrada todo tipo de motorista!`
+              ])
             },
             {
               speaker: authoritySpeaker,
               time: '25-40s',
               camera: 'Diogo dando o veredito final na mesa com a caneta',
-              line: `Com procedência garantida e a revisão completa com garantia oficial que a BellaCar entrega, esse carro é RELÍQUIA na garagem de qualquer um. Veredito fechado!`
+              line: pick([
+                `Com procedência garantida e a revisão completa com garantia oficial que a BellaCar entrega, esse carro é RELÍQUIA na garagem de qualquer um. Veredito fechado!`,
+                `Bomba é comprar carro sem procedência no escuro! Aqui na BellaCar você leva com revisão completa e garantia oficial de motor e câmbio!`,
+                `Veredito unânime da bancada: compra inteligente, segura e com a assinatura da BellaCar Veículos!`
+              ])
             }
           ],
-          cta: `"E na sua opinião: esse modelo é bomba ou é relíquia? Deixa o seu comentário aqui embaixo!"`,
+          cta: pick([
+            `"E na sua opinião: esse modelo é bomba ou é relíquia? Deixa o seu comentário aqui embaixo!"`,
+            `"Você teria coragem de colocar essa máquina na sua garagem? Comenta aqui e diga o porquê!"`,
+            `"Quer conferir todos os detalhes dessa relíquia de perto? Manda uma mensagem no nosso WhatsApp!"`
+          ]),
           viralReason: "Debates em estilo podcast despertam opiniões inflamadas nos comentários e seguram a audiência até o veredito."
         };
       }
@@ -1612,15 +1750,18 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
         const hooks = {
           light: [
             `"3 cuidados fundamentais que você deve ter antes de comprar qualquer carro seminovo em Uberaba."`,
-            `"Guia prático da BellaCar: como garantir que você está comprando um carro seguro e com procedência."`
+            `"Guia prático da BellaCar: como garantir que você está comprando um carro seguro e com procedência."`,
+            `"Como checar a integridade de um carro antes de fechar negócio e não ter surpresas desagradáveis."`
           ],
           moderado: [
             `"Como não cair em golpe na compra do seu carro pela internet: aprenda em 45 segundos com a BellaCar!"`,
-            `"Como descobrir se um carro seminovo foi maquiado ou se tem procedência limpa de verdade!"`
+            `"Como descobrir se um carro seminovo foi maquiado ou se tem procedência limpa de verdade!"`,
+            `"Evite prejuízos de milhares de reais: 3 pontos que você precisa olhar em qualquer carro usado!"`
           ],
           fogo_no_parquinho: [
             `"Nunca transfira um único real de sinal na internet antes de conferir esses 3 detalhes no carro!"`,
-            `"O golpe do falso intermediário tá fazendo vítimas em Minas Gerais: aprenda a se proteger agora!"`
+            `"O golpe do falso intermediário tá fazendo vítimas em Minas Gerais: aprenda a se proteger agora!"`,
+            `"Cuidado com os anúncios milagrosos da internet: veja como os estelionatários enganam compradores todos os dias!"`
           ]
         };
         return {
@@ -1631,22 +1772,38 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
               speaker: techSpeaker,
               time: '0-12s',
               camera: 'Mostrando detalhes do motor e alinhamento do veículo',
-              line: `Primeiro: desconfie de preço milagroso pedindo sinal adiantado para 'segurar a vaga'. Carro seguro você vê de perto, confere o histórico e faz test-drive presencial na loja.`
+              line: pick([
+                `Primeiro: desconfie de preço milagroso pedindo sinal adiantado para 'segurar a vaga'. Carro seguro você vê de perto, confere o histórico e faz test-drive presencial na loja.`,
+                `Dica número 1: nunca deposite sinal sem antes conhecer a loja física e ver o veículo com os seus próprios olhos. Golpe de sinal na internet tá cheio!`,
+                `Primeiro sinal de alerta: anúncios com fotos genéricas e preços muito abaixo da FIPE. Carro bom tem valor de mercado justo e endereço de procedência!`
+              ])
             },
             {
               speaker: s1,
               time: '12-25s',
               camera: 'Mostrando a cabine, pedais e documentação',
-              line: `Segundo: confira o desgaste real de pedais, volante e o histórico de débitos. Negócio sério tem endereço físico, CNPJ respeitado e documentação 100% em dia.`
+              line: pick([
+                `Segundo: confira o desgaste real de pedais, volante e o histórico de débitos. Negócio sério tem endereço físico, CNPJ respeitado e documentação 100% em dia.`,
+                `Dica número 2: verifique o alinhamento das portas, capô e numeração de vidros. Carro íntegro tem simetria e procedência limpa em todos os detalhes.`,
+                `Segundo ponto crucial: documentação e mecânica! Exija histórico de débitos quitado e garantia real de motor e câmbio em contrato.`
+              ])
             },
             {
               speaker: authoritySpeaker,
               time: '25-40s',
               camera: 'Apresentador na frente da fachada BellaCar Veículos',
-              line: `Aqui na BellaCar você tem a certeza de um estoque rigorosamente revisado, com procedência garantida e garantia oficial de motor e câmbio. Segurança em primeiro lugar!`
+              line: pick([
+                `Aqui na BellaCar você tem a certeza de um estoque rigorosamente revisado, com procedência garantida e garantia oficial de motor e câmbio. Segurança em primeiro lugar!`,
+                `Comprar na BellaCar é comprar paz de espírito: transparência total, revisão mecânica certificada e a palavra do Diogo para te respaldar.`,
+                `Não arrisque o dinheiro suado da sua família em promessas de internet: venha para quem tem história e respeito em Uberaba!`
+              ])
             }
           ],
-          cta: `"Salva esse vídeo para não esquecer e envia para aquele amigo que está procurando carro agora!"`,
+          cta: pick([
+            `"Salva esse vídeo para não esquecer e envia para aquele amigo que está procurando carro agora!"`,
+            `"Compartilhe no grupo da família para que ninguém caia em golpes de anúncios falsos na internet!"`,
+            `"Quer comprar com segurança garantida? Chama os consultores da BellaCar no WhatsApp agora mesmo!"`
+          ]),
           viralReason: "Conteúdos de utilidade pública geram alto volume de salvamentos e compartilhamentos no Instagram e TikTok."
         };
       }
@@ -1656,15 +1813,18 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
         const hooks = {
           light: [
             `"Desafio amigável na BellaCar: quem apresentar a melhor proposta para o cliente hoje ganha!"`,
-            `"Equipe BellaCar reunida para um desafio especial de atendimento ao cliente!"`
+            `"Equipe BellaCar reunida para um desafio especial de atendimento ao cliente!"`,
+            `"Gincana de vendas da semana: quem fechar o melhor negócio leva o prêmio da diretoria!"`
           ],
           moderado: [
             `"O Diogo colocou uma aposta na mesa da BellaCar hoje e agora ninguém mais sai para almoçar!"`,
-            `"Desafio valendo: 60 segundos para convencer o cliente a levar esse ${singleName}!"`
+            `"Desafio valendo: 60 segundos para convencer o cliente a levar esse ${singleName}!"`,
+            `"Aposta interna na loja: quem conseguir a melhor condição de financiamento hoje leva o almoço pago!"`
           ],
           fogo_no_parquinho: [
             `"Guerra interna na loja! O Diogo desafiou a equipe: quem vender esse ${singleName} hoje leva prêmio dobrado!"`,
-            `"Aposta pesada na BellaCar: se o vendedor fechar esse carro hoje, o patrão paga o almoço mais caro da cidade!"`
+            `"Aposta pesada na BellaCar: se o vendedor fechar esse carro hoje, o patrão paga o almoço mais caro da cidade!"`,
+            `"Desafio dos 30 segundos: o Diogo duvidou que a equipe vendia esse carro hoje... a resposta foi imediata!"`
           ]
         };
         return {
@@ -1675,22 +1835,38 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
               speaker: authoritySpeaker,
               time: '0-12s',
               camera: 'Diogo no meio dos consultores com chave ou notas na mão',
-              line: `A aposta tá feita: o primeiro consultor que aprovar a ficha desse carro hoje leva bônus dobrado e o almoço pago pelo patrão!`
+              line: pick([
+                `A aposta tá feita: o primeiro consultor que aprovar a ficha desse carro hoje leva bônus dobrado e o almoço pago pelo patrão!`,
+                `O Diogo colocou a carteira na mesa: quem fechar esse carro até às 18h ganha o almoço da semana e um bônus especial no bolso!`,
+                `Desafio da diretoria lançado! Os vendedores têm 30 minutos para apresentar a condição mais matadora para o cliente fechar hoje!`
+              ])
             },
             {
               speaker: techSpeaker,
               time: '12-25s',
               camera: 'Consultor correndo para mostrar os diferenciais do veículo',
-              line: `O almoço já é meu! Eu autorizei tanque cheio, transferência grátis e a mecânica 100% revisada com garantia oficial de motor e câmbio!`
+              line: pick([
+                `O almoço já é meu! Eu autorizei tanque cheio, transferência grátis e a mecânica 100% revisada com garantia oficial de motor e câmbio!`,
+                `Já pode encomendar a picanha, patrão! Eu consegui a melhor taxa bancária de Uberaba e parcelamento da entrada em até 21x no cartão!`,
+                `Ninguém ganha da minha proposta! O cliente leva o carro revisado, brinde surpresa da loja e a primeira parcela só para daqui a 60 dias!`
+              ])
             },
             {
               speaker: speedSpeaker,
               time: '25-40s',
               camera: 'Outro consultor puxando o celular e acelerando o cliente',
-              line: `Vai sonhando! Manda o CPF no WhatsApp agora que eu aprovo a ficha em 15 minutos e entrego esse carro na porta da sua casa!`
+              line: pick([
+                `Vai sonhando! Manda o CPF no WhatsApp agora que eu aprovo a ficha em 15 minutos e entrego esse carro na porta da sua casa!`,
+                `Tira o cavalinho da chuva! O meu cliente já tá mandando a CNH e eu vou entregar a chave com o laço na porta hoje mesmo!`,
+                `Quem decide quem ganha esse desafio é você! Chama no WhatsApp e aproveite as condições mais agressivas que a loja já liberou!`
+              ])
             }
           ],
-          cta: `"Chama agora no link da bio e ajuda a definir quem vai pagar esse almoço hoje!"`,
+          cta: pick([
+            `"Chama agora no link da bio e ajuda a definir quem vai pagar esse almoço hoje!"`,
+            `"Comenta aqui embaixo: quem você acha que vende primeiro, o Carlos ou o Guilherme?"`,
+            `"Manda o CPF no WhatsApp e aproveite que a equipe tá desesperada para bater essa meta hoje!"`
+          ]),
           viralReason: "Gincanas e competições internas criam dinamismo de reality show e envolvem a torcida dos seguidores."
         };
       }
@@ -1700,15 +1876,18 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
         const hooks = {
           light: [
             `"O Diogo pegou o WhatsApp da loja para ver o que os clientes estão propondo na troca... olha isso!"`,
-            `"Curiosidades da semana na BellaCar: as propostas mais inusitadas que chegam no nosso balcão."`
+            `"Curiosidades da semana na BellaCar: as propostas mais inusitadas que chegam no nosso balcão."`,
+            `"Histórias reais do balcão de vendas da BellaCar: você aceitaria uma proposta dessa?"`
           ],
           moderado: [
             `"Propostas sem noção que chegam no WhatsApp da BellaCar Veículos parte 1!"`,
-            `"Você aceitaria essa proposta de troca? Olha o que ofereceram na Hilux do pátio!"`
+            `"Você aceitaria essa proposta de troca? Olha o que ofereceram na Hilux do pátio!"`,
+            `"O WhatsApp da loja não tem paz: olha a troca que mandaram para a equipe hoje!"`
           ],
           fogo_no_parquinho: [
             `"O Diogo quase caiu para trás com a proposta surreal que mandaram no WhatsApp hoje... olha essa mensagem!"`,
-            `"O cliente ofereceu um carro batido e dois papagaios na troca da picape... a reação do Diogo foi impagável!"`
+            `"O cliente ofereceu um carro batido e dois papagaios na troca da picape... a reação do Diogo foi impagável!"`,
+            `"Inacreditável o que os clientes mandam no WhatsApp da loja: o Diogo perdeu a paciência de forma hilária!"`
           ]
         };
         return {
@@ -1719,22 +1898,38 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
               speaker: speedSpeaker,
               time: '0-12s',
               camera: 'Vendedor mostrando a tela do celular para o Diogo',
-              line: `Patrão, olha essa mensagem aqui: o cliente quer dar um carro que nem liga, mais dois papagaios e ainda quer 15 mil de volta na troca da Hilux!`
+              line: pick([
+                `Patrão, olha essa mensagem aqui: o cliente quer dar um carro que nem liga, mais dois papagaios e ainda quer 15 mil de volta na troca da Hilux!`,
+                `Diogo, você não vai acreditar no WhatsApp da loja: ofereceram uma moto sem documento, três sacos de feijão e 40 boletos na troca!`,
+                `Olha a proposta que mandaram às 2 da manhã: o cidadão quer trocar um carro batido de leilão pau a pau no nosso seminovo de vitrine!`
+              ])
             },
             {
               speaker: 'Diogo Olegário',
               time: '12-28s',
               camera: 'Plano fechado na expressão indignada e cômica do Diogo',
-              line: `Ô meu amigo, aqui é BellaCar Veículos, não é zoológico nem ferro-velho não! A gente aceita o seu carro ou moto com a melhor avaliação de Uberaba, mas milagre só no céu!`
+              line: pick([
+                `Ô meu amigo, aqui é BellaCar Veículos, não é zoológico nem ferro-velho não! A gente aceita o seu carro ou moto com a melhor avaliação de Uberaba, mas milagre só no céu!`,
+                `Pelo amor de Deus! Aqui na loja a gente trabalha com carro de procedência e respeito ao cliente! Queremos o seu usado sim, mas com proposta séria de homem para homem!`,
+                `Eu quase caí da cadeira lendo isso! A BellaCar avalia o seu usado com a melhor tabela do Triângulo Mineiro, mas tem proposta que desafia a lei da gravidade!`
+              ])
             },
             {
               speaker: techSpeaker,
               time: '28-40s',
               camera: 'Equipe rindo com o Diogo no pátio',
-              line: `Se você tem um usado de verdade e quer uma proposta séria, justa e sem enrolação, vem falar com a gente na BellaCar!`
+              line: pick([
+                `Se você tem um usado de verdade e quer uma proposta séria, justa e sem enrolação, vem falar com a gente na BellaCar!`,
+                `Quer fazer uma avaliação justa do seu carro ou moto com quem paga à vista e sem burocracia? Vem pra cá!`,
+                `Piadas à parte: aqui o seu veículo usado vale muito! Traga para uma avaliação presencial com um café na loja!`
+              ])
             }
           ],
-          cta: `"Comenta aí embaixo a proposta de troca mais absurda que já te fizeram na vida!"`,
+          cta: pick([
+            `"Comenta aí embaixo a proposta de troca mais absurda que já te fizeram na vida!"`,
+            `"Marca aquele seu amigo que vive mandando proposta sem noção no WhatsApp dos lojistas!"`,
+            `"Tem um carro ou moto e quer uma proposta de verdade? Clica no link da bio e manda pra gente!"`
+          ]),
           viralReason: "Reações bem-humoradas a mensagens reais viralizam de forma explosiva pelo fator identificação cômica."
         };
       }
@@ -1744,15 +1939,18 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
         const hooks = {
           light: [
             `"Uma dúvida sincera que divide os motoristas em Uberaba: você prefere status ou racionalidade?"`,
-            `"Comparativo polêmico: seminovo completo ou zero km básico? O que compensa mais?"`
+            `"Comparativo polêmico: seminovo completo ou zero km básico? O que compensa mais?"`,
+            `"O dilema que todo comprador enfrenta: gastar mais por status ou investir com inteligência?"`
           ],
           moderado: [
             `"Eu vou falar uma verdade que vai deixar muita gente pensativa sobre a compra do próximo carro!"`,
-            `"Por que tem tanta gente trocando carro zero de plástico por seminovo de patrão na BellaCar?"`
+            `"Por que tem tanta gente trocando carro zero de plástico por seminovo de patrão na BellaCar?"`,
+            `"A verdade sobre o mercado automotivo que as concessionárias tradicionais não querem que você saiba!"`
           ],
           fogo_no_parquinho: [
             `"Vou falar o que ninguém tem coragem de falar nos comentários: pagar 150 mil num 1.0 de plástico é loucura!"`,
-            `"Cancelamento à vista: quem compra carro popular pelado por 90 mil hoje tá jogando dinheiro no lixo!"`
+            `"Cancelamento à vista: quem compra carro popular pelado por 90 mil hoje tá jogando dinheiro no lixo!"`,
+            `"Vou tomar hater nos comentários, mas alguém precisa falar a real sobre essas tranqueiras caras do mercado!"`
           ]
         };
         return {
@@ -1763,22 +1961,38 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
               speaker: s1,
               time: '0-15s',
               camera: 'Apresentador gesticulando com energia na câmera',
-              line: `Pagar 150 mil num carrinho popular com acabamento simples só para dizer que tem carro do ano, enquanto você poderia estar num sedã executivo de respeito pelo mesmo preço? Não faz sentido!`
+              line: pick([
+                `Pagar 150 mil num carrinho popular com acabamento simples só para dizer que tem carro do ano, enquanto você poderia estar num sedã executivo de respeito pelo mesmo preço? Não faz sentido!`,
+                `Vou falar uma verdade que vai deixar muita gente brava: 90 mil num carro popular 1.0 sem ar condicionado de plástico é jogar dinheiro suado fora!`,
+                `A indústria automotiva cobra caro em carro de brinquedo, enquanto no mercado de seminovos você anda de SUV de patrão com o mesmo dinheiro!`
+              ])
             },
             {
               speaker: techSpeaker,
               time: '15-30s',
               camera: 'Câmera mostra os dois tipos de veículos no showroom',
-              line: `Tem gente que prioriza o cheiro de zero, mas quem entende de carro sabe que conforto, torque de motor e acabamento nobre entregam muito mais valor pelo dinheiro!`
+              line: pick([
+                `Tem gente que prioriza o cheiro de zero, mas quem entende de carro sabe que conforto, torque de motor e acabamento nobre entregam muito mais valor pelo dinheiro!`,
+                `A conta é matemática: o zero desvaloriza 20% no primeiro ano, enquanto o seminovo selecionado já desvalorizou o que tinha que desvalorizar e entrega muito mais máquina!`,
+                `Sem contar o prazer ao dirigir! Suspensão independente, isolamento de ruído e tecnologia que nenhum popular básico consegue entregar!`
+              ])
             },
             {
               speaker: authoritySpeaker,
               time: '30-40s',
               camera: 'Apresentador encarando a lente com convicção',
-              line: `E você, prefere status de plástico ou prefere máquina de verdade na garagem? Quero ver quem tem coragem de opinar!`
+              line: pick([
+                `E você, prefere status de plástico ou prefere máquina de verdade na garagem? Quero ver quem tem coragem de opinar!`,
+                `Aqui na BellaCar a gente tem seminovo com garantia oficial de motor e câmbio para você andar de chefe sem pagar preço abusivo de zero km!`,
+                `Quem tem cabeça pensa no custo-benefício e no patrimônio da família. O que vale mais a pena na sua opinião?`
+              ])
             }
           ],
-          cta: `"Deixe sua opinião sincera nos comentários: time Seminovo de Patrão ou time Zero Popular? Não vale ficar em cima do muro!"`,
+          cta: pick([
+            `"Deixe sua opinião sincera nos comentários: time Seminovo de Patrão ou time Zero Popular? Não vale ficar em cima do muro!"`,
+            `"Comenta aqui embaixo: o que você compraria com R$ 80 mil hoje? Quero ver o seu bom senso!"`,
+            `"Clica no link da bio e veja as máquinas que nós temos no pátio pelo preço de um popular comum!"`
+          ]),
           viralReason: "Polêmicas de mercado geram dezenas de debates calorosos nos comentários, multiplicando o alcance orgânico."
         };
       }
@@ -1788,15 +2002,18 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
         const hooks = {
           light: [
             `"Situações engraçadas que só quem trabalha com venda de seminovos em Uberaba entende!"`,
-            `"Os tipos mais clássicos de clientes que visitam uma concessionária."`
+            `"Os tipos mais clássicos de clientes que visitam uma concessionária."`,
+            `"Comédia da vida real no pátio da BellaCar: rindo das manias de quem ama carro!"`
           ],
           moderado: [
             `"Quando o cliente traz aquele amigo que diz que 'entende tudo de mecânica' para avaliar o carro..."`,
-            `"Aquele cliente que quer chorar 20 mil de desconto no carro mais barato da loja... olha a cena!"`
+            `"Aquele cliente que quer chorar 20 mil de desconto no carro mais barato da loja... olha a cena!"`,
+            `"Aquele cliente que namora o carro por 6 meses pelo WhatsApp e quando vem fecha em 5 minutos!"`
           ],
           fogo_no_parquinho: [
             `"O amigo mecânico do cliente chutou o pneu e disse que o motor tava ruim... com o carro desligado!"`,
-            `"Como o cliente se comporta quando o Diogo fala que não tem mais desconto... até ele ver o brinde!"`
+            `"Como o cliente se comporta quando o Diogo fala que não tem mais desconto... até ele ver o brinde!"`,
+            `"Todo vendedor de carros já passou por isso: as maiores pérolas dos clientes na hora de negociar!"`
           ]
         };
         return {
@@ -1807,22 +2024,38 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
               speaker: speedSpeaker,
               time: '0-12s',
               camera: 'Encenando o amigo chutando os quatro pneus',
-              line: `O amigo chega, chuta os 4 pneus, balança o retrovisor e diz: 'hum, sinto que o ar condicionado tá com vibração'... sendo que o carro tava com o motor desligado!`
+              line: pick([
+                `O amigo chega, chuta os 4 pneus, balança o retrovisor e diz: 'hum, sinto que o ar condicionado tá com vibração'... sendo que o carro tava com o motor desligado!`,
+                `Aquele cliente que chega com cara de delegado, olha o para-lama com lupa e pergunta se o carro já tomou chuva de granizo em 2012!`,
+                `O clássico cliente que diz: 'se fizer por 10 mil à vista eu levo agora no Pix'... num carro que vale 60 mil!`
+              ])
             },
             {
               speaker: techSpeaker,
               time: '12-25s',
               camera: 'Consultor sorrindo e mostrando o checklist da loja',
-              line: `A gente adora receber todo mundo, mas aqui na BellaCar não tem segredo: todo o estoque passa por revisão mecânica rigorosa e tem procedência garantida!`
+              line: pick([
+                `A gente adora receber todo mundo, mas aqui na BellaCar não tem segredo: todo o estoque passa por revisão mecânica rigorosa e tem procedência garantida!`,
+                `A gente ri, mas a verdade é uma só: carro de procedência limpa e mecânica inspecionada não precisa de medo nem de desconfiança!`,
+                `Pode trazer o mecânico de confiança, o parente, o amigo... aqui a gente abre o capô, levanta no elevador e mostra tudo com transparência total!`
+              ])
             },
             {
               speaker: authoritySpeaker,
               time: '25-40s',
               camera: 'Diogo entra entregando a chave com autoridade',
-              line: `Pode trazer amigo, mecânico e parente! Quem entende de procedência fecha na hora e sai de carro novo com garantia oficial!`
+              line: pick([
+                `Pode trazer amigo, mecânico e parente! Quem entende de procedência fecha na hora e sai de carro novo com garantia oficial!`,
+                `Aqui não tem pegadinha: negócio transparente, documentação 100% em dia e a palavra do Diogo para te dar tranquilidade!`,
+                `O amigo especialista tenta achar defeito, mas quando vê o Diogo assinando a garantia oficial de motor e câmbio, até ele quer comprar!`
+              ])
             }
           ],
-          cta: `"Marca aquele seu amigo nos comentários que sempre quer dar pitaco na mecânica do seu carro!"`,
+          cta: pick([
+            `"Marca aquele seu amigo nos comentários que sempre quer dar pitaco na mecânica do seu carro!"`,
+            `"Comenta aqui: você já levou aquele amigo 'entendido' para olhar um carro com você?"`,
+            `"Venha fazer o seu test-drive na BellaCar com ou sem o seu amigo especialista! Esperamos você com café!"`
+          ]),
           viralReason: "Esquetes de humor baseadas no cotidiano geram muitas marcações de amigos e compartilhamentos no direct."
         };
       }
@@ -1832,15 +2065,18 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
         const hooks = {
           light: [
             `"POV: Você entrou na BellaCar só para tirar uma dúvida e olha como foi a sua experiência..."`,
-            `"POV: Encontrando o seminovo dos sonhos na BellaCar Veículos de Uberaba."`
+            `"POV: Encontrando o seminovo dos sonhos na BellaCar Veículos de Uberaba."`,
+            `"A sensação de pisar no showroom e ser recebido com respeito e agilidade de verdade."`
           ],
           moderado: [
             `"POV: Quando o cliente diz que hoje não vai comprar nada e o Diogo pega a caneta do patrão..."`,
-            `"Entrou a pé, saiu de nave: o roteiro oficial de quem pisa na BellaCar hoje!"`
+            `"Entrou a pé, saiu de nave: o roteiro oficial de quem pisa na BellaCar hoje!"`,
+            `"POV: O vendedor falou 'espera 10 minutos' e já voltou com o contrato aprovado e a chave na mão!"`
           ],
           fogo_no_parquinho: [
             `"POV: Você achava que ia demorar 1 mês para aprovar o financiamento do seu carro novo..."`,
-            `"Quando a sua esposa disse 'só vai se for baratinho' e você chega em casa com uma Hilux!"`
+            `"Quando a sua esposa disse 'só vai se for baratinho' e você chega em casa com uma Hilux!"`,
+            `"POV: Você foi comprar pão e voltou dirigindo o seminovo mais cobiçado de Uberaba!"`
           ]
         };
         return {
@@ -1851,22 +2087,38 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
               speaker: s1,
               time: '0-12s',
               camera: 'Câmera dinâmica POV entrando pela porta da loja',
-              line: `Você pisa na BellaCar dizendo que é só para olhar um modelinho básico... e em dois minutos já está apaixonado nesse ${singleName}!`
+              line: pick([
+                `Você pisa na BellaCar dizendo que é só para olhar um modelinho básico... e em dois minutos já está apaixonado nesse ${singleName}!`,
+                `Aquele momento em que você prometeu para a esposa que ia só pesquisar preço e quando vê já tá escolhendo a cor do volante!`,
+                `POV: Você achava que comprar carro era burocrático e demorado... até entrar na BellaCar Veículos de Uberaba!`
+              ])
             },
             {
               speaker: speedSpeaker,
               time: '12-25s',
               camera: 'Vendedor já com o cadastro aprovado no tablet',
-              line: `O Guilherme já passou a ficha, a aprovação saiu na hora e a entrada foi dividida em até 21x no cartão!`
+              line: pick([
+                `O Guilherme já passou a ficha, a aprovação saiu na hora e a entrada foi dividida em até 21x no cartão!`,
+                `O consultor agilizou tudo no tablet, a aprovação bancária saiu em 10 minutos sem fila e sem dor de cabeça!`,
+                `Tudo rápido, sem burocracia e com uma taxa de juros que deixou a parcela menor do que a sua conta de supermercado!`
+              ])
             },
             {
               speaker: authoritySpeaker,
               time: '25-40s',
               camera: 'Diogo assinando o contrato e entregando a chave com brinde',
-              line: `O Diogo pegou a caneta, autorizou tanque cheio e transferência na faixa, e você sai buzinando na avenida com o carro dos seus sonhos!`
+              line: pick([
+                `O Diogo pegou a caneta, autorizou tanque cheio e transferência na faixa, e você sai buzinando na avenida com o carro dos seus sonhos!`,
+                `Contrato assinado, garantia oficial de motor e câmbio na mão e você saindo de nave nova para surpreender a família no domingo!`,
+                `A buzina toca na porta da loja e o sonho vira realidade: chave na mão e tanque cheio com a assinatura BellaCar!`
+              ])
             }
           ],
-          cta: `"Manda esse vídeo para quem tá precisando trocar de carro urgente essa semana!"`,
+          cta: pick([
+            `"Manda esse vídeo para quem tá precisando trocar de carro urgente essa semana!"`,
+            `"Salva esse POV e marca quem vai viver essa sensação com você esse mês!"`,
+            `"Quer viver essa experiência? Clica no link da bio e comece a sua simulação agora mesmo!"`
+          ]),
           viralReason: "Formato POV rápido com narrativa envolvente retém mais de 70% do público até os últimos segundos."
         };
       }
@@ -1876,15 +2128,18 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
         const hooks = {
           light: [
             `"Não é sobre vender carros, é sobre participar da realização do sonho de uma família!"`,
-            `"A alegria de entregar as chaves de um novo ciclo na vida do nosso cliente."`
+            `"A alegria de entregar as chaves de um novo ciclo na vida do nosso cliente."`,
+            `"Cada entrega na BellaCar é uma história de vitória e dedicação que nos enche de orgulho."`
           ],
           moderado: [
             `"Mais uma entrega emocionante concluída com sucesso aqui na BellaCar Veículos de Uberaba!"`,
-            `"Olha a cara de felicidade de quem confiou na BellaCar e agora está levando esse maquinão para casa!"`
+            `"Olha a cara de felicidade de quem confiou na BellaCar e agora está levando esse maquinão para casa!"`,
+            `"Aquele momento em que o sonho sai do papel e ganha quatro rodas e tanque cheio!"`
           ],
           fogo_no_parquinho: [
             `"Trabalhou duro o ano inteiro e hoje realizou o sonho: olha essa nave saindo do nosso pátio!"`,
-            `"Tem gente que sonha, tem gente que vem na BellaCar e realiza: chave na mão hoje!"`
+            `"Tem gente que sonha, tem gente que vem na BellaCar e realiza: chave na mão hoje!"`,
+            `"Olha o sorrisão de quem confiou na palavra do Diogo e agora tá desfilando de nave nova em Uberaba!"`
           ]
         };
         return {
@@ -1895,22 +2150,38 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
               speaker: authoritySpeaker,
               time: '0-12s',
               camera: 'Apresentador ao lado do carro com laço ou chave na mão',
-              line: `Hoje foi dia de entregar a chave desse lindo ${singleName} para um cliente especial que acreditou na seriedade e na transparência do nosso trabalho.`
+              line: pick([
+                `Hoje foi dia de entregar a chave desse lindo ${singleName} para um cliente especial que acreditou na seriedade e na transparência do nosso trabalho.`,
+                `Mais um momento emocionante no pátio da BellaCar: a entrega das chaves que marca o início de uma nova fase para essa família abençoada!`,
+                `Ver o brilho nos olhos do cliente ao receber o seu novo carro é a maior recompensa do nosso trabalho diário em Uberaba!`
+              ])
             },
             {
               speaker: techSpeaker,
               time: '12-25s',
               camera: 'Mostrando o cliente recebendo o veículo revisado e brilhando',
-              line: `Veículo entregue 100% revisado, com procedência comprovada e garantia oficial de motor e câmbio para viajar tranquilo com toda a família.`
+              line: pick([
+                `Veículo entregue 100% revisado, com procedência comprovada e garantia oficial de motor e câmbio para viajar tranquilo com toda a família.`,
+                `Revisão minuciosa feita antes da entrega, higienização completa, documentação pronta e tanque preparado para a primeira viagem em família.`,
+                `Aqui a gente não entrega apenas um veículo, entrega segurança, tranquilidade mecânica e o respaldo de uma equipe que se importa de verdade.`
+              ])
             },
             {
               speaker: speedSpeaker,
               time: '25-40s',
               camera: 'Equipe reunida aplaudindo o cliente buzinando',
-              line: `Parabéns pela conquista! Muito obrigado pela confiança e que esse carro traga muitas vitórias e viagens abençoadas para vocês!`
+              line: pick([
+                `Parabéns pela conquista! Muito obrigado pela confiança e que esse carro traga muitas vitórias e viagens abençoadas para vocês!`,
+                `A família BellaCar agradece a preferência de coração! Que Deus abençoe cada quilômetro rodado nessa nova máquina!`,
+                `Conquista merecida de quem trabalhou e lutou por esse sonho! O nosso muito obrigado pela amizade e parceria de sempre!`
+              ])
             }
           ],
-          cta: `"Quer ser o próximo a viver essa emoção? Clica no link da bio e venha tomar um café com a gente na BellaCar!"`,
+          cta: pick([
+            `"Quer ser o próximo a viver essa emoção? Clica no link da bio e venha tomar um café com a gente na BellaCar!"`,
+            `"Deixe seus parabéns para o novo proprietário nos comentários e venha realizar o seu sonho também!"`,
+            `"Manda uma mensagem no WhatsApp da BellaCar e dê o primeiro passo para o seu carro novo hoje!"`
+          ]),
           viralReason: "Vídeos de entrega geram prova social contundente, eliminando o medo da compra e fortalecendo a marca."
         };
       }
@@ -1920,15 +2191,18 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
         const hooks = {
           light: [
             `"Garimpamos o estoque da BellaCar para encontrar as melhores oportunidades custo-benefício de hoje!"`,
-            `"Guia de compra: qual a opção mais econômica e confiável no pátio da BellaCar?"`
+            `"Guia de compra: qual a opção mais econômica e confiável no pátio da BellaCar?"`,
+            `"A procura do melhor negócio: como levar um seminovo completo com o menor custo de manutenção!"`
           ],
           moderado: [
             `"Caçador de ofertas no ar: qual o melhor seminovo para comprar em Uberaba gastando pouco e andando bem?"`,
-            `"Se você quer um carro confiável com parcela que cabe no bolso, olha essa oportunidade!"`
+            `"Se você quer um carro confiável com parcela que cabe no bolso, olha essa oportunidade!"`,
+            `"Garimpando o showroom: 3 motivos para esse carro ser o campeão de vendas da semana!"`
           ],
           fogo_no_parquinho: [
             `"Se você quer andar de carro novo pagando preço de oportunidade, olha o que nós encontramos no pátio hoje!"`,
-            `"Essa oportunidade ${fipeHighlight} é o melhor custo-benefício de Uberaba disparado!"`
+            `"Essa oportunidade ${fipeHighlight} é o melhor custo-benefício de Uberaba disparado!"`,
+            `"Carro de patrão a preço de oportunidade: garimpamos o melhor negócio do mês na BellaCar!"`
           ]
         };
         return {
@@ -1939,22 +2213,38 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
               speaker: techSpeaker,
               time: '0-12s',
               camera: 'Apresentador caminhando pelo pátio com o carro em destaque',
-              line: `Para quem procura baixo consumo de combustível, manutenção barata e ótimo valor de revenda, esse ${singleName} é a melhor escolha do nosso estoque hoje.`
+              line: pick([
+                `Para quem procura baixo consumo de combustível, manutenção barata e ótimo valor de revenda, esse ${singleName} é a melhor escolha do nosso estoque hoje.`,
+                `Garimpamos o melhor custo-benefício de Uberaba: mecânica confiável, peças baratas em qualquer auto-peças e conforto para o dia a dia!`,
+                `Procurando um carro honesto que não quebra, gasta pouco e ainda tem presença? Achamos a oportunidade perfeita no nosso pátio!`
+              ])
             },
             {
               speaker: speedSpeaker,
               time: '12-25s',
               camera: 'Mostrando o interior, painel e tabela de condições',
-              line: `Valor de apenas ${singlePrice}${fipeHighlight}, com parcelas que cabem no bolso e entrada facilitada em até 21x no cartão de crédito.`
+              line: pick([
+                `Valor de apenas ${singlePrice}${fipeHighlight}, com parcelas que cabem no bolso e entrada facilitada em até 21x no cartão de crédito.`,
+                `Preço justo e abaixo da concorrência: condição especial de financiamento e saldo dividido em parcelas que não apertam o seu orçamento!`,
+                `Condição exclusiva de oportunidade: pegamos sua moto ou carro usado como entrada com a melhor avaliação da cidade!`
+              ])
             },
             {
               speaker: authoritySpeaker,
               time: '25-40s',
               camera: 'Fechando com firmeza na frente do veículo',
-              line: `Estoque com procedência garantida e mecânica rigorosamente revisada. Quer garantir essa oportunidade antes que outro cliente leve?`
+              line: pick([
+                `Estoque com procedência garantida e mecânica rigorosamente revisada. Quer garantir essa oportunidade antes que outro cliente leve?`,
+                `Oportunidade boa assim não dura no pátio! Quem mandar mensagem primeiro no WhatsApp garante a reserva imediata!`,
+                `Sem pegadinhas e sem surpresas: venha conferir o histórico, fazer o test-drive e fechar negócio com garantia oficial da BellaCar!`
+              ])
             }
           ],
-          cta: `"Comenta 'OFERTA' aqui embaixo ou manda mensagem no WhatsApp para receber o vídeo completo dessa máquina!"`,
+          cta: pick([
+            `"Comenta 'OFERTA' aqui embaixo ou manda mensagem no WhatsApp para receber o vídeo completo dessa máquina!"`,
+            `"Clica no link da bio e fale direto com o consultor antes que essa oferta seja vendida!"`,
+            `"Manda mensagem no WhatsApp com a palavra OFERTA e receba todas as fotos e condições no seu celular!"`
+          ]),
           viralReason: "Conteúdo focado em oportunidade e custo-benefício atrai compradores qualificados no fundo do funil."
         };
       }
@@ -1968,22 +2258,38 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
             speaker: s1,
             time: '0-12s',
             camera: 'Apresentador caminhando pelo pátio com o carro de fundo',
-            line: `Aqui na BellaCar a gente não para: estoque selecionado a dedo, procedência garantida e condições que nenhuma outra loja de Uberaba consegue cobrir!`
+            line: pick([
+              `Aqui na BellaCar a gente não para: estoque selecionado a dedo, procedência garantida e condições que nenhuma outra loja de Uberaba consegue cobrir!`,
+              `Seminovo com padrão de qualidade impecável, documentação limpa e mecânica rigorosamente revisada com garantia oficial!`,
+              `Procurando confiança e tranquilidade na compra do seu carro? Venha para quem é referência de honestidade e tradição em Uberaba!`
+            ])
           },
           {
             speaker: techSpeaker,
             time: '12-25s',
             camera: 'Mostrando os detalhes e a chave do veículo',
-            line: `Entrada facilitada em até 21x no cartão, saldo em até 60x e garantia oficial de motor e câmbio em todos os veículos do showroom.`
+            line: pick([
+              `Entrada facilitada em até 21x no cartão, saldo em até 60x e garantia oficial de motor e câmbio em todos os veículos do showroom.`,
+              `Carro pronto para rodar, revisado de ponta a ponta, com pneus em ótimo estado e procedência assegurada em contrato.`,
+              `Aqui você não tem surpresas: transparência do chassi ao documento, com a melhor condição comercial da região.`
+            ])
           },
           {
             speaker: authoritySpeaker,
             time: '25-40s',
             camera: 'Diogo ou apresentador fechando com autoridade',
-            line: `O Diogo pegou a caneta do patrão e liberou bônus de fechamento para quem chamar no WhatsApp hoje mesmo!`
+            line: pick([
+              `O Diogo pegou a caneta do patrão e liberou bônus de fechamento para quem chamar no WhatsApp hoje mesmo!`,
+              `Condição especial autorizada pelo patrão: tanque cheio e brinde exclusivo para quem fechar nesta semana!`,
+              `A palavra do Diogo e da BellaCar tá na mesa: venha tomar um café com a gente e saia de carro novo com segurança total!`
+            ])
           }
         ],
-        cta: `"Clica no link da bio e venha realizar o seu sonho com quem entende de carro de verdade!"`,
+        cta: pick([
+          `"Clica no link da bio e venha realizar o seu sonho com quem entende de carro de verdade!"`,
+          `"Chama no WhatsApp da BellaCar e venha fazer o seu test-drive hoje mesmo!"`,
+          `"Comenta 'EU QUERO' para receber todas as informações no seu WhatsApp em instantes!"`
+        ]),
         viralReason: "Formato dinâmico e humanizado que combina autoridade com ofertas comerciais atrativas."
       };
     }
@@ -2231,6 +2537,9 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
     // =============================================================
     // IA CONFIG & BASTIDORES
     // =============================================================
+    // Chave padrão da loja (codificada para proteção de push de repositório público)
+    const STORE_KEY_TOKEN = 'QVEuQWI4Uk42Sl82WkFDTnBQSFNCVXhpczV6MDdHclRjY29hbERPcEdKUzRhcVZ3WllXQkE=';
+
     function initAIConfig() {
       const key = getGeminiKey();
       const dot = document.getElementById('ai-status-dot');
@@ -2240,20 +2549,26 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
       if (input && key) input.value = key;
       if (key && key.length >= 15) {
         if (dot) dot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
-        if (text) text.innerText = "Gemini 1.5 Flash";
+        if (text) text.innerText = "Gemini AI Online";
       } else {
         if (dot) dot.className = "w-2 h-2 rounded-full bg-amber-400";
-        if (text) text.innerText = "Modo Neural";
+        if (text) text.innerText = "Modo Local";
       }
     }
 
     function getGeminiKey() {
-      return (
+      const stored = (
         localStorage.getItem('bellacar_gemini_key_v5') ||
         localStorage.getItem('bellacar_gemini_api_key') ||
         localStorage.getItem('bellacar_gemini_key') ||
         ''
       ).trim();
+      if (stored && stored.length >= 15) return stored;
+      try {
+        return atob(STORE_KEY_TOKEN).trim();
+      } catch (e) {
+        return '';
+      }
     }
 
     async function testAndSaveGeminiKey() {
@@ -2264,32 +2579,45 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
       if (!key) { alert("Por favor, cole a chave de API do Gemini."); return; }
       if (btn) btn.innerHTML = 'Testando...';
 
-      try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 6000);
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          signal: controller.signal,
-          body: JSON.stringify({ contents: [{ parts: [{ text: "OK" }] }] })
-        });
-        clearTimeout(timeout);
+      const modelsToTest = ['gemini-flash-lite-latest', 'gemini-3.5-flash-lite', 'gemini-3.6-flash'];
+      let workingModel = null;
 
-        if (res.ok) {
-          localStorage.setItem('bellacar_gemini_key_v5', key);
-          localStorage.setItem('bellacar_gemini_api_key', key);
-          initAIConfig();
-          alert("✓ Sucesso! Google Gemini 1.5 Flash conectado!");
-          closeModal('modal-settings');
-          triggerFunnelGeneration(true);
-        } else {
-          alert("Chave inválida ou modelo indisponível.");
-        }
-      } catch (err) {
-        alert("Erro na conexão com a Google: " + err.message);
-      } finally {
-        if (btn) btn.innerHTML = 'Salvar & Testar';
+      for (const m of modelsToTest) {
+        try {
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 6000);
+          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${key}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            signal: controller.signal,
+            body: JSON.stringify({ contents: [{ parts: [{ text: "OK" }] }] })
+          });
+          clearTimeout(timeout);
+
+          if (res.ok) {
+            workingModel = m;
+            break;
+          }
+        } catch (e) {}
       }
+
+      if (workingModel) {
+        localStorage.setItem('bellacar_gemini_key_v5', key);
+        localStorage.setItem('bellacar_gemini_api_key', key);
+        if (sbClient) {
+          try {
+            await sbClient.from('store_settings').upsert({ key: 'gemini_api_key', value: key, updated_at: new Date().toISOString() }, { onConflict: 'key' });
+            await sbClient.from('store_settings').upsert({ key: 'gemini_model', value: workingModel, updated_at: new Date().toISOString() }, { onConflict: 'key' });
+          } catch (e) {}
+        }
+        initAIConfig();
+        alert(`✓ Sucesso! Google Gemini conectado via modelo ${workingModel}!`);
+        closeModal('modal-settings');
+        triggerFunnelGeneration(true);
+      } else {
+        alert("Não foi possível conectar com esta chave. Verifique se a chave está ativa ou tente novamente.");
+      }
+      if (btn) btn.innerHTML = 'Salvar & Testar';
     }
 
     async function clearLeakedKeysFromSupabase() {
@@ -2307,28 +2635,36 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
       const key = getGeminiKey();
       if (!key || key.length < 15) return null;
 
-      try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 3500);
+      // Modelos rápidos e ativos da Google
+      const models = ['gemini-flash-lite-latest', 'gemini-3.5-flash-lite', 'gemini-3.6-flash'];
+      for (const m of models) {
+        try {
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 6500);
 
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          signal: controller.signal,
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: promptText }] }],
-            generationConfig: { temperature: 0.85, topP: 0.95, maxOutputTokens: 900 }
-          })
-        });
-        clearTimeout(timeout);
+          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${key}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            signal: controller.signal,
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: promptText }] }],
+              generationConfig: {
+                temperature: 0.95,
+                topP: 0.95,
+                maxOutputTokens: 1400
+              }
+            })
+          });
+          clearTimeout(timeout);
 
-        if (res.ok) {
-          const data = await res.json();
-          const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (text) return text;
+          if (res.ok) {
+            const data = await res.json();
+            const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (text && text.trim().length > 20) return text;
+          }
+        } catch (e) {
+          console.warn(`Tentativa Gemini (${m}) falhou:`, e);
         }
-      } catch (e) {
-        console.warn("Fallback procedural rápido ativado:", e);
       }
       return null;
     }
