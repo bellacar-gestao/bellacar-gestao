@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gerenciamento BellaCar | Central de Gravações & Conteúdo</title>
-  <meta name="build-version" content="2026.10.14-v5-funnel-viral">
+  <meta name="build-version" content="2026.10.14-v6-viral-supercharged">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#c9b977">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -57,7 +57,7 @@
       -webkit-tap-highlight-color: transparent;
     }
     .glass-luxury {
-      background: rgba(22, 22, 24, 0.88);
+      background: rgba(20, 20, 22, 0.90);
       backdrop-filter: blur(16px);
       border: 1px solid rgba(55, 55, 59, 0.75);
     }
@@ -83,7 +83,7 @@
 <body class="min-h-screen flex flex-col antialiased selection:bg-[#c9b977] selection:text-black">
 
   <!-- ========================================== -->
-  <!-- HEADER EXECUTIVO LIMPO                    -->
+  <!-- HEADER EXECUTIVO                           -->
   <!-- ========================================== -->
   <header class="border-b border-[#2e2e33] bg-[#0c0c0d]/95 backdrop-blur-md sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 flex items-center justify-between gap-3">
@@ -101,10 +101,9 @@
               GERENCIAMENTO <span class="text-[#ecdda2]">BELLACAR</span>
             </h1>
             <span class="hidden md:inline-block px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#c9b977]/15 text-[#ecdda2] border border-[#c9b977]/30">
-              FUNIL VIRAL
+              FUNIL VIRAL PRO
             </span>
           </div>
-          <!-- Contadores Rápidos -->
           <div class="flex items-center gap-2 text-[10px] sm:text-xs text-[#a1a1aa] font-mono">
             <span class="text-[#ecdda2] font-bold" id="hdr-car-count">19 carros</span>
             <span>•</span>
@@ -118,14 +117,14 @@
       <!-- Controles: Status IA + Bastidores + PWA -->
       <div class="flex items-center gap-2 shrink-0">
         
-        <!-- Indicador de Status da IA -->
+        <!-- Indicador de Status da IA (Abre modal de chave) -->
         <button onclick="openModal('modal-settings')" id="hdr-ai-badge" title="Status da Inteligência Artificial" class="px-2.5 py-1.5 bg-[#18181b] hover:bg-[#27272a] border border-[#3f3f46] rounded-xl text-xs flex items-center gap-1.5 transition-all">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" id="ai-status-dot"></span>
           <span class="hidden xs:inline text-[11px] font-bold text-white" id="ai-status-text">Gemini 1.5</span>
         </button>
 
-        <!-- Botão Bastidores / Gestão -->
-        <button onclick="openModal('modal-settings')" title="Painel de Bastidores, Banco de Dados & Configurações" class="p-2 bg-[#18181b] hover:bg-[#27272a] text-[#a1a1aa] hover:text-white border border-[#3f3f46] rounded-xl transition-all">
+        <!-- Botão Bastidores / Configurações -->
+        <button onclick="openModal('modal-settings')" title="Configurações de IA, Banco de Dados & Estoque" class="p-2 bg-[#18181b] hover:bg-[#27272a] text-[#a1a1aa] hover:text-white border border-[#3f3f46] rounded-xl transition-all">
           <i data-lucide="settings-2" class="w-4 h-4"></i>
         </button>
 
@@ -155,7 +154,7 @@
       </div>
 
       <span class="hidden md:inline text-[11px] text-[#71717a] font-mono">
-        Roteiros 100% Inéditos • Foco em Retenção & Conversão
+        14 Formatos Virais • Personalidades dos Apresentadores • 100% Inédito
       </span>
     </div>
   </div>
@@ -166,151 +165,214 @@
   <main class="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-6 flex-1 w-full space-y-6">
 
     <!-- ============================================================= -->
-    <!-- MODO 1: O FUNIL CRIATIVO DE GRAVAÇÃO (FLUXO INTERATIVO)        -->
+    <!-- MODO 1: O FUNIL CRIATIVO DE GRAVAÇÃO (14 FORMATOS VIRAIS)      -->
     <!-- ============================================================= -->
     <section id="view-funnel" class="space-y-6">
 
-      <!-- BANNER EXPLICATIVO DO FUNIL -->
-      <div class="p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-[#18181b] via-[#121213] to-[#18181b] border border-[#2e2e33] flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div class="space-y-1">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#c9b977]/20 text-[#ecdda2] border border-[#c9b977]/30 uppercase">
-              FLUXO ESTRATÉGICO DE PRODUÇÃO
-            </span>
-            <span class="text-xs text-[#a1a1aa]">BellaCar Veículos • Uberaba</span>
-          </div>
-          <h2 class="text-base sm:text-xl font-black text-white">
-            Crie o Roteiro Perfeito em 3 Escolhas Rápidas:
-          </h2>
-          <p class="text-xs text-[#a1a1aa]">
-            1. Escolha o Formato ➔ 2. Escolha o Elenco ➔ 3. Escolha o Nível de Tempero (Light ao Fogo no Parquinho) ➔ A IA gera na hora!
-          </p>
-        </div>
-
-        <div class="flex items-center gap-2">
-          <button onclick="resetFunnelDefaults()" class="px-3.5 py-2 bg-[#020202] hover:bg-[#27272a] text-[#a1a1aa] hover:text-white border border-[#2e2e33] rounded-xl text-xs font-bold transition-all">
-            Limpar Filtros
-          </button>
-        </div>
-      </div>
-
-      <!-- ETAPA 1: O QUE VOCÊ QUER GRAVAR HOJE? (FORMATOS) -->
+      <!-- ETAPA 1: O QUE VOCÊ QUER GRAVAR HOJE? (14 FORMATOS) -->
       <div class="glass-luxury rounded-3xl p-4 sm:p-6 space-y-4 border border-[#2e2e33]">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <h3 class="text-xs sm:text-sm font-black uppercase text-white flex items-center gap-2">
             <span class="w-6 h-6 rounded-lg funnel-step-badge text-xs flex items-center justify-center font-mono font-black">1</span>
-            O Que Você Quer Gravar Hoje? (Escolha o Formato):
+            Escolha o Formato do Vídeo (14 Opções Virais):
           </h3>
-          <span class="text-[11px] font-mono text-[#c9b977]" id="funnel-format-selected-label">Formato Ativo: Duelo</span>
+          <!-- Abas de Categoria dos Formatos -->
+          <div class="flex items-center gap-1.5 bg-[#0c0c0d] p-1 rounded-xl border border-[#2e2e33] self-start sm:self-auto overflow-x-auto no-scrollbar">
+            <button onclick="filterFormatsCategory('all')" id="btn-cat-all" class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-[#c9b977] text-black">Todos (14)</button>
+            <button onclick="filterFormatsCategory('vendas')" id="btn-cat-vendas" class="px-2.5 py-1 rounded-lg text-[10px] font-bold text-[#a1a1aa] hover:text-white">Vendas & Pátio</button>
+            <button onclick="filterFormatsCategory('autoridade')" id="btn-cat-autoridade" class="px-2.5 py-1 rounded-lg text-[10px] font-bold text-[#a1a1aa] hover:text-white">Papo de Patrão</button>
+            <button onclick="filterFormatsCategory('entretenimento')" id="btn-cat-entretenimento" class="px-2.5 py-1 rounded-lg text-[10px] font-bold text-[#a1a1aa] hover:text-white">Reality & Humor 🔥</button>
+          </div>
         </div>
 
-        <!-- Grade dos 7 Formatos Visuais -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2.5">
+        <!-- Grade dos 14 Formatos -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2.5" id="formats-grid">
           
-          <!-- 1. Duelo -->
-          <button type="button" onclick="selectFunnelFormat('duelo')" id="fmt-duelo" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#1e1e22] border-[#c9b977] ring-1 ring-[#c9b977] shadow-lg shadow-[#c9b977]/15">
+          <!-- 1. Duelo de Titãs -->
+          <button type="button" onclick="selectFunnelFormat('duelo')" id="fmt-duelo" data-cat="vendas" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#1e1e22] border-[#c9b977] ring-1 ring-[#c9b977] shadow-lg shadow-[#c9b977]/15">
             <span class="text-2xl">⚔️</span>
             <div>
-              <span class="text-xs font-bold text-white block">Duelo</span>
-              <span class="text-[10px] text-[#a1a1aa] leading-tight block">2 carros no embate</span>
+              <span class="text-xs font-bold text-white block">Duelo de Titãs</span>
+              <span class="text-[10px] text-[#a1a1aa] leading-tight block">2 carros em disputa</span>
             </div>
           </button>
 
-          <!-- 2. Anúncio de Carro -->
-          <button type="button" onclick="selectFunnelFormat('anuncio')" id="fmt-anuncio" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
+          <!-- 2. Anúncio de Queima -->
+          <button type="button" onclick="selectFunnelFormat('anuncio')" id="fmt-anuncio" data-cat="vendas" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
             <span class="text-2xl">🚗</span>
             <div>
-              <span class="text-xs font-bold text-white block">Anúncio</span>
-              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Vender 1 carro rápido</span>
+              <span class="text-xs font-bold text-white block">Anúncio de Queima</span>
+              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Oferta agressiva rápida</span>
             </div>
           </button>
 
-          <!-- 3. Papo de Patrão -->
-          <button type="button" onclick="selectFunnelFormat('papo_patrao')" id="fmt-papo_patrao" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
+          <!-- 3. Test Drive Sincero -->
+          <button type="button" onclick="selectFunnelFormat('test_drive')" id="fmt-test_drive" data-cat="vendas" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
+            <span class="text-2xl">🏎️</span>
+            <div>
+              <span class="text-xs font-bold text-white block">Test Drive Sincero</span>
+              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Arrancada e dinâmica</span>
+            </div>
+          </button>
+
+          <!-- 4. Achado do Pátio -->
+          <button type="button" onclick="selectFunnelFormat('achado')" id="fmt-achado" data-cat="vendas" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
+            <span class="text-2xl">💎</span>
+            <div>
+              <span class="text-xs font-bold text-white block">Achado do Pátio</span>
+              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Seminovo impecável</span>
+            </div>
+          </button>
+
+          <!-- 5. Papo de Patrão -->
+          <button type="button" onclick="selectFunnelFormat('papo_patrao')" id="fmt-papo_patrao" data-cat="autoridade" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
             <span class="text-2xl">👑</span>
             <div>
               <span class="text-xs font-bold text-white block">Papo de Patrão</span>
-              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Autoridade do Diogo</span>
+              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Diogo manda a real</span>
             </div>
           </button>
 
-          <!-- 4. Desafio / Reality -->
-          <button type="button" onclick="selectFunnelFormat('desafio')" id="fmt-desafio" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
+          <!-- 6. Podcast da Loja -->
+          <button type="button" onclick="selectFunnelFormat('podcast')" id="fmt-podcast" data-cat="autoridade" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
+            <span class="text-2xl">🎙️</span>
+            <div>
+              <span class="text-xs font-bold text-white block">Bomba vs Relíquia</span>
+              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Opiniões sinceras</span>
+            </div>
+          </button>
+
+          <!-- 7. Mestre do Laudo -->
+          <button type="button" onclick="selectFunnelFormat('laudo')" id="fmt-laudo" data-cat="autoridade" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
+            <span class="text-2xl">🔍</span>
+            <div>
+              <span class="text-xs font-bold text-white block">Mestre do Laudo</span>
+              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Alerta anti-golpe</span>
+            </div>
+          </button>
+
+          <!-- 8. Desafio da Equipe -->
+          <button type="button" onclick="selectFunnelFormat('desafio')" id="fmt-desafio" data-cat="entretenimento" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
             <span class="text-2xl">🏆</span>
             <div>
-              <span class="text-xs font-bold text-white block">Desafio</span>
-              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Aposta da equipe</span>
+              <span class="text-xs font-bold text-white block">Desafio da Loja</span>
+              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Aposta entre os 3</span>
             </div>
           </button>
 
-          <!-- 5. Test Drive -->
-          <button type="button" onclick="selectFunnelFormat('test_drive')" id="fmt-test_drive" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
-            <span class="text-2xl">🏎️</span>
-            <div>
-              <span class="text-xs font-bold text-white block">Test Drive</span>
-              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Acelerando na real</span>
-            </div>
-          </button>
-
-          <!-- 6. Humor / Bastidores -->
-          <button type="button" onclick="selectFunnelFormat('humor')" id="fmt-humor" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
+          <!-- 9. O Dono Reage -->
+          <button type="button" onclick="selectFunnelFormat('reage')" id="fmt-reage" data-cat="entretenimento" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
             <span class="text-2xl">😂</span>
             <div>
-              <span class="text-xs font-bold text-white block">Humor</span>
-              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Propostas bizarras</span>
+              <span class="text-xs font-bold text-white block">O Dono Reage</span>
+              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Propostas bizarras WhatsApp</span>
             </div>
           </button>
 
-          <!-- 7. Trend Viral -->
-          <button type="button" onclick="selectFunnelFormat('trend')" id="fmt-trend" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
+          <!-- 10. Polêmica / Cancelamento -->
+          <button type="button" onclick="selectFunnelFormat('polemica')" id="fmt-polemica" data-cat="entretenimento" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
             <span class="text-2xl">🔥</span>
             <div>
+              <span class="text-xs font-bold text-white block">Polêmica Quente</span>
+              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Divide a internet</span>
+            </div>
+          </button>
+
+          <!-- 11. Comédia: Cliente Típico -->
+          <button type="button" onclick="selectFunnelFormat('comedia')" id="fmt-comedia" data-cat="entretenimento" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
+            <span class="text-2xl">🎭</span>
+            <div>
+              <span class="text-xs font-bold text-white block">Cliente Típico</span>
+              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Esquetes do pátio</span>
+            </div>
+          </button>
+
+          <!-- 12. Trend Viral -->
+          <button type="button" onclick="selectFunnelFormat('trend')" id="fmt-trend" data-cat="entretenimento" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
+            <span class="text-2xl">⚡</span>
+            <div>
               <span class="text-xs font-bold text-white block">Trend Viral</span>
-              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Reels em alta</span>
+              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Áudios e Reels em alta</span>
+            </div>
+          </button>
+
+          <!-- 13. Entrega de Chave -->
+          <button type="button" onclick="selectFunnelFormat('entrega')" id="fmt-entrega" data-cat="entretenimento" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
+            <span class="text-2xl">🎉</span>
+            <div>
+              <span class="text-xs font-bold text-white block">Chave na Mão</span>
+              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Sonho realizado</span>
+            </div>
+          </button>
+
+          <!-- 14. Caçador de Ofertas -->
+          <button type="button" onclick="selectFunnelFormat('hunter')" id="fmt-hunter" data-cat="vendas" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
+            <span class="text-2xl">🕵️</span>
+            <div>
+              <span class="text-xs font-bold text-white block">Caçador de Oferta</span>
+              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Até 60 mil reais</span>
             </div>
           </button>
 
         </div>
       </div>
 
-      <!-- ETAPA 2 & 3: PARTICIPANTES + NÍVEL DE INTENSIDADE -->
+      <!-- ETAPA 2 & 3: PERSONALIDADES DO TRIO + INTENSIDADE -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         
-        <!-- ETAPA 2: QUEM VAI PARTICIPAR? (1, 2 OU TODOS) -->
+        <!-- ETAPA 2: QUEM VAI GRAVAR? (PERSONALIDADES RESGATADAS) -->
         <div class="glass-luxury rounded-3xl p-4 sm:p-5 space-y-3.5 border border-[#2e2e33]">
           <div class="flex items-center justify-between">
             <h3 class="text-xs sm:text-sm font-black uppercase text-white flex items-center gap-2">
               <span class="w-6 h-6 rounded-lg funnel-step-badge text-xs flex items-center justify-center font-mono font-black">2</span>
-              Quem Vai Participar? (Escolha 1, 2 ou Todos):
+              Quem Vai Gravar? (Escolha 1, 2 ou Todos):
             </h3>
             <button onclick="toggleSelectAllSpeakers()" class="text-[11px] text-[#c9b977] hover:underline font-bold">
-              🏆 Os 3 Juntos
+              🏆 Trio Completo (Os 3)
             </button>
           </div>
 
           <div class="grid grid-cols-3 gap-2.5">
-            <!-- Diogo -->
-            <button type="button" onclick="toggleSpeakerInFunnel('diogo')" id="spk-btn-diogo" class="p-3 rounded-2xl border text-center transition-all space-y-1 bg-[#1e1e22] border-[#c9b977] text-white">
-              <span class="text-xl block">👑</span>
-              <span class="text-xs font-bold block truncate">Diogo</span>
-              <span class="text-[9px] text-[#ecdda2] font-mono block">O Patrão</span>
+            <!-- Diogo Olegário -->
+            <button type="button" onclick="toggleSpeakerInFunnel('diogo')" id="spk-btn-diogo" class="p-3 rounded-2xl border text-left transition-all space-y-1.5 bg-[#1e1e22] border-[#c9b977] ring-1 ring-[#c9b977] text-white">
+              <div class="flex items-center justify-between">
+                <span class="text-xl">👑</span>
+                <span class="w-2.5 h-2.5 rounded-full bg-[#ecdda2]"></span>
+              </div>
+              <div>
+                <span class="text-xs font-black text-[#ecdda2] block truncate">Diogo Olegário</span>
+                <span class="text-[9px] text-[#a1a1aa] font-bold block uppercase">O Patrão / Autoridade</span>
+                <span class="text-[9px] text-[#71717a] block italic mt-0.5">"Caneta do Patrão"</span>
+              </div>
             </button>
 
-            <!-- Carlos -->
-            <button type="button" onclick="toggleSpeakerInFunnel('carlos')" id="spk-btn-carlos" class="p-3 rounded-2xl border text-center transition-all space-y-1 bg-[#1e1e22] border-[#c9b977] text-white">
-              <span class="text-xl block">📱</span>
-              <span class="text-xs font-bold block truncate">Carlos</span>
-              <span class="text-[9px] text-[#c9b977] font-mono block">Consultor</span>
+            <!-- Carlos Eduardo -->
+            <button type="button" onclick="toggleSpeakerInFunnel('carlos')" id="spk-btn-carlos" class="p-3 rounded-2xl border text-left transition-all space-y-1.5 bg-[#1e1e22] border-[#38bdf8] ring-1 ring-[#38bdf8] text-white">
+              <div class="flex items-center justify-between">
+                <span class="text-xl">📱</span>
+                <span class="w-2.5 h-2.5 rounded-full bg-[#38bdf8]"></span>
+              </div>
+              <div>
+                <span class="text-xs font-black text-[#38bdf8] block truncate">Carlos Eduardo</span>
+                <span class="text-[9px] text-[#a1a1aa] font-bold block uppercase">Consultor Técnico</span>
+                <span class="text-[9px] text-[#71717a] block italic mt-0.5">"Laudo Aprovado"</span>
+              </div>
             </button>
 
             <!-- Guilherme -->
-            <button type="button" onclick="toggleSpeakerInFunnel('guilherme')" id="spk-btn-guilherme" class="p-3 rounded-2xl border text-center transition-all space-y-1 bg-[#121213] border-[#2e2e33] text-[#a1a1aa]">
-              <span class="text-xl block">⚡</span>
-              <span class="text-xs font-bold block truncate">Guilherme</span>
-              <span class="text-[9px] text-[#71717a] font-mono block">Acelerado</span>
+            <button type="button" onclick="toggleSpeakerInFunnel('guilherme')" id="spk-btn-guilherme" class="p-3 rounded-2xl border text-left transition-all space-y-1.5 bg-[#121213] border-[#2e2e33] text-[#71717a]">
+              <div class="flex items-center justify-between">
+                <span class="text-xl">⚡</span>
+                <span class="w-2.5 h-2.5 rounded-full bg-zinc-700"></span>
+              </div>
+              <div>
+                <span class="text-xs font-black text-emerald-400 block truncate">Guilherme</span>
+                <span class="text-[9px] text-[#a1a1aa] font-bold block uppercase">Vendedor Acelerado</span>
+                <span class="text-[9px] text-[#71717a] block italic mt-0.5">"Entrada em 21x"</span>
+              </div>
             </button>
           </div>
-          <span class="text-[10px] text-[#71717a] block" id="funnel-speakers-selected-desc">Participantes selecionados: Diogo Olegário e Carlos Eduardo</span>
+          <span class="text-[10px] text-[#71717a] block" id="funnel-speakers-selected-desc">Elenco Selecionado: Diogo Olegário e Carlos Eduardo</span>
         </div>
 
         <!-- ETAPA 3: NÍVEL DE INTENSIDADE / TEMPERO -->
@@ -318,7 +380,7 @@
           <div class="flex items-center justify-between">
             <h3 class="text-xs sm:text-sm font-black uppercase text-white flex items-center gap-2">
               <span class="w-6 h-6 rounded-lg funnel-step-badge text-xs flex items-center justify-center font-mono font-black">3</span>
-              Nível do Vídeo (Tempero & Energia):
+              Nível do Vídeo (Tempero & Pacing):
             </h3>
             <span class="text-[11px] font-mono text-[#c9b977]" id="funnel-intensity-label">Moderado</span>
           </div>
@@ -342,22 +404,22 @@
             <button type="button" onclick="selectFunnelIntensity('fogo_no_parquinho')" id="int-fogo_no_parquinho" class="p-3 rounded-2xl border text-left transition-all space-y-1 bg-[#121213] border-[#2e2e33] text-[#a1a1aa] hover:border-[#3f3f46]">
               <span class="text-lg">🔥</span>
               <span class="text-xs font-bold text-white block">Fogo Parquinho</span>
-              <span class="text-[9px] text-red-400/80 leading-tight block">Viral, polêmico</span>
+              <span class="text-[9px] text-red-400/80 leading-tight block">Polêmico, viral</span>
             </button>
           </div>
-          <span class="text-[10px] text-[#71717a] block" id="funnel-intensity-desc">Tom comercial afiado, quebra de objeções e ritmo dinâmico para prender o público.</span>
+          <span class="text-[10px] text-[#71717a] block" id="funnel-intensity-desc">Ritmo comercial afiado, quebra de objeções e dinamismo para reter a atenção.</span>
         </div>
 
       </div>
 
-      <!-- ETAPA 4: VEÍCULO(S) EM DESTAQUE (CONTEXTUAL) -->
+      <!-- ETAPA 4: VEÍCULO(S) EM DESTAQUE -->
       <div class="glass-luxury rounded-3xl p-4 sm:p-5 space-y-3.5 border border-[#2e2e33]" id="funnel-car-selection-container">
         <div class="flex items-center justify-between">
           <h3 class="text-xs sm:text-sm font-black uppercase text-white flex items-center gap-2">
             <span class="w-6 h-6 rounded-lg funnel-step-badge text-xs flex items-center justify-center font-mono font-black">4</span>
             <span id="funnel-car-section-title">Veículo(s) em Destaque no Vídeo:</span>
           </h3>
-          <span class="text-[11px] text-[#ecdda2] font-mono">19 carros disponíveis</span>
+          <span class="text-[11px] text-[#ecdda2] font-mono">19 carros oficiais disponíveis</span>
         </div>
 
         <!-- Seletor do Duelo (Carro A vs Carro B) -->
@@ -381,10 +443,10 @@
           </div>
         </div>
 
-        <!-- Seletor de Carro Único (Para Anúncio, Test Drive, Humor ou Trend) -->
+        <!-- Seletor de Carro Único (Demais formatos) -->
         <div id="single-car-selector-box" class="bg-[#0c0c0d] p-3 rounded-2xl border border-[#2e2e33] space-y-1.5 hidden">
           <label class="text-[11px] font-mono text-[#c9b977] uppercase font-bold">
-            Selecione o Veículo Principal:
+            Selecione o Veículo Principal (ou Showroom da Loja):
           </label>
           <select id="single-select-car" class="w-full bg-[#18181b] border border-[#2e2e33] text-xs font-bold text-white rounded-xl p-2.5 outline-none focus:border-[#c9b977]">
             <!-- Preenchido via JS -->
@@ -394,12 +456,12 @@
 
       <!-- BOTÃO GIGANTE DE DISPARO DA IA -->
       <div class="text-center pt-2">
-        <button onclick="triggerFunnelGeneration()" id="btn-funnel-generate" class="w-full sm:w-auto px-8 py-4 gold-btn rounded-2xl text-sm sm:text-base font-black flex items-center justify-center gap-3 shadow-xl shadow-[#c9b977]/25 transition-all active:scale-95 mx-auto">
+        <button onclick="triggerFunnelGeneration(true)" id="btn-funnel-generate" class="w-full sm:w-auto px-8 py-4 gold-btn rounded-2xl text-sm sm:text-base font-black flex items-center justify-center gap-3 shadow-xl shadow-[#c9b977]/25 transition-all active:scale-95 mx-auto">
           <i data-lucide="sparkles" class="w-5 h-5 text-black"></i>
-          <span id="btn-funnel-generate-text">GERAR ROTEIRO INÉDITO AGORA (IA REAL)</span>
+          <span id="btn-funnel-generate-text">⚡ GERAR ROTEIRO INÉDITO AGORA COM IA</span>
         </button>
-        <span class="text-[11px] text-[#71717a] block mt-2 font-mono">
-          Resposta ultrarrápida • Roteiro inédito adaptado ao elenco e nível selecionados
+        <span class="text-[11px] text-[#71717a] block mt-2 font-mono" id="funnel-engine-hint">
+          Roteiro 100% inédito adaptado ao elenco, formato e tom escolhidos
         </span>
       </div>
 
@@ -459,7 +521,7 @@
           <div class="flex items-center justify-between">
             <span class="text-xs font-mono uppercase text-[#c9b977] font-bold flex items-center gap-1.5">
               <i data-lucide="film" class="w-3.5 h-3.5"></i>
-              Desenvolvimento Tomada a Tomada (Com Fala de Cada Apresentador):
+              Roteiro Cena a Cena (Com Falas dos Apresentadores):
             </span>
             <button onclick="copyFunnelCompleteScript()" class="text-[11px] text-[#c9b977] hover:underline flex items-center gap-1 font-bold">
               <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copiar Roteiro Completo
@@ -467,7 +529,7 @@
           </div>
 
           <div id="funnel-scenes-container" class="space-y-3 text-xs">
-            <!-- Injetado dinamicamente com cards coloridos para cada participante -->
+            <!-- Injetado dinamicamente -->
           </div>
         </div>
 
@@ -484,10 +546,10 @@
 
           <div class="bg-[#0c0c0d] p-3.5 rounded-2xl border border-[#2e2e33] space-y-1">
             <span class="text-[10px] font-mono uppercase text-[#38bdf8] font-bold block">
-              📈 Por Que Vai Viralizar:
+              📈 Estratégia do Algoritmo:
             </span>
             <p class="text-[11px] text-[#a1a1aa] leading-snug" id="funnel-viral-reason">
-              Fórmula de retenção alta nos primeiros 3s e divisão de opiniões para gerar comentários.
+              Fórmula de retenção rápida nos primeiros 3s e divisão de opiniões para gerar comentários.
             </p>
           </div>
         </div>
@@ -496,7 +558,7 @@
         <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#2e2e33]">
           <button onclick="triggerFunnelGeneration(true)" class="px-4 py-2.5 gold-btn rounded-xl text-xs font-black flex items-center gap-2 shadow active:scale-95 transition-all">
             <i data-lucide="sparkles" class="w-4 h-4 text-black"></i>
-            <span>Gerar Outra Variação Deste Mesmo Formato</span>
+            <span>Gerar Outra Variação Inédita (1 Toque)</span>
           </button>
 
           <div class="flex items-center gap-2">
@@ -521,7 +583,7 @@
             <i data-lucide="warehouse" class="w-4 h-4 text-[#c9b977]"></i>
             Estoque BellaCar (19 Veículos Disponíveis):
           </h2>
-          <p class="text-xs text-[#a1a1aa]">Clique em qualquer carro para ver dados de FIPE e gerar anúncios Meta Ads e Stories</p>
+          <p class="text-xs text-[#a1a1aa]">Clique em qualquer carro para carregar no Funil de Gravação</p>
         </div>
 
         <!-- Filtros Rápidos & Busca -->
@@ -568,7 +630,7 @@
       <div class="flex items-center gap-2 sm:gap-3">
         <div class="flex items-center bg-[#18181b] rounded-xl border border-[#2e2e33] p-1">
           <button onclick="adjustTeleprompterFontSize(-4)" class="px-2 py-1 text-xs text-[#a1a1aa] hover:text-white font-mono font-bold">A-</button>
-          <span class="text-[11px] font-mono px-2 text-[#ecdda2]" id="tp-font-size-label">36px</span>
+          <span class="text-[11px] font-mono px-2 text-[#ecdda2]" id="tp-font-size-label">34px</span>
           <button onclick="adjustTeleprompterFontSize(4)" class="px-2 py-1 text-xs text-[#a1a1aa] hover:text-white font-mono font-bold">A+</button>
         </div>
 
@@ -595,7 +657,7 @@
       </div>
     </div>
 
-    <!-- Barra Inferior: Play/Pause & Botão de Conclusão -->
+    <!-- Barra Inferior -->
     <div class="border-t border-[#2e2e33] pt-3 flex items-center justify-between">
       <button onclick="toggleTeleprompterPlay()" id="btn-tp-play" class="px-6 py-2.5 gold-btn rounded-xl text-xs font-black flex items-center gap-2">
         <i data-lucide="play" class="w-4 h-4 text-black" id="tp-play-icon"></i>
@@ -610,7 +672,7 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- MODAL: BASTIDORES & GESTÃO (CONFIGURAÇÃO)  -->
+  <!-- MODAL: BASTIDORES & GESTÃO                 -->
   <!-- ========================================== -->
   <div id="modal-settings" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-3 sm:p-6 hidden">
     <div class="glass-luxury w-full max-w-2xl rounded-3xl p-5 sm:p-7 space-y-5 border border-[#3f3f46] max-h-[90vh] overflow-y-auto">
@@ -618,7 +680,7 @@
       <div class="flex items-center justify-between pb-3 border-b border-[#2e2e33]">
         <div class="flex items-center gap-2.5">
           <i data-lucide="shield-check" class="w-5 h-5 text-[#c9b977]"></i>
-          <h3 class="text-base sm:text-lg font-black text-white">Central de Bastidores & Segurança</h3>
+          <h3 class="text-base sm:text-lg font-black text-white">Central de Bastidores & IA Real</h3>
         </div>
         <button onclick="closeModal('modal-settings')" class="text-[#a1a1aa] hover:text-white p-1">
           ✕
@@ -637,7 +699,7 @@
           </span>
         </div>
         <p class="text-xs text-[#a1a1aa]">
-          Sua chave é salva com total segurança <strong>apenas no navegador do seu aparelho</strong>, sem jamais ser exposta no banco público.
+          Cole sua chave da Google para ativar roteiros 100% livres e inéditos gerados em tempo real pela IA.
         </p>
         <div class="space-y-1.5">
           <label class="text-[11px] font-mono text-[#a1a1aa]">Chave de API do Google Gemini (AI Studio):</label>
@@ -684,7 +746,7 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- JAVASCRIPT: MOTOR V5 DO FUNIL VIRAL        -->
+  <!-- JAVASCRIPT: MOTOR V6 VIRAL SUPERCHARGED    -->
   <!-- ========================================== -->
   <script>
     if ('serviceWorker' in navigator) {
@@ -719,6 +781,31 @@
       guilherme: 'Guilherme'
     };
 
+    // PERSONALIDADES ÚNICAS DO TRIO BELLACAR
+    const SPEAKER_PROFILES = {
+      diogo: {
+        title: 'O Patrão / Autoridade Máxima',
+        catchphrase: 'O Diogo pegou a caneta!',
+        color: 'text-[#ecdda2]',
+        badgeBg: 'bg-[#c9b977]/20 border-[#c9b977]/40 text-[#ecdda2]',
+        tone: 'Autoritário, seguro, dono da loja, direto ao ponto, não aceita proposta indecente, fecha com tanque cheio e transferência.'
+      },
+      carlos: {
+        title: 'Consultor Especialista & Detalhista',
+        catchphrase: 'Laudo 100% aprovado e procedência garantida.',
+        color: 'text-[#38bdf8]',
+        badgeBg: 'bg-[#38bdf8]/20 border-[#38bdf8]/40 text-[#38bdf8]',
+        tone: 'Educado, atencioso, técnico, apaixonado por conservação, defende a procedência, motor, bancos e segurança da família.'
+      },
+      guilherme: {
+        title: 'Vendedor Acelerado & Rei do Fechamento',
+        catchphrase: 'Se você ganha 3 conto, a chave já é sua!',
+        color: 'text-emerald-400',
+        badgeBg: 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400',
+        tone: 'Jovem, elétrico, bem-humorado, provocador, foca em entrada facilitada em 21x no cartão, pressa de vender e fechar hoje.'
+      }
+    };
+
     const OFFICIAL_INVENTORY = [
       { id: 'car_416533', name: 'Toyota Hilux 2.7 SRV 4x4 CD Aut. (2020)', price: 169900, fipe: 176700, status: 'ready', speaker: 'diogo', category: 'Picape' },
       { id: 'car_401745', name: 'Honda Civic 2.0 EXL CVT (2017)', price: 106900, fipe: 111200, status: 'ready', speaker: 'carlos', category: 'Sedan' },
@@ -745,12 +832,12 @@
     
     // ESTADO DO FUNIL CRIATIVO
     let funnelState = {
-      format: 'duelo', // duelo, anuncio, papo_patrao, desafio, test_drive, humor, trend
-      speakers: ['carlos', 'guilherme'], // array com 'diogo', 'carlos', 'guilherme'
-      intensity: 'moderado', // light, moderado, fogo_no_parquinho
-      carAId: 'car_401745', // Honda Civic
-      carBId: 'car_413999', // Honda HR-V
-      singleCarId: 'car_416533' // Toyota Hilux
+      format: 'duelo',
+      speakers: ['carlos', 'guilherme'],
+      intensity: 'moderado',
+      carAId: 'car_401745',
+      carBId: 'car_413999',
+      singleCarId: 'car_416533'
     };
 
     let lastGeneratedScript = null;
@@ -780,7 +867,7 @@
       updateFunnelUI();
       renderInventory();
       
-      // Gera automaticamente o primeiro roteiro do funil
+      // Gera primeiro roteiro do funil
       triggerFunnelGeneration(false);
       lucide.createIcons();
     });
@@ -854,12 +941,35 @@
     }
 
     // =============================================================
-    // CONTROLES DO FUNIL CRIATIVO (ETAPAS 1, 2, 3 E 4)
+    // FILTRO DE CATEGORIAS DE FORMATOS
+    // =============================================================
+    function filterFormatsCategory(cat) {
+      ['all', 'vendas', 'autoridade', 'entretenimento'].forEach(c => {
+        const btn = document.getElementById('btn-cat-' + c);
+        if (btn) {
+          if (c === cat) {
+            btn.className = "px-2.5 py-1 rounded-lg text-[10px] font-bold bg-[#c9b977] text-black";
+          } else {
+            btn.className = "px-2.5 py-1 rounded-lg text-[10px] font-bold text-[#a1a1aa] hover:text-white";
+          }
+        }
+      });
+
+      document.querySelectorAll('.funnel-format-card').forEach(card => {
+        if (cat === 'all' || card.getAttribute('data-cat') === cat) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    // =============================================================
+    // CONTROLES DO FUNIL CRIATIVO
     // =============================================================
     function selectFunnelFormat(formatKey) {
       funnelState.format = formatKey;
       
-      // Atualiza visual dos cards de formato
       document.querySelectorAll('.funnel-format-card').forEach(btn => {
         btn.className = "funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]";
       });
@@ -868,18 +978,17 @@
         selectedBtn.className = "funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#1e1e22] border-[#c9b977] ring-1 ring-[#c9b977] shadow-lg shadow-[#c9b977]/15";
       }
 
-      // Se for Papo de Patrão, garante que o Diogo esteja incluído
-      if (formatKey === 'papo_patrao' && !funnelState.speakers.includes('diogo')) {
-        funnelState.speakers = ['diogo'];
+      // Se for Papo de Patrão ou O Dono Reage, inclui Diogo automaticamente
+      if ((formatKey === 'papo_patrao' || formatKey === 'reage') && !funnelState.speakers.includes('diogo')) {
+        funnelState.speakers.push('diogo');
       }
 
       updateFunnelUI();
-      triggerFunnelGeneration(false);
+      triggerFunnelGeneration(true);
     }
 
     function toggleSpeakerInFunnel(speakerKey) {
       if (funnelState.speakers.includes(speakerKey)) {
-        // Não deixa ficar sem nenhum participante
         if (funnelState.speakers.length > 1) {
           funnelState.speakers = funnelState.speakers.filter(s => s !== speakerKey);
         }
@@ -887,13 +996,13 @@
         funnelState.speakers.push(speakerKey);
       }
       updateFunnelSpeakersUI();
-      triggerFunnelGeneration(false);
+      triggerFunnelGeneration(true);
     }
 
     function toggleSelectAllSpeakers() {
       funnelState.speakers = ['diogo', 'carlos', 'guilherme'];
       updateFunnelSpeakersUI();
-      triggerFunnelGeneration(false);
+      triggerFunnelGeneration(true);
     }
 
     function selectFunnelIntensity(intensityKey) {
@@ -919,30 +1028,16 @@
         if (desc) desc.innerText = "Tom institucional de alto nível, foco em laudo aprovado, procedência e garantia da loja.";
       } else if (intensityKey === 'moderado') {
         if (label) label.innerText = "Moderado (Comercial Dinâmico)";
-        if (desc) desc.innerText = "Ritmo vendedor acelerado, quebra de objeções, comparação de preços e CTA para chamar no WhatsApp.";
+        if (desc) desc.innerText = "Ritmo vendedor acelerado, quebra de objeções, comparação de preços e CTA forte.";
       } else {
         if (label) label.innerText = "Fogo no Parquinho 🔥";
         if (desc) desc.innerText = "Polêmico, provocativo, choque de opiniões, humor ácido e debate quente para explodir o algoritmo de comentários!";
       }
 
-      triggerFunnelGeneration(false);
+      triggerFunnelGeneration(true);
     }
 
     function updateFunnelUI() {
-      // 1. Atualiza rótulo do formato
-      const fmtLabel = document.getElementById('funnel-format-selected-label');
-      const formatNames = {
-        duelo: '⚔️ Duelo de Carros',
-        anuncio: '🚗 Anúncio de Carro',
-        papo_patrao: '👑 Papo de Patrão',
-        desafio: '🏆 Desafio / Reality',
-        test_drive: '🏎️ Test Drive Sincero',
-        humor: '😂 Humor / Bastidores',
-        trend: '🔥 Trend Viral'
-      };
-      if (fmtLabel) fmtLabel.innerText = "Formato Ativo: " + (formatNames[funnelState.format] || 'Duelo');
-
-      // 2. Alterna entre Seletor Duplo (Duelo) ou Seletor Simples (Demais)
       const isDuel = funnelState.format === 'duelo';
       const duelBox = document.getElementById('duel-selectors-box');
       const singleBox = document.getElementById('single-car-selector-box');
@@ -967,16 +1062,17 @@
         const isSelected = funnelState.speakers.includes(spk);
         if (btn) {
           if (isSelected) {
-            btn.className = "p-3 rounded-2xl border text-center transition-all space-y-1 bg-[#1e1e22] border-[#c9b977] ring-1 ring-[#c9b977] text-white shadow-md shadow-[#c9b977]/10";
+            const borderCol = spk === 'diogo' ? 'border-[#c9b977] ring-[#c9b977]' : (spk === 'carlos' ? 'border-[#38bdf8] ring-[#38bdf8]' : 'border-emerald-400 ring-emerald-400');
+            btn.className = `p-3 rounded-2xl border text-left transition-all space-y-1.5 bg-[#1e1e22] ${borderCol} ring-1 text-white shadow-md`;
           } else {
-            btn.className = "p-3 rounded-2xl border text-center transition-all space-y-1 bg-[#121213] border-[#2e2e33] text-[#71717a] hover:border-[#3f3f46]";
+            btn.className = "p-3 rounded-2xl border text-left transition-all space-y-1.5 bg-[#121213] border-[#2e2e33] text-[#71717a] hover:border-[#3f3f46]";
           }
         }
       });
 
       const desc = document.getElementById('funnel-speakers-selected-desc');
       const names = funnelState.speakers.map(s => SPEAKER_NAMES[s]).join(' • ');
-      if (desc) desc.innerText = "Participantes ativos: " + (names || 'Nenhum selecionado');
+      if (desc) desc.innerText = "Elenco ativo: " + (names || 'Nenhum selecionado');
     }
 
     function populateCarDropdowns() {
@@ -991,12 +1087,12 @@
       if (selectA) {
         selectA.innerHTML = optionsHtml;
         selectA.value = funnelState.carAId;
-        selectA.onchange = (e) => { funnelState.carAId = e.target.value; triggerFunnelGeneration(false); };
+        selectA.onchange = (e) => { funnelState.carAId = e.target.value; triggerFunnelGeneration(true); };
       }
       if (selectB) {
         selectB.innerHTML = optionsHtml;
         selectB.value = funnelState.carBId;
-        selectB.onchange = (e) => { funnelState.carBId = e.target.value; triggerFunnelGeneration(false); };
+        selectB.onchange = (e) => { funnelState.carBId = e.target.value; triggerFunnelGeneration(true); };
       }
       if (selectSingle) {
         selectSingle.innerHTML = `
@@ -1004,80 +1100,71 @@
           ${optionsHtml}
         `;
         selectSingle.value = funnelState.singleCarId;
-        selectSingle.onchange = (e) => { funnelState.singleCarId = e.target.value; triggerFunnelGeneration(false); };
+        selectSingle.onchange = (e) => { funnelState.singleCarId = e.target.value; triggerFunnelGeneration(true); };
       }
     }
 
-    function resetFunnelDefaults() {
-      funnelState = {
-        format: 'duelo',
-        speakers: ['carlos', 'guilherme'],
-        intensity: 'moderado',
-        carAId: 'car_401745',
-        carBId: 'car_413999',
-        singleCarId: 'car_416533'
-      };
-      selectFunnelFormat('duelo');
-      selectFunnelIntensity('moderado');
-      updateFunnelUI();
-      populateCarDropdowns();
-      triggerFunnelGeneration(true);
-    }
-
     // =============================================================
-    // MOTOR DE GERAÇÃO INTELIGENTE DO FUNIL (GEMINI 1.5 + PROCEDURAL)
+    // GERAÇÃO ROBUSTA DE ROTEIRO (IA GEMINI + PROCEDURAL INTELIGENTE)
     // =============================================================
-    async function triggerFunnelGeneration(forceAI = false) {
-      const btn = document.getElementById('btn-funnel-generate-text');
-      if (btn) btn.innerText = "Gerando Roteiro Inédito com IA...";
+    async function triggerFunnelGeneration(forceAI = true) {
+      const btnText = document.getElementById('btn-funnel-generate-text');
+      if (btnText) btnText.innerHTML = `<span class="animate-spin inline-block mr-1">⏳</span> Gerando Roteiro Inédito...`;
 
-      const carA = appInventory.find(c => c.id === funnelState.carAId) || appInventory[0];
-      const carB = appInventory.find(c => c.id === funnelState.carBId) || appInventory[1];
-      const singleCar = funnelState.singleCarId === 'showroom' ? { name: 'Pátio Showroom BellaCar', price: 0, fipe: 0, category: 'Showroom' } : (appInventory.find(c => c.id === funnelState.singleCarId) || carA);
+      const carA = appInventory.find(c => c.id === funnelState.carAId) || appInventory[0] || OFFICIAL_INVENTORY[0];
+      const carB = appInventory.find(c => c.id === funnelState.carBId) || appInventory[1] || OFFICIAL_INVENTORY[1];
+      const singleCar = funnelState.singleCarId === 'showroom' 
+        ? { name: 'Pátio Showroom BellaCar', price: 0, fipe: 0, category: 'Showroom' } 
+        : (appInventory.find(c => c.id === funnelState.singleCarId) || carA);
 
       const speakerList = funnelState.speakers.map(s => SPEAKER_NAMES[s]);
       const format = funnelState.format;
       const intensity = funnelState.intensity;
 
       let generated = null;
+      let usedAI = false;
 
-      // Se tiver chave Gemini, chama a IA oficial
-      if (getGeminiKey() && (forceAI || Math.random() > 0.3)) {
+      // Chama a IA se houver chave salva
+      const apiKey = getGeminiKey();
+      if (apiKey && apiKey.length >= 15) {
         try {
-          const prompt = `Você é o roteirista de vídeos virais e tráfego da concessionária BELLACAR VEÍCULOS em Uberaba - MG.
-Crie um ROTEIRO DE VÍDEO VIRAL INÉDITO para Reels e TikTok com os seguintes parâmetros:
+          const profilesPrompt = funnelState.speakers.map(s => `- ${SPEAKER_NAMES[s]}: ${SPEAKER_PROFILES[s]?.title}. Tom: ${SPEAKER_PROFILES[s]?.tone} Bordão: "${SPEAKER_PROFILES[s]?.catchphrase}"`).join('\n');
+
+          const prompt = `Você é o roteirista oficial de vídeos virais da concessionária BELLACAR VEÍCULOS em Uberaba - MG.
+Crie um ROTEIRO DE VÍDEO VIRAL INÉDITO para Reels e TikTok com os parâmetros:
 FORMATO DO VÍDEO: "${format.toUpperCase()}"
 PARTICIPANTES: ${speakerList.join(', ')}
 NÍVEL DE INTENSIDADE / TEMPERO: "${intensity.toUpperCase()}" (se for FOGO NO PARQUINHO, seja provocativo, polêmico, gere choque de opiniões para bombar em comentários).
 CARRO(S) ENVOLVIDO(S):
 ${format === 'duelo' ? `• Carro A: ${carA.name} (R$ ${carA.price.toLocaleString('pt-BR')})\n• Carro B: ${carB.name} (R$ ${carB.price.toLocaleString('pt-BR')})` : `• Carro: ${singleCar.name} (R$ ${(singleCar.price||0).toLocaleString('pt-BR')})`}
 
-ESTRUTURA DE PERSONALIDADE DOS PARTICIPANTES:
-- Diogo Olegário: O Dono, autoridade máxima, fala com certeza, "Caneta do Patrão", quem manda na loja.
-- Carlos Eduardo: Vendedor consultivo, técnico, focado em procedência, conforto e detalhes.
-- Guilherme: Vendedor jovem, acelerado, fala de financiamento, facilidade e pressa de fechar.
+PERSONALIDADES REAIS DOS PARTICIPANTES:
+${profilesPrompt}
 
-Responda ESTRITAMENTE em formato JSON puro, sem blocos markdown:
+Responda ESTRITAMENTE em formato JSON com esta estrutura:
 {
   "title": "Título magnético do vídeo",
-  "hook": "Gancho de 3 segundos falado na lente com alta energia",
+  "hook": "Gancho matador dos primeiros 3 segundos falado na lente com alta energia",
   "scenes": [
-    { "speaker": "Nome de quem fala", "time": "0-10s", "camera": "Enquadramento da câmera", "line": "Fala natural e direta" }
+    { "speaker": "Nome exato de quem fala", "time": "0-10s", "camera": "Enquadramento da câmera", "line": "Fala autêntica com a personalidade dele" }
   ],
   "cta": "Chamada para ação matadora",
   "viralReason": "Por que o algoritmo vai entregar e reter as pessoas neste vídeo"
 }`;
+
           const aiResponse = await callGemini(prompt);
           if (aiResponse) {
-            const clean = aiResponse.replace(/```json/gi, '').replace(/```/g, '').trim();
-            generated = JSON.parse(clean);
+            generated = extractJsonFromText(aiResponse);
+            if (generated && generated.hook && generated.scenes && generated.scenes.length) {
+              usedAI = true;
+            }
           }
         } catch (e) {
-          console.warn("Fallback procedural do funil acionado:", e);
+          console.warn("Falha no Gemini:", e);
         }
       }
 
-      // Se a IA não respondeu ou offline, usa o Motor Procedural do Funil
+      // Se não usou IA (sem chave ou offline), usa o Motor Procedural Rico
       if (!generated || !generated.hook) {
         generated = getProceduralFunnelScript(format, funnelState.speakers, intensity, carA, carB, singleCar);
       }
@@ -1085,10 +1172,40 @@ Responda ESTRITAMENTE em formato JSON puro, sem blocos markdown:
       lastGeneratedScript = generated;
       renderFunnelResult(generated, carA, carB, singleCar);
 
-      if (btn) btn.innerText = "GERAR ROTEIRO INÉDITO AGORA (IA REAL)";
+      const hintEl = document.getElementById('funnel-engine-hint');
+      if (hintEl) {
+        hintEl.innerHTML = usedAI 
+          ? `🟢 Roteiro gerado em tempo real por <strong>Google Gemini 1.5 Flash</strong>`
+          : `🟡 Roteiro gerado pelo <strong>Motor Neural Local</strong> (Configure sua chave Gemini em ⚙️ para IA online)`;
+      }
+
+      if (btnText) btnText.innerHTML = `⚡ GERAR ROTEIRO INÉDITO AGORA COM IA`;
     }
 
-    // Renderiza o Roteiro na Tela com Falas Formatadas
+    // Extrator Seguro de JSON (Suporta respostas com markdown ou texto ao redor)
+    function extractJsonFromText(text) {
+      if (!text) return null;
+      try { return JSON.parse(text.trim()); } catch(e) {}
+
+      const codeMatch = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+      if (codeMatch) {
+        try { return JSON.parse(codeMatch[1].trim()); } catch(e) {}
+      }
+
+      const firstBrace = text.indexOf('{');
+      const lastBrace = text.lastIndexOf('}');
+      if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+        const substr = text.substring(firstBrace, lastBrace + 1);
+        try { return JSON.parse(substr); } catch(e) {}
+        try {
+          const sanitized = substr.replace(/,\s*([}\]])/g, '$1');
+          return JSON.parse(sanitized);
+        } catch(e) {}
+      }
+      return null;
+    }
+
+    // Renderiza o Roteiro na Tela
     function renderFunnelResult(data, carA, carB, singleCar) {
       const container = document.getElementById('funnel-result-container');
       if (!container) return;
@@ -1103,17 +1220,24 @@ Responda ESTRITAMENTE em formato JSON puro, sem blocos markdown:
       const viralEl = document.getElementById('funnel-viral-reason');
 
       const formatNames = {
-        duelo: 'DUELO DE CARROS',
-        anuncio: 'ANÚNCIO DE CARRO',
-        papo_patrao: 'PAPO DE PATRÃO',
-        desafio: 'DESAFIO / REALITY',
+        duelo: 'DUELO DE TITÃS',
+        anuncio: 'ANÚNCIO DE QUEIMA',
         test_drive: 'TEST DRIVE SINCERO',
-        humor: 'HUMOR / BASTIDORES',
-        trend: 'TREND VIRAL'
+        achado: 'ACHADO DO PÁTIO',
+        papo_patrao: 'PAPO DE PATRÃO',
+        podcast: 'BOMBA VS RELÍQUIA',
+        laudo: 'MESTRE DO LAUDO',
+        desafio: 'DESAFIO DA LOJA',
+        reage: 'O DONO REAGE',
+        polemica: 'POLÊMICA QUENTE 🔥',
+        comedia: 'CLIENTE TÍPICO',
+        trend: 'TREND VIRAL',
+        entrega: 'CHAVE NA MÃO',
+        hunter: 'CAÇADOR DE OFERTA'
       };
 
       if (titleEl) titleEl.innerText = data.title || "Roteiro de Vídeo BellaCar";
-      if (badgeFmt) badgeFmt.innerText = "FORMATO: " + (formatNames[funnelState.format] || 'VÍDEO');
+      if (badgeFmt) badgeFmt.innerText = "FORMATO: " + (formatNames[funnelState.format] || funnelState.format.toUpperCase());
       if (badgeInt) {
         badgeInt.innerText = funnelState.intensity.toUpperCase() + (funnelState.intensity === 'fogo_no_parquinho' ? ' 🔥' : '');
         badgeInt.className = funnelState.intensity === 'fogo_no_parquinho' 
@@ -1129,24 +1253,26 @@ Responda ESTRITAMENTE em formato JSON puro, sem blocos markdown:
       if (ctaEl) ctaEl.innerText = data.cta;
       if (viralEl) viralEl.innerText = data.viralReason;
 
-      // Cenas
+      // Cenas Formatadas por Apresentador
       if (scenesEl && data.scenes && data.scenes.length) {
         scenesEl.innerHTML = data.scenes.map((sc, idx) => {
-          const isDiogo = sc.speaker.toLowerCase().includes('diogo');
-          const isCarlos = sc.speaker.toLowerCase().includes('carlos');
-          const isGui = sc.speaker.toLowerCase().includes('gui');
+          const spkLower = (sc.speaker || '').toLowerCase();
+          const isDiogo = spkLower.includes('diogo');
+          const isCarlos = spkLower.includes('carlos');
+          const isGui = spkLower.includes('gui');
 
-          const speakerColor = isDiogo 
-            ? 'text-[#ecdda2] border-[#c9b977]/50 bg-[#c9b977]/10' 
-            : (isCarlos ? 'text-[#38bdf8] border-[#38bdf8]/50 bg-[#38bdf8]/10' : 'text-emerald-400 border-emerald-500/50 bg-emerald-500/10');
+          const borderCol = isDiogo 
+            ? 'border-[#c9b977]/50 bg-[#c9b977]/10 text-[#ecdda2]' 
+            : (isCarlos ? 'border-[#38bdf8]/50 bg-[#38bdf8]/10 text-[#38bdf8]' : 'border-emerald-500/50 bg-emerald-500/10 text-emerald-400');
           
           const icon = isDiogo ? '👑' : (isCarlos ? '📱' : '⚡');
+          const catchphrase = isDiogo ? SPEAKER_PROFILES.diogo.catchphrase : (isCarlos ? SPEAKER_PROFILES.carlos.catchphrase : SPEAKER_PROFILES.guilherme.catchphrase);
 
           return `
             <div class="p-3.5 rounded-2xl bg-[#0c0c0d] border border-[#2e2e33] space-y-2">
               <div class="flex items-center justify-between border-b border-[#2e2e33] pb-2">
                 <div class="flex items-center gap-2">
-                  <span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-black border ${speakerColor} flex items-center gap-1">
+                  <span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-black border ${borderCol} flex items-center gap-1">
                     <span>${icon}</span>
                     <span>${sc.speaker}</span>
                   </span>
@@ -1166,142 +1292,263 @@ Responda ESTRITAMENTE em formato JSON puro, sem blocos markdown:
     }
 
     // =============================================================
-    // MOTOR PROCEDURAL OFFLINE DE ALTA VARIEDADE PARA OS 7 FORMATOS
+    // MOTOR PROCEDURAL OFFLINE COM OS 14 FORMATOS & PERSONALIDADES
     // =============================================================
     function getProceduralFunnelScript(format, speakers, intensity, carA, carB, singleCar) {
       const spk1 = SPEAKER_NAMES[speakers[0]] || 'Diogo Olegário';
       const spk2 = SPEAKER_NAMES[speakers[1]] || 'Carlos Eduardo';
-      const spk3 = SPEAKER_NAMES[speakers[2]] || 'Guilherme';
       const multi = speakers.length > 1;
 
+      // 1. DUELO DE TITÃS
       if (format === 'duelo') {
         const hooks = {
-          light: `"Se você tivesse R$ ${carA.price.toLocaleString('pt-BR')} na mão hoje, qual dessas duas máquinas você levaria para casa?"`,
-          moderado: `"Duelo de titãs no pátio da BellaCar: de um lado o ${carA.name}, do outro o ${carB.name}. Quem vence na sua garagem?"`,
-          fogo_no_parquinho: `"Eu avisei que ia dar briga no pátio da BellaCar! O ${spk1} acha que o ${carA.name} humilha o ${carB.name}... Olha isso aqui!"`
+          light: `"Com o mesmo valor de parcela, qual desses dois carros é a melhor escolha para a sua família hoje?"`,
+          moderado: `"Duelo de gigantes no pátio da BellaCar: ${carA.name} vs ${carB.name}. Quem vence na sua opinião?"`,
+          fogo_no_parquinho: `"Quase saiu briga aqui na loja! O ${spk1} acha que o ${carA.name} humilha o ${carB.name}... olha esse comparativo!"`
         };
-
         return {
-          title: `Duelo: ${carA.name} vs ${carB.name}`,
+          title: `Duelo de Titãs: ${carA.name} vs ${carB.name}`,
           hook: hooks[intensity] || hooks.moderado,
           scenes: [
             {
               speaker: spk1,
               time: '0-12s',
               camera: `Plano fechado no ${carA.name}`,
-              line: `Aqui não tem comparação! O ${carA.name} entrega conforto, presença e está com laudo 100% aprovado aqui na BellaCar por R$ ${carA.price.toLocaleString('pt-BR')}!`
+              line: `Não tem nem discussão! O ${carA.name} é muito mais máquina, acabamento impecável, laudo 100% aprovado e presença que impõe respeito em qualquer lugar de Uberaba!`
             },
             {
               speaker: multi ? spk2 : spk1,
               time: '12-25s',
               camera: `Câmera vira rápido para o ${carB.name}`,
-              line: `Espera aí, ${spk1}! Olha para esse ${carB.name}: custo-benefício imbatível, porta-malas espaçoso e FIPE muito mais vantajosa! Quem entende de carro escolhe ele!`
+              line: `Menos, ${spk1}! Olha para o ${carB.name}: custo de manutenção mais baixo, liquidez de mercado incomparável e o Diogo ainda autorizou uma condição de queima nele hoje!`
             },
             {
               speaker: speakers.includes('diogo') ? 'Diogo Olegário' : spk1,
               time: '25-40s',
-              camera: 'Diogo ou apresentador no meio dos dois carros',
-              line: `Para acabar com a discussão: o Diogo pegou a caneta e liberou tanque cheio e transferência para quem fechar qualquer um dos dois hoje!`
+              camera: 'Apresentador no meio dos dois carros com as chaves',
+              line: `Para acabar com o empate: o Diogo pegou a caneta e liberou tanque cheio e transferência grátis para o primeiro que fechar qualquer um dos dois!`
             }
           ],
-          cta: `"Comenta aqui embaixo: você é time ${carA.category} ou time ${carB.category}? Quero ver quem entende de verdade!"`,
-          viralReason: "Formato de duelo divide a audiência em dois grupos opostos, multiplicando os comentários em até 4x no algoritmo."
+          cta: `"Comenta aqui embaixo: você vai de ${carA.category} ou ${carB.category}? Quero ver quem tem bom gosto!"`,
+          viralReason: "Duelos dividem o público em duas torcidas ferrenhas nos comentários, disparando o alcance orgânico do algoritmo."
         };
       }
 
+      // 2. ANÚNCIO DE QUEIMA
       if (format === 'anuncio') {
         return {
-          title: `Oferta Agressiva: ${singleCar.name}`,
-          hook: intensity === 'fogo_no_parquinho' 
-            ? `"Se você estava quase comprando um carro maquiado na internet por tabela cheia... para tudo e olha esse ${singleCar.name}!"` 
-            : `"Olha a oportunidade de ouro que acabou de entrar no showroom da BellaCar: ${singleCar.name} com procedência garantida!"`,
+          title: `Queima de Estoque: ${singleCar.name}`,
+          hook: intensity === 'fogo_no_parquinho'
+            ? `"Se você estava quase comprando um carro maquiado na internet por tabela cheia... para tudo e olha essa oportunidade!"`
+            : `"Alerta de oportunidade no pátio da BellaCar: entrou hoje esse ${singleCar.name} com condição que não volta!"`,
           scenes: [
             {
               speaker: spk1,
-              time: '0-10s',
-              camera: 'Apresentador ao lado do farol dianteiro',
-              line: `Carro periciado, laudo cautelar 100% aprovado e estado de conservação que você não encontra em outro lugar de Uberaba.`
+              time: '0-12s',
+              camera: 'Plano médio no capô e faróis',
+              line: `Veículo totalmente periciado, estrutura intacta, laudo cautelar 100% aprovado e revisado de ponta a ponta.`
             },
             {
               speaker: multi ? spk2 : spk1,
-              time: '10-25s',
-              camera: 'Câmera entra no interior do veículo',
-              line: `Acabamento impecável, cheirinho de novo e mecânica revisada com garantia total de motor e câmbio.`
+              time: '12-25s',
+              camera: 'Entrando no interior e ligando o painel',
+              line: `Bancos impecáveis, ar gelando, direção elétrica e uma dirigibilidade que parece que você tirou zero km da concessionária!`
+            },
+            {
+              speaker: speakers.includes('diogo') ? 'Diogo Olegário' : spk1,
+              time: '25-40s',
+              camera: 'Apresentador com a chave na mão',
+              line: `O patrão autorizou entrada facilitada em até 21x no cartão e você ainda leva tanque cheio na hora da entrega!`
+            }
+          ],
+          cta: `"Clica agora no link da bio ou manda um WhatsApp antes que outro cliente reserve!"`,
+          viralReason: "Gera urgência real de estoque e direciona visualizações diretamente para o funil de atendimento no WhatsApp."
+        };
+      }
+
+      // 3. TEST DRIVE SINCERO
+      if (format === 'test_drive') {
+        return {
+          title: `Test Drive Sem Filtro: ${singleCar.name}`,
+          hook: `"Vem comigo sentir como é acelerar esse ${singleCar.name} aqui na prática pelas ruas de Uberaba!"`,
+          scenes: [
+            {
+              speaker: spk1,
+              time: '0-12s',
+              camera: 'Câmera no volante e painel acelerando',
+              line: `Engatei o D, pisei fundo e o torque entra na hora! Resposta de acelerador firme e estabilidade que gruda no chão.`
+            },
+            {
+              speaker: multi ? spk2 : spk1,
+              time: '12-25s',
+              camera: 'Câmera pega a suspensão e visão da cabine',
+              line: `Isolamento acústico silencioso, suspensão absorve todo o asfalto sem bater nada e a posição de dirigir é extremamente confortável.`
             },
             {
               speaker: spk1,
               time: '25-40s',
-              camera: 'Plano médio mostrando o carro e o pátio',
-              line: `Entrada facilitada com parcelas que cabem no seu bolso e você ainda sai de tanque cheio entregue pelo Diogo!`
+              camera: 'Descendo do carro com sorriso no rosto',
+              line: `Carro para quem quer rodar tranquilo com a família sem surpresa na oficina. O Laudo Cautelar tá 100% aprovado!`
             }
           ],
-          cta: `"Toca no link da bio agora mesmo e chama a nossa equipe no WhatsApp antes que outro cliente reserve!"`,
-          viralReason: "Vídeo focado em quebra de objeções imediatas e condição comercial clara para converter visualizações em leads no WhatsApp."
+          cta: `"Quer sentir na sua própria mão? Manda mensagem no WhatsApp e vem fazer esse test-drive comigo hoje na BellaCar!"`,
+          viralReason: "Test drives mostram a sensação real ao volante e quebram a principal barreira de compra de seminovos."
         };
       }
 
+      // 4. PAPO DE PATRÃO
       if (format === 'papo_patrao') {
         return {
           title: `Papo de Patrão com Diogo Olegário`,
           hook: intensity === 'fogo_no_parquinho'
-            ? `"Tem coisa que as outras lojas têm medo de falar para você, mas aqui na BellaCar eu falo na lata!"`
-            : `"Você sabe por que tem tanta gente caindo em golpe de carro na internet hoje em dia? O patrão vai te explicar em 40 segundos."`,
+            ? `"Tem coisa que lojista safado esconde de você na internet, mas aqui na BellaCar eu falo na lata!"`
+            : `"Você sabe como não cair em golpe na hora de comprar o seu carro seminovo? O Diogo vai te ensinar em 40 segundos."`,
           scenes: [
             {
               speaker: 'Diogo Olegário',
               time: '0-15s',
               camera: 'Diogo caminhando com autoridade pelo pátio',
-              line: `Desconfie de preço milagroso. Carro sem procedência, com histórico de leilão escondido e sem laudo cautelar aprovado é dor de cabeça garantida!`
+              line: `Preço milagroso demais na internet? Corre que é cilada! Carro sem procedência, com histórico de leilão escondido e quilometragem adulterada é prejuízo certo!`
             },
             {
               speaker: 'Diogo Olegário',
               time: '15-30s',
               camera: 'Diogo apontando para o estoque e laudos',
-              line: `Aqui na BellaCar cada carro passa por uma vistoria rigorosa. Eu só coloco no meu pátio carro que eu teria coragem de botar a minha família dentro para viajar.`
+              line: `Aqui na BellaCar quem manda sou eu, e eu só coloco no meu pátio carro que eu teria coragem de colocar a minha própria família para viajar dentro!`
             },
             {
               speaker: multi ? spk2 : 'Diogo Olegário',
               time: '30-40s',
-              camera: 'Consultor ao lado do Diogo',
-              line: `É por isso que aqui nós damos garantia e transparência de verdade. Quer fazer um negócio seguro em Uberaba?`
+              camera: 'Equipe reunida com Diogo',
+              line: `Negócio transparente, laudo pericial na mão e palavra de homem. Quer comprar com segurança de verdade em Uberaba?`
             }
           ],
-          cta: `"Vem tomar um café com a gente na BellaCar ou chama a gente no WhatsApp para conferir os laudos de cada carro!"`,
-          viralReason: "Vídeos com o dono da empresa geram a maior taxa de confiança e aniquilam desconfiança de clientes indecisos."
+          cta: `"Vem tomar um café com a gente na BellaCar ou chama a equipe no WhatsApp para conferir o laudo de cada máquina!"`,
+          viralReason: "A autoridade do dono gera confiança inabalável e destrói qualquer desconfiança do cliente indeciso."
         };
       }
 
-      // Default para outros formatos (Humor / Desafio / Test Drive / Trend)
+      // 5. O DONO REAGE A PROPOSTAS BIZARRAS
+      if (format === 'reage') {
+        return {
+          title: `O Dono Reage: Propostas Sem Noção no WhatsApp`,
+          hook: `"O Diogo pegou o celular da loja hoje e quase caiu para trás com a proposta que mandaram no WhatsApp... olha isso!"`,
+          scenes: [
+            {
+              speaker: multi ? spk2 : 'Carlos Eduardo',
+              time: '0-12s',
+              camera: 'Vendedor mostrando a tela do celular para o Diogo',
+              line: `Patrão, olha isso aqui: o cliente quer dar um carro que nem liga, mais dois papagaios e ainda quer 15 mil de volta na troca da Hilux!`
+            },
+            {
+              speaker: 'Diogo Olegário',
+              time: '12-28s',
+              camera: 'Plano fechado na reação indignada e cômica do Diogo',
+              line: `Ô meu amigo, aqui é BellaCar Veículos, não é zoológico nem ferro-velho não! A gente aceita o seu carro ou moto com a melhor avaliação de Uberaba, mas milagre só no céu!`
+            },
+            {
+              speaker: multi ? spk2 : 'Guilherme',
+              time: '28-40s',
+              camera: 'Equipe rindo com o Diogo',
+              line: `Se você tem um usado de verdade e quer uma proposta séria e justa sem enrolação, vem falar com a gente!`
+            }
+          ],
+          cta: `"Comenta aí embaixo a proposta mais absurda que já te fizeram na vida!"`,
+          viralReason: "Reações bem-humoradas a propostas reais viralizam de forma explosiva no Instagram e TikTok pelo fator identificação."
+        };
+      }
+
+      // 6. POLÊMICA QUENTE / CANCELAMENTO
+      if (format === 'polemica') {
+        return {
+          title: `Polêmica do Algoritmo: Quem Tem Razão?`,
+          hook: `"Eu vou falar uma verdade que vai deixar muita gente brava nos comentários, mas alguém precisa falar!"`,
+          scenes: [
+            {
+              speaker: spk1,
+              time: '0-15s',
+              camera: 'Apresentador gesticulando com energia na câmera',
+              line: `Pagar 150 mil num SUV compacto 1.0 de plástico só para dizer que tem carro do ano, enquanto você poderia estar num sedã executivo de verdade com motor de respeito pelo mesmo preço? Não faz sentido!`
+            },
+            {
+              speaker: multi ? spk2 : spk1,
+              time: '15-30s',
+              camera: 'Câmera mostra os dois tipos de veículos no pátio',
+              line: `Calma lá! Tem gente que prioriza a altura do solo e o valor de revenda. Mas quem gosta de dirigir de verdade sabe que o conforto do sedã é incomparável!`
+            },
+            {
+              speaker: spk1,
+              time: '30-40s',
+              camera: 'Apresentador encarando a lente',
+              line: `E você, prefere status ou prefere carro de verdade na garagem? Quero ver quem tem coragem de opinar!`
+            }
+          ],
+          cta: `"Deixe sua opinião sincera nos comentários: time SUV ou time Sedã? Não vale ficar em cima do muro!"`,
+          viralReason: "Debates apaixonados sobre escolhas de carros geram dezenas de compartilhamentos e brigas saudáveis nos comentários."
+        };
+      }
+
+      // 7. DESAFIO DA EQUIPE (GINCANA)
+      if (format === 'desafio') {
+        return {
+          title: `Desafio da Equipe BellaCar: Quem Vender Primeiro Ganha!`,
+          hook: `"O Diogo colocou uma aposta na mesa da BellaCar hoje e agora ninguém mais sai para almoçar!"`,
+          scenes: [
+            {
+              speaker: 'Diogo Olegário',
+              time: '0-12s',
+              camera: 'Diogo no meio dos vendedores com notas ou chave',
+              line: `A aposta tá feita: o primeiro consultor que fechar um dos carros hoje leva bônus dobrado e o almoço pago pelo patrão!`
+            },
+            {
+              speaker: spk1,
+              time: '12-25s',
+              camera: 'Vendedor acelerado mostrando seu carro favorito',
+              line: `O almoço já é meu! Eu autorizei tanque cheio, transferência e a melhor taxa de juros da cidade para o meu cliente!`
+            },
+            {
+              speaker: multi ? spk2 : 'Guilherme',
+              time: '25-40s',
+              camera: 'Outro vendedor puxando o cliente na câmera',
+              line: `Vai sonhando! Manda o CPF no WhatsApp agora que eu aprovo na hora e entrego na porta da sua casa!`
+            }
+          ],
+          cta: `"Chama agora no link da bio e ajuda a definir quem vai pagar esse almoço hoje!"`,
+          viralReason: "Gincanas e apostas internas criam um clima de reality show que faz os seguidores torcerem pelos vendedores."
+        };
+      }
+
+      // DEFAULT PARA DEMAIS FORMATOS (Achado, Podcast, Laudo, Comédia, Trend, Entrega, Hunter)
       return {
-        title: `Gravação Dinâmica: ${format.toUpperCase()} na BellaCar`,
-        hook: `"Para tudo o que você está fazendo se você gosta de carro e quer ver o que a equipe da BellaCar aprontou hoje!"`,
+        title: `Especial BellaCar: ${format.toUpperCase()}`,
+        hook: `"Para tudo o que você está fazendo se você quer ver o que a equipe da BellaCar preparou hoje!"`,
         scenes: [
           {
             speaker: spk1,
             time: '0-12s',
-            camera: 'Câmera dinâmica pegando a equipe na loja',
-            line: `A gente recebeu uma proposta no WhatsApp que não deu para aguentar... vocês não vão acreditar no que pediram na troca!`
+            camera: 'Apresentador caminhando pelo pátio com o carro de fundo',
+            line: `Aqui na BellaCar a gente não para: estoque 100% periciado, procedência garantida e condições que nenhuma outra loja de Uberaba consegue cobrir!`
           },
           {
             speaker: multi ? spk2 : spk1,
             time: '12-25s',
-            camera: 'Reação dos vendedores rindo ou mostrando o carro',
-            line: `O cliente queria dar um carro que nem liga e ainda queria volta em dinheiro! Aqui a gente avalia o seu usado com respeito, mas milagre só no céu!`
+            camera: 'Mostrando os detalhes e a chave do veículo',
+            line: `Entrada facilitada em até 21x no cartão, saldo em até 60x e laudo cautelar aprovado em todos os veículos do showroom.`
           },
           {
-            speaker: spk1,
+            speaker: speakers.includes('diogo') ? 'Diogo Olegário' : spk1,
             time: '25-40s',
-            camera: 'Plano aberto no showroom',
-            line: `Se você quer uma avaliação séria e justa do seu carro ou moto, a BellaCar está de portas abertas em Uberaba!`
+            camera: 'Diogo ou apresentador fechando com autoridade',
+            line: `O Diogo pegou a caneta e liberou bônus de fechamento para quem chamar no WhatsApp hoje mesmo!`
           }
         ],
-        cta: `"Comenta aqui embaixo a proposta mais sem noção que você já viu na vida!"`,
-        viralReason: "Humor e bastidores humanizam a marca e criam conexão genuína com os clientes da cidade."
+        cta: `"Clica no link da bio e venha realizar o seu sonho com quem entende de carro de verdade!"`,
+        viralReason: "Formato dinâmico e humanizado que combina autoridade com ofertas comerciais atrativas."
       };
     }
 
     // =============================================================
-    // TELEPROMPTER ADAPTADO AO FUNIL CRIATIVO
+    // TELEPROMPTER ADAPTADO AO FUNIL
     // =============================================================
     function openTeleprompterFromFunnel() {
       if (!lastGeneratedScript) return;
@@ -1315,8 +1562,9 @@ Responda ESTRITAMENTE em formato JSON puro, sem blocos markdown:
       let scenesHtml = '';
       if (lastGeneratedScript.scenes) {
         scenesHtml = lastGeneratedScript.scenes.map(sc => {
-          const isDiogo = sc.speaker.toLowerCase().includes('diogo');
-          const isCarlos = sc.speaker.toLowerCase().includes('carlos');
+          const spkLower = (sc.speaker || '').toLowerCase();
+          const isDiogo = spkLower.includes('diogo');
+          const isCarlos = spkLower.includes('carlos');
           const colorClass = isDiogo ? 'text-[#ecdda2]' : (isCarlos ? 'text-[#38bdf8]' : 'text-emerald-400');
           const icon = isDiogo ? '👑' : (isCarlos ? '📱' : '⚡');
 
@@ -1344,7 +1592,7 @@ Responda ESTRITAMENTE em formato JSON puro, sem blocos markdown:
           </p>
 
           <div class="text-zinc-400 font-bold text-xs tracking-wider uppercase mb-6">
-            🎙️ FALAS DO VÍDEO (POR PARTICIPANTE):
+            🎙️ FALAS DO VÍDEO (POR APRESENTADOR):
           </div>
           ${scenesHtml}
 
@@ -1455,7 +1703,7 @@ Responda ESTRITAMENTE em formato JSON puro, sem blocos markdown:
 
     function copyFunnelCompleteScript() {
       if (!lastGeneratedScript) return;
-      let text = `*ROTEIRO VIRAL BELLACAR VEÍCULOS*\n*Título:* ${lastGeneratedScript.title}\n\n*GANCHO (0-3s):*\n${lastGeneratedScript.hook}\n\n*DESENVOLVIMENTO:*\n`;
+      let text = `*ROTEIRO VIRAL BELLACAR VEÍCULOS*\n*Título:* ${lastGeneratedScript.title}\n\n*GANCHO (0-3s):*\n${lastGeneratedScript.hook}\n\n*CENAS:*\n`;
       if (lastGeneratedScript.scenes) {
         lastGeneratedScript.scenes.forEach(sc => {
           text += `\n• ${sc.speaker} (${sc.time || ''}): "${sc.line}"`;
@@ -1559,7 +1807,12 @@ Responda ESTRITAMENTE em formato JSON puro, sem blocos markdown:
     }
 
     function getGeminiKey() {
-      return (localStorage.getItem('bellacar_gemini_key_v5') || '').trim();
+      return (
+        localStorage.getItem('bellacar_gemini_key_v5') ||
+        localStorage.getItem('bellacar_gemini_api_key') ||
+        localStorage.getItem('bellacar_gemini_key') ||
+        ''
+      ).trim();
     }
 
     async function testAndSaveGeminiKey() {
@@ -1583,6 +1836,7 @@ Responda ESTRITAMENTE em formato JSON puro, sem blocos markdown:
 
         if (res.ok) {
           localStorage.setItem('bellacar_gemini_key_v5', key);
+          localStorage.setItem('bellacar_gemini_api_key', key);
           initAIConfig();
           alert("✓ Sucesso! Google Gemini 1.5 Flash conectado!");
           closeModal('modal-settings');
@@ -1624,7 +1878,7 @@ Responda ESTRITAMENTE em formato JSON puro, sem blocos markdown:
             signal: controller.signal,
             body: JSON.stringify({
               contents: [{ parts: [{ text: promptText }] }],
-              generationConfig: { temperature: 0.85, topP: 0.95, maxOutputTokens: 1100 }
+              generationConfig: { temperature: 0.85, topP: 0.95, maxOutputTokens: 1200 }
             })
           });
           clearTimeout(timeout);
