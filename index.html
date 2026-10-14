@@ -242,12 +242,12 @@
             </div>
           </button>
 
-          <!-- 7. Mestre do Laudo -->
-          <button type="button" onclick="selectFunnelFormat('laudo')" id="fmt-laudo" data-cat="autoridade" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
-            <span class="text-2xl">🔍</span>
+          <!-- 7. Dica Anti-Golpe -->
+          <button type="button" onclick="selectFunnelFormat('dica')" id="fmt-dica" data-cat="autoridade" class="funnel-format-card p-3 rounded-2xl border text-left transition-all space-y-1.5 flex flex-col justify-between bg-[#121213] border-[#2e2e33] hover:border-[#3f3f46]">
+            <span class="text-2xl">🛡️</span>
             <div>
-              <span class="text-xs font-bold text-white block">Mestre do Laudo</span>
-              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Alerta anti-golpe</span>
+              <span class="text-xs font-bold text-white block">Dica Anti-Golpe</span>
+              <span class="text-[10px] text-[#a1a1aa] leading-tight block">Compre com segurança</span>
             </div>
           </button>
 
@@ -355,7 +355,7 @@
               <div>
                 <span class="text-xs font-black text-[#38bdf8] block truncate">Carlos Eduardo</span>
                 <span class="text-[9px] text-[#a1a1aa] font-bold block uppercase">Consultor Técnico</span>
-                <span class="text-[9px] text-[#71717a] block italic mt-0.5">"Laudo Aprovado"</span>
+                <span class="text-[9px] text-[#71717a] block italic mt-0.5">"Procedência Garantida"</span>
               </div>
             </button>
 
@@ -792,7 +792,7 @@
       },
       carlos: {
         title: 'Consultor Especialista & Detalhista',
-        catchphrase: 'Laudo 100% aprovado e procedência garantida.',
+        catchphrase: 'Procedência garantida e carro revisado de verdade!',
         color: 'text-[#38bdf8]',
         badgeBg: 'bg-[#38bdf8]/20 border-[#38bdf8]/40 text-[#38bdf8]',
         tone: 'Educado, atencioso, técnico, apaixonado por conservação, defende a procedência, motor, bancos e segurança da família.'
@@ -1025,7 +1025,7 @@
       const desc = document.getElementById('funnel-intensity-desc');
       if (intensityKey === 'light') {
         if (label) label.innerText = "Light (Elegante & Confiança)";
-        if (desc) desc.innerText = "Tom institucional de alto nível, foco em laudo aprovado, procedência e garantia da loja.";
+        if (desc) desc.innerText = "Tom institucional de alto nível, foco em procedência, conservação impecável e garantia da loja.";
       } else if (intensityKey === 'moderado') {
         if (label) label.innerText = "Moderado (Comercial Dinâmico)";
         if (desc) desc.innerText = "Ritmo vendedor acelerado, quebra de objeções, comparação de preços e CTA forte.";
@@ -1141,6 +1141,8 @@ ${format === 'duelo' ? `• Carro A: ${carA.name} (R$ ${carA.price.toLocaleStrin
 PERSONALIDADES REAIS DOS PARTICIPANTES:
 ${profilesPrompt}
 
+REGRA OBRIGATÓRIA: NUNCA use termos como "laudo aprovado", "laudo cautelar", "laudo pericial" ou "periciado", pois a BellaCar NÃO realiza esse tipo de serviço de laudo. Em vez disso, enfatize: PROCEDÊNCIA GARANTIDA, MECÂNICA RIGOROSAMENTE REVISADA, GARANTIA DE MOTOR E CÂMBIO, CONSERVAÇÃO IMPECÁVEL, DOCUMENTAÇÃO EM DIA e A PALAVRA E AUTORIDADE DO DIOGO E DA BELLACAR.
+
 Responda ESTRITAMENTE em formato JSON com esta estrutura:
 {
   "title": "Título magnético do vídeo",
@@ -1226,7 +1228,7 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
         achado: 'ACHADO DO PÁTIO',
         papo_patrao: 'PAPO DE PATRÃO',
         podcast: 'BOMBA VS RELÍQUIA',
-        laudo: 'MESTRE DO LAUDO',
+        dica: 'DICA ANTI-GOLPE',
         desafio: 'DESAFIO DA LOJA',
         reage: 'O DONO REAGE',
         polemica: 'POLÊMICA QUENTE 🔥',
@@ -1314,7 +1316,7 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
               speaker: spk1,
               time: '0-12s',
               camera: `Plano fechado no ${carA.name}`,
-              line: `Não tem nem discussão! O ${carA.name} é muito mais máquina, acabamento impecável, laudo 100% aprovado e presença que impõe respeito em qualquer lugar de Uberaba!`
+              line: `Não tem nem discussão! O ${carA.name} é muito mais máquina, acabamento impecável, mecânica revisada com garantia e presença que impõe respeito em qualquer lugar de Uberaba!`
             },
             {
               speaker: multi ? spk2 : spk1,
@@ -1346,7 +1348,7 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
               speaker: spk1,
               time: '0-12s',
               camera: 'Plano médio no capô e faróis',
-              line: `Veículo totalmente periciado, estrutura intacta, laudo cautelar 100% aprovado e revisado de ponta a ponta.`
+              line: `Veículo com procedência comprovada, estrutura alinhada e revisado de ponta a ponta com garantia oficial.`
             },
             {
               speaker: multi ? spk2 : spk1,
@@ -1388,7 +1390,7 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
               speaker: spk1,
               time: '25-40s',
               camera: 'Descendo do carro com sorriso no rosto',
-              line: `Carro para quem quer rodar tranquilo com a família sem surpresa na oficina. O Laudo Cautelar tá 100% aprovado!`
+              line: `Carro para quem quer rodar tranquilo com a família sem surpresa na oficina. Mecânica rigorosamente revisada com garantia oficial de motor e câmbio!`
             }
           ],
           cta: `"Quer sentir na sua própria mão? Manda mensagem no WhatsApp e vem fazer esse test-drive comigo hoje na BellaCar!"`,
@@ -1413,17 +1415,17 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
             {
               speaker: 'Diogo Olegário',
               time: '15-30s',
-              camera: 'Diogo apontando para o estoque e laudos',
+              camera: 'Diogo apontando para o estoque e carros selecionados',
               line: `Aqui na BellaCar quem manda sou eu, e eu só coloco no meu pátio carro que eu teria coragem de colocar a minha própria família para viajar dentro!`
             },
             {
               speaker: multi ? spk2 : 'Diogo Olegário',
               time: '30-40s',
               camera: 'Equipe reunida com Diogo',
-              line: `Negócio transparente, laudo pericial na mão e palavra de homem. Quer comprar com segurança de verdade em Uberaba?`
+              line: `Negócio transparente, documentação 100% em dia e palavra de homem. Quer comprar com segurança de verdade em Uberaba?`
             }
           ],
-          cta: `"Vem tomar um café com a gente na BellaCar ou chama a equipe no WhatsApp para conferir o laudo de cada máquina!"`,
+          cta: `"Vem tomar um café com a gente na BellaCar ou chama a equipe no WhatsApp para tirar qualquer dúvida e fazer o seu test-drive!"`,
           viralReason: "A autoridade do dono gera confiança inabalável e destrói qualquer desconfiança do cliente indeciso."
         };
       }
@@ -1518,7 +1520,7 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
         };
       }
 
-      // DEFAULT PARA DEMAIS FORMATOS (Achado, Podcast, Laudo, Comédia, Trend, Entrega, Hunter)
+      // DEFAULT PARA DEMAIS FORMATOS (Achado, Podcast, Dica, Comédia, Trend, Entrega, Hunter)
       return {
         title: `Especial BellaCar: ${format.toUpperCase()}`,
         hook: `"Para tudo o que você está fazendo se você quer ver o que a equipe da BellaCar preparou hoje!"`,
@@ -1527,13 +1529,13 @@ Responda ESTRITAMENTE em formato JSON com esta estrutura:
             speaker: spk1,
             time: '0-12s',
             camera: 'Apresentador caminhando pelo pátio com o carro de fundo',
-            line: `Aqui na BellaCar a gente não para: estoque 100% periciado, procedência garantida e condições que nenhuma outra loja de Uberaba consegue cobrir!`
+            line: `Aqui na BellaCar a gente não para: estoque selecionado a dedo, procedência garantida e condições que nenhuma outra loja de Uberaba consegue cobrir!`
           },
           {
             speaker: multi ? spk2 : spk1,
             time: '12-25s',
             camera: 'Mostrando os detalhes e a chave do veículo',
-            line: `Entrada facilitada em até 21x no cartão, saldo em até 60x e laudo cautelar aprovado em todos os veículos do showroom.`
+            line: `Entrada facilitada em até 21x no cartão, saldo em até 60x e garantia oficial de motor e câmbio em todos os veículos do showroom.`
           },
           {
             speaker: speakers.includes('diogo') ? 'Diogo Olegário' : spk1,
